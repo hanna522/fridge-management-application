@@ -1,2 +1,2 @@
 # with-my-fridge
-Meal planner app, using MERN
+This is an app to auto generate meal plan with the ingredients
