@@ -15,6 +15,21 @@ var { mongoDB } = require("./config/mongo-db");
 // connect with mongoDB
 mongoDB();
 
+// Define API route
+app.get("/api", (req, res) => {
+  res.send("Hello from the API!");
+});
+
+// Serve static assets if in production
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static('client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
