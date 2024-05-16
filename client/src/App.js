@@ -6,13 +6,14 @@ import Home from './components/pages/Home';
 //import MyPage from "./components/pages/MyPage";
 //import Recipe from "./components/pages/Recipe";
 import Fridge from "./components/pages/Fridge";
-//import Navbar from "./components/Navbar";
+import Navbar from './components/Navbar';
 //import Footer from "./components/Footer";
 //import NotFoundPage from '/components/pages/NotFoundPage';
 
 function App() {
   return (
     <Router>
+      <Navbar/>
       <Routes>
         <Route path="/api/" element={<Home />} />
         <Route path="/api/home" element={<Home />} />

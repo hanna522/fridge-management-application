@@ -1,6 +1,7 @@
 console.log(
   "This script populates some test ingredients, categories, and ingredient instances to the database."
 );
+
 const userArgs = process.argv.slice(2);
 
 const Ingredient = require("./model/ingredient");
@@ -22,10 +23,20 @@ async function main() {
   console.log("Debug: About to connect");
   await mongoose.connect(mongoDB);
   console.log("Connected to database:", mongoose.connection.db.databaseName)
+  // clear database
+  await clearDatabase();
+  // add data
   await createCategories();
   await createIngredients();
   await createIngredientInstances();
   mongoose.connection.close();
+}
+
+async function clearDatabase() {
+  await Category.deleteMany({});
+  await Ingredient.deleteMany({});
+  await IngredientInstance.deleteMany({});
+  console.log("Database cleared.");
 }
 
 async function categoryCreate(index, name) {
@@ -94,10 +105,22 @@ async function createIngredients() {
 async function createIngredientInstances() {
   console.log("Adding Ingredient Instances");
   await Promise.all([
-    ingredientInstanceCreate(0, ingredients[0], "2024-05-01", "2024-05-08"),
-    ingredientInstanceCreate(1, ingredients[1], "2024-05-02", "2024-05-09"),
-    ingredientInstanceCreate(2, ingredients[3], "2024-05-01", "2024-05-04"),
-    ingredientInstanceCreate(3, ingredients[5], "2024-05-01", "2024-05-30"),
-    ingredientInstanceCreate(4, ingredients[7], "2024-05-03", "2024-05-12"),
+    ingredientInstanceCreate(
+      0,
+      ingredients[0],
+      "2024-05-01",
+      "2024-05-08",
+      "Fresh"
+    ),
+    ingredientInstanceCreate(
+      1,
+      ingredients[1],
+      "2024-05-02",
+      "2024-05-09",
+      "Unknown"
+    ),
+    ingredientInstanceCreate(2, ingredients[3], "2024-05-01", "2024-05-04", "Alive"),
+    ingredientInstanceCreate(3, ingredients[5], "2024-05-01", "2024-05-30", "Dead"),
+    ingredientInstanceCreate(4, ingredients[7], "2024-05-03", "2024-05-12", "Dying"),
   ]);
 }

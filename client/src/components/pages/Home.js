@@ -19,10 +19,10 @@ function Home() {
 
   return (
     <div>
-      <h1>Hello User</h1>
+      <h1>{homeData.message || "Loading..."}</h1>
       <h2>Fridge</h2>
       <Link to={`/api/fridge/`}>
-        <p>{homeData.message || "Loading..."}</p>
+        <p>{"More"}</p>
       </Link>
     </div>
   );

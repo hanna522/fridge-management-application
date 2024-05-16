@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Ingredient = require('../model/ingredient');
+const IngredientInstance = require('../model/ingredientInstance');
 
 /// HOME ROUTES ///
 
@@ -13,12 +14,14 @@ router.get("/home", (req, res) => {
 
 /// FRIDGE ROUTES ///
 
-// GET all ingredients
-router.get("/fridge", async (req, res) => {
+// GET all ingredient instances
+router.get("/fridgeinstance", async (req, res) => {
   try {
-    const allIngredients = await Ingredient.find({}).sort({ status: 1 });
+    const allIngredientInstance = await IngredientInstance.find({}).populate('ingredient').sort({
+      status: 1,
+    });
     return res.status(200).json({
-      data: allIngredients,
+      data: allIngredientInstance,
     });
   } catch (err) {
     console.log(err.message);
