@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const category = require('category');
 
 const Schema = mongoose.Schema;
 
@@ -10,9 +9,9 @@ const IngredientSchema = new Schema({
 });
 
 IngredientSchema.virtual("url").get(function() {
-  return `/catalog/ingredient/${this._id}`
+  return `/api/ingredient/${this._id}`
 });
 
 const Ingredient = mongoose.model("Ingredient", IngredientSchema);
 
-module.export = Ingredient;
+module.exports = Ingredient;

@@ -8,8 +8,8 @@ function Fridge() {
   useEffect(() => {
     axios
       .get("http://localhost:5050/api/fridge")
-      .then((response) => {
-        setItems(response.data.items);
+      .then((res) => {
+        setItems(res.data.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -19,7 +19,7 @@ function Fridge() {
   return (
     <ul>
       {items.map((item, index) => (
-        <li key={index}>{item}</li>
+        <li key={index}>{item.name}</li>
       ))}
     </ul>
   );

@@ -9,8 +9,8 @@ function Home() {
   useEffect(() => {
     axios
       .get("http://localhost:5050/api/home")
-      .then((response) => {
-        setHomeData(response.data);
+      .then((res) => {
+        setHomeData(res.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -19,7 +19,11 @@ function Home() {
 
   return (
     <div>
-      <h1>{homeData.message || "Loading..."}</h1>
+      <h1>Hello User</h1>
+      <h2>Fridge</h2>
+      <Link to={`/api/fridge/`}>
+        <p>{homeData.message || "Loading..."}</p>
+      </Link>
     </div>
   );
 }

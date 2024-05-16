@@ -9,7 +9,7 @@ const IngredientInstanceSchema = new Schema({
   status: {
     type: String,
     required: true,
-    enum: ["Fresh", "Alive", "Dying", "Dead"],
+    enum: ["Fresh", "Alive", "Dying", "Dead", "Unknown"],
     default: "Unknown"
   }
 });

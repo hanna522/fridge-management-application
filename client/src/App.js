@@ -14,9 +14,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/fridge" element={<Fridge />} />
+        <Route path="/api/" element={<Home />} />
+        <Route path="/api/home" element={<Home />} />
+        <Route path="/api/fridge" element={<Fridge />} />
       </Routes>
     </Router>
   );
