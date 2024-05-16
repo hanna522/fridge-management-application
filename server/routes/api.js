@@ -1,5 +1,4 @@
 const express = require('express');
-//const { category } = require('../model/category.js);
 const router = express.Router();
 
 // Home date endpoint
