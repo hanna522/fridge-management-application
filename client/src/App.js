@@ -7,18 +7,19 @@ import Home from './components/pages/Home';
 //import Recipe from "./components/pages/Recipe";
 import Fridge from "./components/pages/Fridge";
 import Navbar from './components/Navbar';
-//import Footer from "./components/Footer";
+import Footer from "./components/Footer";
 //import NotFoundPage from '/components/pages/NotFoundPage';
 
 function App() {
   return (
     <Router>
-      <Navbar/>
+      <Navbar />
       <Routes>
         <Route path="/api/" element={<Home />} />
         <Route path="/api/home" element={<Home />} />
         <Route path="/api/fridge" element={<Fridge />} />
       </Routes>
+      <Footer />
     </Router>
   );
 }
