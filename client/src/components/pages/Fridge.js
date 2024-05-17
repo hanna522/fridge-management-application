@@ -5,6 +5,7 @@ import Modal from "react-modal";
 import FridgeCard from "./FridgeCard";
 import FridgeDetail from "./FridgeDetail";
 import FridgeAdd from "./FridgeAdd";
+import { PlusCircleFill } from "react-bootstrap-icons";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
@@ -33,8 +34,8 @@ function Fridge() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-      fetchData();
 
+      fetchData();
   }, []);
   
   const fetchData = () => {
@@ -106,9 +107,7 @@ function Fridge() {
           <FridgeCard key={index} item={item} onViewDetail={handleViewDetail} />
         ))}
       </ul>
-      <h2 onClick={handleAdd} style={{ cursor: "pointer" }}>
-        +
-      </h2>
+      <PlusCircleFill size= {35} color="blue" onClick={handleAdd} style={{ cursor: "pointer" }} />
 
       <Modal
         isOpen={!!selectedItem}

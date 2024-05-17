@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Trash } from "react-bootstrap-icons";
 
 function FridgeDetail({ item, onEdit, onClose }) {
   const [isEditing, setIsEditing] = useState(false);
