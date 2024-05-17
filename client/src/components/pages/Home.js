@@ -18,13 +18,21 @@ function Home() {
   }, []);
 
   return (
-    <div>
+    <>
       <h1>{homeData.message || "Loading..."}</h1>
-      <h2>Fridge</h2>
-      <Link to={`/api/fridge/`}>
-        <p>{"More"}</p>
-      </Link>
-    </div>
+      <div>
+        <h2>Meal</h2>
+        <Link to={`/api/meal/`}>
+          <p>{"More"}</p>
+        </Link>
+      </div>
+      <div>
+        <h2>Fridge</h2>
+        <Link to={`/api/fridge/`}>
+          <p>{"More"}</p>
+        </Link>
+      </div>
+    </>
   );
 }
 
