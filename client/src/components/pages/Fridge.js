@@ -10,7 +10,7 @@ Modal.setAppElement("#root"); // Set the app element for accessibility
 
 function Fridge() {
   const [items, setItems] = useState([]);
-  const [selections, setSelections] = useState({
+  const [createElements, setCreateElements] = useState({
     ingredient_list: [],
     category_list: [],
   });
@@ -20,7 +20,6 @@ function Fridge() {
     exp_date: "",
     status: "",
   });
-  const [editingItemId, setEditingItemId] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null); // For viewing details
   const [selectedAdd, setSelectedAdd] = useState(false);
 
@@ -28,13 +27,17 @@ function Fridge() {
     axios
       .get("http://localhost:5050/api/fridgeinstance/create")
       .then((res) => {
-        setSelections(res.data);
+        setCreateElements(res.data);
         console.log("Create Fridge Instance");
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+      fetchData();
 
+  }, []);
+  
+  const fetchData = () => {
     axios
       .get("http://localhost:5050/api/fridgeinstance")
       .then((res) => {
@@ -43,7 +46,16 @@ function Fridge() {
       .catch((error) => {
         console.error("Error fetching items:", error);
       });
-  }, []);
+  };
+  
+  const handleEdit = (updatedItem) => {
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item._id === updatedItem._id ? updatedItem : item
+      )
+    );
+    setSelectedItem(null);
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,88 +67,26 @@ function Fridge() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (editingItemId) {
-      axios
-        .put(
-          `http://localhost:5050/api/fridgeinstance/${editingItemId}`,
-          formData
-        )
-        .then((res) => {
-          console.log("Fridge instance updated:", res.data);
-          // 필요한 경우 상태 초기화
-          setFormData({
-            ingredient: "",
-            buy_date: "",
-            exp_date: "",
-            status: "",
-          });
-          setEditingItemId(null);
-          // 필요한 경우 새로 추가된 항목을 상태에 반영
-          setItems((prevItems) =>
-            prevItems.map((item) =>
-              item._id === res.data.ingredientInstance._id
-                ? res.data.ingredientInstance
-                : item
-            )
-          );
-          setSelectedAdd(false);
-        })
-        .catch((error) => {
-          console.error("Error updating fridge instance:", error);
+    axios
+      .post("http://localhost:5050/api/fridgeinstance/create", formData)
+      .then((res) => {
+        console.log("Fridge instance created:", res.data);
+        // reset FormData
+        setFormData({
+          ingredient: "",
+          buy_date: "",
+          exp_date: "",
+          status: "",
         });
-    } else {
-      axios
-        .post("http://localhost:5050/api/fridgeinstance/create", formData)
-        .then((res) => {
-          console.log("Fridge instance created:", res.data);
-          // 필요한 경우 상태 초기화
-          setFormData({
-            ingredient: "",
-            buy_date: "",
-            exp_date: "",
-            status: "",
-          });
-          // 필요한 경우 새로 추가된 항목을 상태에 반영
-          setItems((prevItems) => [...prevItems, res.data.ingredientInstance]);
-          setSelectedAdd(false);
-        })
-        .catch((error) => {
-          console.error("Error creating fridge instance:", error);
-        });
-    }
-  };
-
-  const handleEdit = (item) => {
-    setFormData({
-      ingredient: item.ingredient._id,
-      buy_date: item.buy_date.split("T")[0], // assuming the date is in ISO format
-      exp_date: item.exp_date.split("T")[0],
-      status: item.status,
-    });
-    setEditingItemId(item._id);
+        setSelectedAdd(false);
+      })
+      .catch((error) => {
+        console.error("Error creating fridge instance:", error);
+      });
   };
 
   const handleViewDetail = (item) => {
     setSelectedItem(item);
-  };
-
-  const handleSave = (formData) => {
-    axios
-      .put(`http://localhost:5050/api/fridgeinstance/${formData._id}`, formData)
-      .then((res) => {
-        console.log("Fridge instance updated:", res.data);
-        setItems((prevItems) =>
-          prevItems.map((item) =>
-            item._id === res.data.ingredientInstance._id
-              ? res.data.ingredientInstance
-              : item
-          )
-        );
-        setSelectedItem(null);
-      })
-      .catch((error) => {
-        console.error("Error updating fridge instance:", error);
-      });
   };
 
   const closeModal = () => {
@@ -170,8 +120,8 @@ function Fridge() {
         {selectedItem && (
           <FridgeDetail
             item={selectedItem}
+            onEdit={handleEdit}
             onClose={closeModal}
-            onSave={handleSave}
           />
         )}
       </Modal>
@@ -186,7 +136,7 @@ function Fridge() {
         {selectedAdd && (
           <FridgeAdd
             formData={formData}
-            selections={selections}
+            selections={createElements}
             onHandleSubmit={handleSubmit}
             onHandleChange={handleChange}
             onClose={closeModal}

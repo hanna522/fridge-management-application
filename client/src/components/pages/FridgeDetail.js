@@ -1,13 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-function FridgeDetail({ item, onEdit, onClose, onSave }) {
+function FridgeDetail({ item, onEdit, onClose }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [updateElements, setUpdateElements] = useState({
+    ingredient_list: [],
+    selected_ingredient: "",
+    ingredientinstance: "",
+  });
   const [formData, setFormData] = useState({
     ingredient: item.ingredient._id,
-    buy_date: item.buy_date,
-    exp_date: item.exp_date,
+    buy_date: item.buy_date.split("T")[0], // assuming the date is in ISO format
+    exp_date: item.exp_date.split("T")[0],
     status: item.status,
   });
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5050/api/fridgeinstance/${item._id}/update`)
+      .then((res) => {
+        setUpdateElements(res.data);
+        console.log("Update Fridge Instance");
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [item._id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,8 +36,18 @@ function FridgeDetail({ item, onEdit, onClose, onSave }) {
   };
 
   const handleSave = () => {
-    onSave(formData);
-    setIsEditing(false);
+    axios
+      .put(
+        `http://localhost:5050/api/fridgeinstance/${item._id}/update`,
+        formData
+      )
+      .then((res) => {
+        console.log("Fridge instance updated:", res.data);
+        setIsEditing(false);
+      })
+      .catch((error) => {
+        console.error("Error updating fridge instance:", error);
+      });
   };
 
   return (
@@ -35,7 +63,11 @@ function FridgeDetail({ item, onEdit, onClose, onSave }) {
             value={formData.ingredient}
             onChange={handleChange}
           >
-            <option value={item.ingredient._id}>{item.ingredient.name}</option>
+            {updateElements.ingredient_list.map((ingredient) => (
+              <option key={ingredient._id} value={ingredient._id}>
+                {ingredient.name}
+              </option>
+            ))}
           </select>
 
           <div className="form-group">
@@ -82,7 +114,7 @@ function FridgeDetail({ item, onEdit, onClose, onSave }) {
         </div>
       ) : (
         <div>
-          <p>ingredient: {item.ingredient.name}</p>
+          <p>Ingredient: {item.ingredient.name}</p>
           <p>Status: {item.status}</p>
           <p>Buy Date: {new Date(item.buy_date).toLocaleDateString()}</p>
           <p>Expiration Date: {new Date(item.exp_date).toLocaleDateString()}</p>
