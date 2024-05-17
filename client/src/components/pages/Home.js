@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import Fridge from "./Fridge";
+import FridgeCard from "./FridgeCard";
 
-function Home() {
+function Home({ items }) {
   const [homeData, setHomeData] = useState({});
 
   useEffect(() => {
@@ -18,6 +18,10 @@ function Home() {
       });
   }, []);
 
+  const linkToFridge = (item) => {
+    return <Link to={`/api/fridge/`}></Link>
+  };
+  
   return (
     <>
       <h1>{homeData.message || "Loading..."}</h1>
@@ -29,6 +33,15 @@ function Home() {
       </div>
       <div>
         <h2>Fridge</h2>
+        <ul>
+          {items.map((item, index) => (
+            <FridgeCard
+              key={index}
+              item={item}
+              onViewDetail={linkToFridge}
+            />
+          ))}
+        </ul>
         <Link to={`/api/fridge/`}>
           <p>{"More"}</p>
         </Link>
