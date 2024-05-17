@@ -120,6 +120,25 @@ function Fridge() {
     setSelectedItem(item);
   };
 
+  const handleSave = (formData) => {
+    axios
+      .put(`http://localhost:5050/api/fridgeinstance/${formData._id}`, formData)
+      .then((res) => {
+        console.log("Fridge instance updated:", res.data);
+        setItems((prevItems) =>
+          prevItems.map((item) =>
+            item._id === res.data.ingredientInstance._id
+              ? res.data.ingredientInstance
+              : item
+          )
+        );
+        setSelectedItem(null);
+      })
+      .catch((error) => {
+        console.error("Error updating fridge instance:", error);
+      });
+  };
+
   const closeModal = () => {
     setSelectedItem(null);
     setSelectedAdd(false);
@@ -149,7 +168,11 @@ function Fridge() {
         overlayClassName="Overlay"
       >
         {selectedItem && (
-          <FridgeDetail item={selectedItem} onClose={closeModal} />
+          <FridgeDetail
+            item={selectedItem}
+            onClose={closeModal}
+            onSave={handleSave}
+          />
         )}
       </Modal>
 

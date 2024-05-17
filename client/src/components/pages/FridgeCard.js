@@ -2,7 +2,7 @@ import React from "react";
 
 function FridgeCard({ item, onViewDetail }) {
   return (
-    <li onClick={() => onViewDetail(item)}>
+    <li onClick={() => onViewDetail(item)} style={{ cursor: "pointer" }}>
       <p>
         <b>{item.ingredient.name}</b>
       </p>
