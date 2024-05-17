@@ -17,10 +17,6 @@ function Home({ items }) {
         console.error("Error fetching data:", error);
       });
   }, []);
-
-  const linkToFridge = (item) => {
-    return <Link to={`/api/fridge/`}></Link>
-  };
   
   return (
     <>
@@ -34,12 +30,11 @@ function Home({ items }) {
       <div>
         <h2>Fridge</h2>
         <ul>
-          {items.map((item, index) => (
-            <FridgeCard
-              key={index}
-              item={item}
-              onViewDetail={linkToFridge}
-            />
+          {items.slice(0, 10).map((item, index) => (
+            <li>
+              <p>{item.ingredient.name}</p>
+              <p>{item.status}</p>
+            </li>
           ))}
         </ul>
         <Link to={`/api/fridge/`}>

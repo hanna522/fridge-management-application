@@ -29,17 +29,9 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route
-          path="/api/"
-          element={<Home items={items.slice(0, 3) || []} />}
-        />
-        <Route
-          path="/api/home"
-          element={<Home items={items.slice(0, 3) || []} />}
-        />
-        <Route 
-          path="/api/fridge" 
-          element={<Fridge items={items || []} />} />
+        <Route path="/api/" element={<Home items={items || []} />} />
+        <Route path="/api/home" element={<Home items={items || []} />} />
+        <Route path="/api/fridge" element={<Fridge items={items || []} />} />
       </Routes>
       <Footer />
     </Router>
