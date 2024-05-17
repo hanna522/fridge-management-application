@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
+import FridgeDetail from "./FridgeDetail";
 import { deleteFridgeInstance } from "../../Api";
 import { Trash } from "react-bootstrap-icons";
 
-function FridgeCard({ item, onViewDetail}) {
+function FridgeCard({ item, onItemUpdate, onItemDelete}) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // For delete confirmation modal
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   const handleDeleteClick = () => {
     setIsDeleteModalOpen(true);
@@ -18,6 +20,7 @@ function FridgeCard({ item, onViewDetail}) {
     deleteFridgeInstance(item._id)
       .then((res) => {
         console.log("Fridge instance deleted:", res.data);
+        onItemDelete(item._id);
       })
       .catch((error) => {
         console.error("Error deleting fridge instance:", error);
@@ -31,7 +34,7 @@ function FridgeCard({ item, onViewDetail}) {
 
   return (
     <>
-      <li onClick={() => onViewDetail(item)} style={{ cursor: "pointer" }}>
+      <li onClick={() => setIsDetailOpen(true)} style={{ cursor: "pointer" }}>
         <p>
           <b>{item.ingredient.name}</b>
         </p>
@@ -45,6 +48,21 @@ function FridgeCard({ item, onViewDetail}) {
         onClick={handleDeleteClick}
         style={{ cursor: "pointer" }}
       />
+
+      <Modal
+        isOpen={isDetailOpen}
+        onRequestClose={() => setIsDetailOpen(false)}
+        contentLabel="Ingredient Details"
+        className="Modal"
+        overlayClassName="Overlay"
+      >
+        <FridgeDetail
+          item={item}
+          onClose={() => setIsDetailOpen(false)}
+          onItemUpdate={onItemUpdate}
+        />
+      </Modal>
+
       <Modal
         isOpen={isDeleteModalOpen}
         onRequestClose={closeDeleteModal}

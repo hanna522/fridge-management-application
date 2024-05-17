@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import FridgeCard from "./FridgeCard";
-import FridgeDetail from "./FridgeDetail";
 import FridgeAdd from "./FridgeAdd";
 import { getCreateFormFridgeInstance, createFridgeInstance } from "../../Api";
 import { PlusCircleFill } from "react-bootstrap-icons";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
-function Fridge({ items }) {
+function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd }) {
   const [createElements, setCreateElements] = useState({
     ingredient_list: [],
     category_list: [],
@@ -19,7 +18,6 @@ function Fridge({ items }) {
     exp_date: "",
     status: "",
   });
-  const [selectedItem, setSelectedItem] = useState(null); // For viewing details
   const [selectedAdd, setSelectedAdd] = useState(false);
 
   useEffect(() => {
@@ -32,13 +30,6 @@ function Fridge({ items }) {
         console.error("Error fetching data:", error);
       });
   }, []);
-  
-  const handleEdit = (updatedItem) => {
-    items.map((item) =>
-      item._id === updatedItem._id ? updatedItem : item
-    )
-    setSelectedItem(null);
-  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,23 +52,19 @@ function Fridge({ items }) {
           status: "",
         });
         setSelectedAdd(false);
+        onItemAdd(res.data.ingredientInstance);
       })
       .catch((error) => {
         console.error("Error creating fridge instance:", error);
       });
   };
 
-  const handleViewDetail = (item) => {
-    setSelectedItem(item);
+  const handleAdd = () => {
+    setSelectedAdd(true);
   };
 
   const closeModal = () => {
-    setSelectedItem(null);
     setSelectedAdd(false);
-  };
-
-  const handleAdd = () => {
-    setSelectedAdd(true);
   };
 
   return (
@@ -85,26 +72,15 @@ function Fridge({ items }) {
       <h1>Your Fridge</h1>
       <ul>
         {items.map((item, index) => (
-          <FridgeCard key={index} item={item} onViewDetail={handleViewDetail} />
+          <FridgeCard key={index} item={item} onItemUpdate={onItemUpdate} onItemDelete={onItemDelete} />
         ))}
       </ul>
-      <PlusCircleFill size= {35} color="blue" onClick={handleAdd} style={{ cursor: "pointer" }} />
-
-      <Modal
-        isOpen={!!selectedItem}
-        onRequestClose={closeModal}
-        contentLabel="Ingredient Details"
-        className="Modal"
-        overlayClassName="Overlay"
-      >
-        {selectedItem && (
-          <FridgeDetail
-            item={selectedItem}
-            onEdit={handleEdit}
-            onClose={closeModal}
-          />
-        )}
-      </Modal>
+      <PlusCircleFill
+        size={35}
+        color="blue"
+        onClick={handleAdd}
+        style={{ cursor: "pointer" }}
+      />
 
       <Modal
         isOpen={!!selectedAdd}

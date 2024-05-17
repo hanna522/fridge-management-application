@@ -15,15 +15,35 @@ function App() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = () => {
     fetchFridgeInstances()
       .then((res) => {
-        console.log("Fetched data:", res.data.data);
         setItems(res.data.data);
       })
       .catch((error) => {
         console.error("Error fetching items:", error);
       });
-  }, []);
+  };
+
+  const handleItemUpdate = (updatedItem) => {
+    setItems((prevItems) =>
+      prevItems.map((item) =>
+        item._id === updatedItem._id ? updatedItem : item
+      )
+    );
+  };
+
+  const handleItemDelete = (id) => {
+    setItems((prevItems) => prevItems.filter((item) => item._id !== id));
+  };
+
+  const handleItemAdd = (newItem) => {
+    setItems((prevItems) => [...prevItems, newItem]);
+  };
+
 
   return (
     <Router>
@@ -31,7 +51,7 @@ function App() {
       <Routes>
         <Route path="/api/" element={<Home items={items || []} />} />
         <Route path="/api/home" element={<Home items={items || []} />} />
-        <Route path="/api/fridge" element={<Fridge items={items || []} />} />
+        <Route path="/api/fridge" element={<Fridge items={items} onItemUpdate={handleItemUpdate} onItemDelete={handleItemDelete} onItemAdd={handleItemAdd} />} />
       </Routes>
       <Footer />
     </Router>

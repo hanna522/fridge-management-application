@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import FridgeCard from "./FridgeCard";
 
 function Home({ items }) {
   const [homeData, setHomeData] = useState({});
@@ -28,16 +27,16 @@ function Home({ items }) {
         </Link>
       </div>
       <div>
-        <h2>Fridge</h2>
-        <ul>
-          {items.slice(0, 10).map((item, index) => (
-            <li>
-              <p>{item.ingredient.name}</p>
-              <p>{item.status}</p>
-            </li>
-          ))}
-        </ul>
         <Link to={`/api/fridge/`}>
+          <h2>Fridge</h2>
+          <ul>
+            {items.slice(0, 10).map((item, index) => (
+              <li>
+                <p>{item.ingredient.name}</p>
+                <p>{item.status}</p>
+              </li>
+            ))}
+          </ul>
           <p>{"More"}</p>
         </Link>
       </div>

@@ -68,7 +68,7 @@ function FridgeAdd({
         </div>
 
         <button type="submit" className="btn btn-primary">
-          {formData._id ? "Update Ingredient" : "Add Ingredient"}
+          Add
         </button>
         <button type="button" className="btn btn-secondary" onClick={onClose}>
           Cancel

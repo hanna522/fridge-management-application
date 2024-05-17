@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {getUpdateFormFridgeInstance, updateFridgeInstance} from "../../Api";
 
-function FridgeDetail({ item, onEdit, onClose }) {
+function FridgeDetail({ item, onClose, onItemUpdate }) {
   const [isEditing, setIsEditing] = useState(false);
   const [updateElements, setUpdateElements] = useState({
     ingredient_list: [],
@@ -38,7 +38,9 @@ function FridgeDetail({ item, onEdit, onClose }) {
     updateFridgeInstance(item._id, formData)
       .then((res) => {
         console.log("Fridge instance updated:", res.data);
+        onItemUpdate(res.data.ingredientInstance);
         setIsEditing(false);
+        onClose();
       })
       .catch((error) => {
         console.error("Error updating fridge instance:", error);
