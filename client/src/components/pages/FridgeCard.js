@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
-import axios from "axios";
+import { deleteFridgeInstance } from "../../Api";
 import { Trash } from "react-bootstrap-icons";
 
 function FridgeCard({ item, onViewDetail}) {
@@ -13,9 +13,9 @@ function FridgeCard({ item, onViewDetail}) {
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
   };
+
   const onDeleteConfirm = (item) => {
-    axios
-      .delete(`http://localhost:5050/api/fridgeinstance/${item._id}/delete`)
+    deleteFridgeInstance(item._id)
       .then((res) => {
         console.log("Fridge instance deleted:", res.data);
       })

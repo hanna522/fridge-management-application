@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Trash } from "react-bootstrap-icons";
+import {getUpdateFormFridgeInstance, updateFridgeInstance} from "../../Api";
 
 function FridgeDetail({ item, onEdit, onClose }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -11,14 +10,13 @@ function FridgeDetail({ item, onEdit, onClose }) {
   });
   const [formData, setFormData] = useState({
     ingredient: item.ingredient._id,
-    buy_date: item.buy_date.split("T")[0], // assuming the date is in ISO format
+    buy_date: item.buy_date.split("T")[0],
     exp_date: item.exp_date.split("T")[0],
     status: item.status,
   });
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5050/api/fridgeinstance/${item._id}/update`)
+    getUpdateFormFridgeInstance(item._id)
       .then((res) => {
         setUpdateElements(res.data);
         console.log("Update Fridge Instance");
@@ -37,11 +35,7 @@ function FridgeDetail({ item, onEdit, onClose }) {
   };
 
   const handleSave = () => {
-    axios
-      .put(
-        `http://localhost:5050/api/fridgeinstance/${item._id}/update`,
-        formData
-      )
+    updateFridgeInstance(item._id, formData)
       .then((res) => {
         console.log("Fridge instance updated:", res.data);
         setIsEditing(false);

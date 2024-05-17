@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
 import Modal from "react-modal";
 import FridgeCard from "./FridgeCard";
 import FridgeDetail from "./FridgeDetail";
 import FridgeAdd from "./FridgeAdd";
+import { getCreateFormFridgeInstance, createFridgeInstance } from "../../Api";
 import { PlusCircleFill } from "react-bootstrap-icons";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
-function Fridge() {
-  const [items, setItems] = useState([]);
+function Fridge({ items }) {
   const [createElements, setCreateElements] = useState({
     ingredient_list: [],
     category_list: [],
@@ -25,8 +23,7 @@ function Fridge() {
   const [selectedAdd, setSelectedAdd] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5050/api/fridgeinstance/create")
+    getCreateFormFridgeInstance()
       .then((res) => {
         setCreateElements(res.data);
         console.log("Create Fridge Instance");
@@ -34,27 +31,12 @@ function Fridge() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-
-      fetchData();
   }, []);
   
-  const fetchData = () => {
-    axios
-      .get("http://localhost:5050/api/fridgeinstance")
-      .then((res) => {
-        setItems(res.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching items:", error);
-      });
-  };
-  
   const handleEdit = (updatedItem) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item._id === updatedItem._id ? updatedItem : item
-      )
-    );
+    items.map((item) =>
+      item._id === updatedItem._id ? updatedItem : item
+    )
     setSelectedItem(null);
   }
 
@@ -68,8 +50,7 @@ function Fridge() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:5050/api/fridgeinstance/create", formData)
+    createFridgeInstance(formData)
       .then((res) => {
         console.log("Fridge instance created:", res.data);
         // reset FormData
