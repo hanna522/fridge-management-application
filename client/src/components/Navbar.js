@@ -6,20 +6,22 @@ import { Link } from "react-router-dom";
 function Navbar() {
 
   return (
-    <ul>
-      <li>
-        <Link to="/api/home">Home</Link>
-      </li>
-      <li>
-        <Link to="/api/fridge">Fridge</Link>
-      </li>
-      <li>
-        <Link to="/api/meal">Meal</Link>
-      </li>
-      <li>
-        <Link to="/api/mypage">My Page</Link>
-      </li>
-    </ul>
+    <div className="navbar-container">
+      <ul className="navbar-list">
+        <li>
+          <Link to="/api/home">Home</Link>
+        </li>
+        <li>
+          <Link to="/api/fridge">Fridge</Link>
+        </li>
+        <li>
+          <Link to="/api/meal">Meal</Link>
+        </li>
+        <li>
+          <Link to="/api/mypage">My Page</Link>
+        </li>
+      </ul>
+    </div>
   );
 }
 

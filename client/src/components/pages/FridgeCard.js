@@ -34,20 +34,30 @@ function FridgeCard({ item, onItemUpdate, onItemDelete}) {
 
   return (
     <>
-      <li onClick={() => setIsDetailOpen(true)} style={{ cursor: "pointer" }}>
-        <p>
-          <b>{item.ingredient.name}</b>
-        </p>
-        <p>{item.status}</p>
-        <p>{new Date(item.buy_date).toLocaleDateString()}</p>
-        <p>{new Date(item.exp_date).toLocaleDateString()}</p>
-      </li>
-      <Trash
-        size={15}
-        color="gray"
-        onClick={handleDeleteClick}
+      <li
+        className="fridge-card"
+        onClick={() => setIsDetailOpen(true)}
         style={{ cursor: "pointer" }}
-      />
+      >
+        <section className={"status-" + item.status}>
+          <div className="heading">
+            <p>
+              <b>{item.ingredient.name}</b>
+            </p>
+            <p>{item.ingredient.category.name}</p>
+            <Trash
+              size={15}
+              color="gray"
+              onClick={handleDeleteClick}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+          <p className="content">
+            {new Date(item.buy_date).toLocaleDateString()} -{" "}
+            {new Date(item.exp_date).toLocaleDateString()}
+          </p>
+        </section>
+      </li>
 
       <Modal
         isOpen={isDetailOpen}

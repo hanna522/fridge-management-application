@@ -69,7 +69,7 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd }) {
   return (
     <>
       <h1>Your Fridge</h1>
-      <ul>
+      <ul className="fridge-card-container">
         {items.map((item, index) => (
           <FridgeCard key={index} item={item} onItemUpdate={onItemUpdate} onItemDelete={onItemDelete} />
         ))}
