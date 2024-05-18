@@ -110,7 +110,7 @@ async function createIngredientInstances() {
       ingredients[0],
       "2024-05-01",
       "2024-05-08",
-      "Fresh"
+      "Unknown"
     ),
     ingredientInstanceCreate(
       1,
@@ -119,8 +119,26 @@ async function createIngredientInstances() {
       "2024-05-09",
       "Unknown"
     ),
-    ingredientInstanceCreate(2, ingredients[3], "2024-05-01", "2024-05-04", "Alive"),
-    ingredientInstanceCreate(3, ingredients[5], "2024-05-01", "2024-05-30", "Dead"),
-    ingredientInstanceCreate(4, ingredients[7], "2024-05-03", "2024-05-12", "Dying"),
+    ingredientInstanceCreate(
+      2,
+      ingredients[3],
+      "2024-05-01",
+      "2024-05-04",
+      "Unknown"
+    ),
+    ingredientInstanceCreate(
+      3,
+      ingredients[5],
+      "2024-05-01",
+      "2024-05-30",
+      "Unknown"
+    ),
+    ingredientInstanceCreate(
+      4,
+      ingredients[7],
+      "2024-05-03",
+      "2024-05-12",
+      "Unknown"
+    ),
   ]);
 }

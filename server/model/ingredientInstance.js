@@ -18,4 +18,20 @@ IngredientInstanceSchema.virtual("url").get(function() {
   return `/api/ingredientinstance/${this._id}`;
 })
 
+// use pre-save hook for conditional status
+IngredientInstanceSchema.pre('save', function(next) {
+  const currentDate = new Date();
+  const status_ratio = (this.exp_date - currentDate) / (this.exp_date - this.buy_date);
+  if (status_ratio < 0) {
+    this.status = "Dead";
+  } else if (status_ratio < 0.2) {
+    this.status= "Dying"
+  } else if (status_ratio < 0.5) {
+    this.status = "Alive"
+  } else {
+    this.status = "Fresh"
+  }
+  next();
+});
+
 module.exports = mongoose.model("IngredientInstance", IngredientInstanceSchema);
