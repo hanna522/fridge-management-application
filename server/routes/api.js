@@ -63,11 +63,15 @@ router.post("/fridgeinstance/create", [
       });
     } else {
       await ingredientInstance.save();
+      const addedIngredientInstance = await ingredientInstance.populate({
+        path: "ingredient",
+        populate: { path: "category" },
+      });
       res
         .status(201)
         .json({
           message: "Ingredient instance created successfully",
-          ingredientInstance,
+          ingredientInstance: addedIngredientInstance,
         });
     }
   },
