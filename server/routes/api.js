@@ -21,9 +21,9 @@ router.get("/home", (req, res) => {
 // GET request for creating an ingredient instance. NOTE This must come before routes that display ingredient instances
 router.get("/fridgeinstance/create", async (req, res) => {
   try {
-    const allIngredients = await Ingredient.find({}).populate("category").sort({ title: 1 }).exec();
+    const allIngredients = await Ingredient.find().sort({ title: 1 }).exec();
     return res.status(200).json({
-      ingredient_list: allIngredients
+      ingredient_list: allIngredients,
     });
   } catch (err) {
     console.log(err.message);
@@ -46,31 +46,23 @@ router.post("/fridgeinstance/create", [
       buy_date: req.body.buy_date,
       exp_date: req.body.exp_date,
       status: req.body.status,
-      _id: req.params.id,
     });
-
     if (!errors.isEmpty()) {
-      const allIngredients = await Ingredient.find().populate("category").sort({ name: 1 }).exec();
+      const allIngredients = await Ingredient.find().sort({ name: 1 }).exec();
 
       return res.status(400).json({
         ingredient_list: allIngredients,
-        selected_ingredient: ingredientInstance.ingredient._id,
         ingredientInstance: ingredientInstance,
         errors: errors.array(),
       });
     } else {
-      const updatedInstance = await IngredientInstance.findByIdAndUpdate(
-        req.params.id,
-        ingredientInstance,
-        { new: true }
-      ).populate({
-        path: "ingredient",
-        populate: { path: "category" },
-      });
-      res.status(201).json({
-        message: "Ingredient instance created successfully",
-        ingredientInstance: updatedInstance,
-      });
+      await ingredientInstance.save();
+      res
+        .status(201)
+        .json({
+          message: "Ingredient instance created successfully",
+          ingredientInstance,
+        });
     }
   },
 ]);
@@ -81,10 +73,7 @@ router.post("/fridgeinstance/create", [
 router.get("/fridgeinstance", async (req, res) => {
   try {
     const allIngredientInstance = await IngredientInstance.find({})
-      .populate({
-        path: "ingredient",
-        populate: { path: "category" }
-      })
+      .populate("ingredient")
       .sort({
         status: 1,
       });
@@ -101,19 +90,14 @@ router.get("/fridgeinstance", async (req, res) => {
 // Display ingredient instance update form on GET
 router.get("/fridgeinstance/:id/update", async (req, res) => {
   try {
-    const [ingredientInstance, allIngredient] = await Promise.all([
-      IngredientInstance.findById(req.params.id)
-        .populate({
-          path: "ingredient",
-          populate: { path: "category" },
-        })
-        .exec(),
-      Ingredient.find().populate("category"),
+    const [ingredientinstance, allIngredient] = await Promise.all([
+      IngredientInstance.findById(req.params.id).populate("ingredient").exec(),
+      Ingredient.find(),
     ]);
     return res.status(200).json({
       ingredient_list: allIngredient,
-      selected_ingredient: ingredientInstance.ingredient._id,
-      ingredientInstance: ingredientInstance,
+      selected_ingredient: ingredientinstance.ingredient._id,
+      ingredientinstance: ingredientinstance,
     });
   } catch (err) {
     console.log(err.message);
@@ -153,7 +137,7 @@ router.put("/fridgeinstance/:id/update", [
         req.params.id,
         ingredientInstance,
         { new: true }
-      ).populate("ingredient");
+      );
       res
         .status(200)
         .json({

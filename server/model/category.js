@@ -10,6 +10,6 @@ CategorySchema.virtual("url").get(function() {
   return `/api/category/${this._id}`
 });
 
-const Category = mongoose.model("Category", CategorySchema);
+const Category = mongoose.model("category", CategorySchema);
 
 module.exports = Category;

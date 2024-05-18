@@ -38,7 +38,6 @@ function FridgeCard({ item, onItemUpdate, onItemDelete}) {
         <p>
           <b>{item.ingredient.name}</b>
         </p>
-        <p>{item.ingredient.category.name}</p>
         <p>{item.status}</p>
         <p>{new Date(item.buy_date).toLocaleDateString()}</p>
         <p>{new Date(item.exp_date).toLocaleDateString()}</p>
