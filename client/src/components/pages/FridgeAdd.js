@@ -49,24 +49,6 @@ function FridgeAdd({
           />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="status">Status:</label>
-          <select
-            className="form-control"
-            name="status"
-            required
-            value={formData.status}
-            onChange={onHandleChange}
-          >
-            <option value="">Select a status</option>
-            <option value="Fresh">Fresh</option>
-            <option value="Alive">Alive</option>
-            <option value="Dying">Dying</option>
-            <option value="Dead">Dead</option>
-            <option value="Unknown">Unknown</option>
-          </select>
-        </div>
-
         <button type="submit" className="btn btn-primary">
           Add
         </button>

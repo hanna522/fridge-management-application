@@ -10,13 +10,12 @@ Modal.setAppElement("#root"); // Set the app element for accessibility
 function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd }) {
   const [createElements, setCreateElements] = useState({
     ingredient_list: [],
-    category_list: [],
   });
   const [formData, setFormData] = useState({
     ingredient: "",
     buy_date: "",
     exp_date: "",
-    status: "",
+    status: "Unknown",
   });
   const [selectedAdd, setSelectedAdd] = useState(false);
 
@@ -49,7 +48,7 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd }) {
           ingredient: "",
           buy_date: "",
           exp_date: "",
-          status: "",
+          status: "Unknown",
         });
         setSelectedAdd(false);
         onItemAdd(res.data.ingredientInstance);

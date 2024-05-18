@@ -21,7 +21,10 @@ router.get("/home", (req, res) => {
 // GET request for creating an ingredient instance. NOTE This must come before routes that display ingredient instances
 router.get("/fridgeinstance/create", async (req, res) => {
   try {
-    const allIngredients = await Ingredient.find().sort({ title: 1 }).exec();
+    const allIngredients = await Ingredient.find()
+      .populate("category")
+      .sort({ name: 1 })
+      .exec();
     return res.status(200).json({
       ingredient_list: allIngredients,
     });
@@ -48,7 +51,10 @@ router.post("/fridgeinstance/create", [
       status: req.body.status,
     });
     if (!errors.isEmpty()) {
-      const allIngredients = await Ingredient.find().sort({ name: 1 }).exec();
+    const allIngredients = await Ingredient.find({})
+      .populate("category")
+      .sort({ title: 1 })
+      .exec();
 
       return res.status(400).json({
         ingredient_list: allIngredients,
@@ -73,7 +79,10 @@ router.post("/fridgeinstance/create", [
 router.get("/fridgeinstance", async (req, res) => {
   try {
     const allIngredientInstance = await IngredientInstance.find({})
-      .populate("ingredient")
+      .populate({
+        path: "ingredient",
+        populate: { path: "category" },
+      })
       .sort({
         status: 1,
       });
@@ -91,7 +100,12 @@ router.get("/fridgeinstance", async (req, res) => {
 router.get("/fridgeinstance/:id/update", async (req, res) => {
   try {
     const [ingredientinstance, allIngredient] = await Promise.all([
-      IngredientInstance.findById(req.params.id).populate("ingredient").exec(),
+      IngredientInstance.findById(req.params.id)
+        .populate({
+          path: "ingredient",
+          populate: { path: "category" },
+        })
+        .exec(),
       Ingredient.find(),
     ]);
     return res.status(200).json({
@@ -137,7 +151,10 @@ router.put("/fridgeinstance/:id/update", [
         req.params.id,
         ingredientInstance,
         { new: true }
-      );
+      ).populate({
+        path: "ingredient",
+        populate: { path: "category" },
+      });
       res
         .status(200)
         .json({
