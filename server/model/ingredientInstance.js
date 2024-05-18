@@ -19,17 +19,18 @@ IngredientInstanceSchema.virtual("url").get(function() {
 })
 
 // use pre-save hook for conditional status
-IngredientInstanceSchema.pre('save', function(next) {
+IngredientInstanceSchema.pre("save", function (next) {
   const currentDate = new Date();
-  const status_ratio = (this.exp_date - currentDate) / (this.exp_date - this.buy_date);
+  const status_ratio =
+    (this.exp_date - currentDate) / (this.exp_date - this.buy_date);
   if (status_ratio < 0) {
     this.status = "Dead";
   } else if (status_ratio < 0.2) {
-    this.status= "Dying"
+    this.status = "Dying";
   } else if (status_ratio < 0.5) {
-    this.status = "Alive"
+    this.status = "Alive";
   } else {
-    this.status = "Fresh"
+    this.status = "Fresh";
   }
   next();
 });
