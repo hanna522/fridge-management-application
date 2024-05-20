@@ -74,13 +74,23 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd}) {
    path.split(".").reduce((acc, part) => acc && acc[part], obj);
   
  const sortedAndFilteredItems = items
-    .sort((a, b) => {
-      const aValue = getNestedValue(a, sortField);
-      const bValue = getNestedValue(b, sortField);
-      if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
-      if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
-      return 0;
-    });
+   .filter((item) => {
+     if (!filterValue) return true;
+     const category = getNestedValue(item, "ingredient.category.name");
+     return (
+       typeof category === "string" &&
+       category.toLowerCase().includes(filterValue.toLowerCase())
+     );
+   })
+   .sort((a, b) => {
+     const aValue = getNestedValue(a, sortField);
+     const bValue = getNestedValue(b, sortField);
+     if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+     if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
+     return 0;
+   });
+
+  console.log("sorted items: ", sortedAndFilteredItems);
 
   return (
     <>
@@ -114,9 +124,9 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd}) {
         <label>
           Category:
           <button onClick={() => setFilterValue("")}>All</button>
-          <button onClick={() => setFilterValue("Meat")}>Meat</button>
-          <button onClick={() => setFilterValue("Vegetable")}>Vegetable</button>
-          <button onClick={() => setFilterValue("Fruit")}>Fruit</button>
+          <button onClick={() => setFilterValue("meat")}>Meat</button>
+          <button onClick={() => setFilterValue("vegetable")}>Vegetable</button>
+          <button onClick={() => setFilterValue("fruit")}>Fruit</button>
         </label>
       </div>
 
