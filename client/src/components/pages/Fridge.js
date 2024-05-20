@@ -7,7 +7,7 @@ import { PlusCircleFill } from "react-bootstrap-icons";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
-function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd }) {
+function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd}) {
   const [createElements, setCreateElements] = useState({
     ingredient_list: [],
   });
@@ -18,6 +18,10 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd }) {
     status: "Unknown",
   });
   const [selectedAdd, setSelectedAdd] = useState(false);
+
+  const [sortField, setSortField] = useState("status");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [filterValue, setFilterValue] = useState("");
 
   useEffect(() => {
     getCreateFormFridgeInstance()
@@ -66,12 +70,64 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd }) {
     setSelectedAdd(false);
   };
 
+  const getNestedValue = (obj, path) =>
+   path.split(".").reduce((acc, part) => acc && acc[part], obj);
+  
+ const sortedAndFilteredItems = items
+    .sort((a, b) => {
+      const aValue = getNestedValue(a, sortField);
+      const bValue = getNestedValue(b, sortField);
+      if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
+
   return (
     <>
       <h1>Your Fridge</h1>
+      <div>
+        <label>
+          Sort By:
+          <select
+            value={sortField}
+            onChange={(e) => setSortField(e.target.value)}
+          >
+            <option value="status">Status</option>
+            <option value="ingredient.name">Ingredient Name</option>
+            <option value="buy_date">Buy Date</option>
+            <option value="exp_date">Expiration Date</option>
+          </select>
+        </label>
+        <label>
+          Order:
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </label>
+      </div>
+
+      <div>
+        <label>
+          Category:
+          <button onClick={() => setFilterValue("")}>All</button>
+          <button onClick={() => setFilterValue("Meat")}>Meat</button>
+          <button onClick={() => setFilterValue("Vegetable")}>Vegetable</button>
+          <button onClick={() => setFilterValue("Fruit")}>Fruit</button>
+        </label>
+      </div>
+
       <ul className="fridge-card-container">
-        {items.map((item, index) => (
-          <FridgeCard key={index} item={item} onItemUpdate={onItemUpdate} onItemDelete={onItemDelete} />
+        {sortedAndFilteredItems.map((item, index) => (
+          <FridgeCard
+            key={index}
+            item={item}
+            onItemUpdate={onItemUpdate}
+            onItemDelete={onItemDelete}
+          />
         ))}
       </ul>
       <PlusCircleFill
