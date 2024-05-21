@@ -29,3 +29,19 @@ export const deleteFridgeInstance = (id) => {
 export const fetchCategories = () => {
   return axios.get(`${API_BASE_URL}/api/category`);
 }
+
+export const fetchShoppingList = () => {
+  return axios.get(`${API_BASE_URL}/api/shoppinglist`);
+};
+
+export const getCreateFormShoppingList = () => {
+  return axios.get(`${API_BASE_URL}/api/shoppinglist/create`);
+};
+
+export const createShoppingList = (formData) => {
+  return axios.post(`${API_BASE_URL}/api/shoppinglist/create`, formData);
+};
+
+export const deleteShoppingList = (id) => {
+  return axios.delete(`${API_BASE_URL}/api/shoppinglist/${id}`);
+};

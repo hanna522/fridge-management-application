@@ -305,9 +305,9 @@ main {
   background-color: rgb(236, 236, 236);
 }
 
-.home-meal-container {
+.home-meal-container, .home-shop-container {
   width: 373px;
-  padding: 20px;
+  padding: 15px 20px 0px;
   border: 1px solid;
   border-color: rgba(201, 201, 201, 0.671);
   box-shadow: 1px 1px 1px rgba(156, 156, 156, 0.5);
@@ -317,13 +317,13 @@ main {
 
 .home-fridge-container {
   width: 373px;
-  padding: 20px;
+  padding: 15px 20px 15px;
   background-color: rgba(207, 207, 207, 0.391);
   border-radius: 15px;
 }
 
 .home-heading {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
 }
 .home-fridge-card-container {
