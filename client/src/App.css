@@ -6,45 +6,6 @@ main {
   gap: 15px;
 }
 
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .Modal {
   position: absolute;
   top: 50%;
@@ -133,9 +94,16 @@ main {
 }
 .add-btn {
   position: fixed;
-  top: 93%;
+  top: 91%;
+  font-size:45px;
   left: 80%;
-  color: rgb(0, 136, 255);
+  cursor: pointer;
+  color: rgb(17, 19, 22);
+}
+
+.add-btn:hover {
+  font-size:50px;
+  color: #00c8c5;
 }
 
 .trash-btn {
@@ -157,6 +125,7 @@ main {
   border-radius: 15px;
   width: auto;
   font-size: 14px;
+  color: gray;
   margin-right: 5px;
 }
 
@@ -166,10 +135,16 @@ main {
 
 .slider-item button:hover {
   background-color: rgb(229, 229, 229);
+  color: black;
 }
 
 .fridge-top {
   margin-left: 30px;
+}
+
+.fridge-top h1 {
+  font-size: 25px;
+  font-weight: 700;
 }
 
 .fridge-top p {
@@ -433,8 +408,27 @@ main {
 }
 
 .fridge-graph {
-  background-color: mintcream;
-  height: 15px;
-  margin-bottom: 15px;
+  display: flex;
+  gap: 5px;
+  margin-bottom: 20px;
   margin-top: 15px;
+}
+
+.fridge-graph-bar {
+  background-color: #00e8e4;
+  color: white;
+  text-align: center;
+  padding: 5px;
+  height: 10px;
+}
+
+.fridge-graph-bar:hover {
+  background-color: #01d1cd;
+}
+
+.fridge-graph span {
+  font-size: 8px;
+  padding: 0;
+  margin: 0;
+  color: black;
 }

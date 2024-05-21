@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { fetchFridgeInstances } from "./Api";
+import { fetchFridgeInstances, fetchCategories } from "./Api";
 import Home from './components/pages/Home';
 import MealPlan from "./components/pages/MealPlan";
 //import MyPage from "./components/pages/MyPage";
@@ -13,9 +13,12 @@ import Footer from "./components/Footer";
 
 function App() {
   const [items, setItems] = useState([]);
+  const [categories, setCategories] = useState({ category_list: [] });
+
 
   useEffect(() => {
     fetchData();
+    fetchCategory();
   }, []);
 
   const fetchData = () => {
@@ -27,6 +30,17 @@ function App() {
         console.error("Error fetching items:", error);
       });
   };
+
+  const fetchCategory = () => {
+    fetchCategories()
+      .then((res) => {
+        setCategories(res.data);
+        console.log("Get Category Data");
+      })
+      .catch((error) => {
+        console.error("Error fetching category data:", error);
+      });
+  }
 
   const handleItemUpdate = (updatedItem) => {
     setItems((prevItems) =>
@@ -50,13 +64,20 @@ function App() {
       <Navbar />
       <main>
         <Routes>
-          <Route path="/api/" element={<Home items={items || []} />} />
-          <Route path="/api/home" element={<Home items={items || []} />} />
+          <Route
+            path="/api/"
+            element={<Home items={items || []} categories={categories} />}
+          />
+          <Route
+            path="/api/home"
+            element={<Home items={items || []} categories={categories} />}
+          />
           <Route
             path="/api/fridge"
             element={
               <Fridge
                 items={items}
+                categories={categories}
                 onItemUpdate={handleItemUpdate}
                 onItemDelete={handleItemDelete}
                 onItemAdd={handleItemAdd}

@@ -44,19 +44,6 @@ function CategorySlider({ categories, setFilterValue }) {
     };
   }, []);
 
-  const getImoji = (cate) => {
-    if (cate === "Meat") {
-      return "🍖";
-    } else if (cate === "Fruit") {
-      return "🍎";
-    } else if (cate === "Vegetable") {
-      return "🥬";
-    } else if (cate === "Grain") {
-      return "🌾";
-    } else {
-      return "🥫";
-    }
-  };
 
   return (
     <div className="fridge-filtering">
@@ -67,7 +54,7 @@ function CategorySlider({ categories, setFilterValue }) {
         {categories.category_list.map((category) => (
           <div key={category.name} className="slider-item">
             <button onClick={() => setFilterValue(category.name)}>
-              {getImoji(category.name)} {category.name}
+              {category.name}
             </button>
           </div>
         ))}

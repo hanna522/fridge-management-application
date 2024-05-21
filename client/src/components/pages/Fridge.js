@@ -12,7 +12,7 @@ import CategorySlider from "./CategorySlider";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
-function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd}) {
+function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd}) {
   const [createElements, setCreateElements] = useState({
     ingredient_list: [],
   });
@@ -22,7 +22,6 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd}) {
     exp_date: "",
     status: "Unknown",
   });
-  const [categories, setCategories] = useState({ category_list: [] });
   const [selectedAdd, setSelectedAdd] = useState(false);
   const [sortField, setSortField] = useState("status");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -37,15 +36,6 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd}) {
       })
       .catch((error) => {
         console.error("Error fetching creating form data:", error);
-      });
-
-    fetchCategories()
-      .then((res) => {
-        setCategories(res.data);
-        console.log("Get Category Data");
-      })
-      .catch((error) => {
-        console.error("Error fetching category data:", error);
       });
   }, []);
 
@@ -109,9 +99,8 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd}) {
 
   return (
     <>
-      <h1>Your Fridge</h1>
-
       <div className="fridge-top">
+        <h1>My Fridge</h1>
         <div className="top">
           <p>Category</p>
           <div
@@ -183,7 +172,6 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd}) {
         ))}
       </ul>
       <PlusCircleFill
-        size={45}
         onClick={handleAdd}
         className="add-btn"
         style={{ cursor: "pointer" }}
