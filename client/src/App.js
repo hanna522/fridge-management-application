@@ -48,12 +48,24 @@ function App() {
   return (
     <Router>
       <Navbar />
-      <Routes>
-        <Route path="/api/" element={<Home items={items || []} />} />
-        <Route path="/api/home" element={<Home items={items || []} />} />
-        <Route path="/api/fridge" element={<Fridge items={items} onItemUpdate={handleItemUpdate} onItemDelete={handleItemDelete} onItemAdd={handleItemAdd} />} />
-        <Route path="/api/meal" element={<MealPlan />} />
-      </Routes>
+      <main>
+        <Routes>
+          <Route path="/api/" element={<Home items={items || []} />} />
+          <Route path="/api/home" element={<Home items={items || []} />} />
+          <Route
+            path="/api/fridge"
+            element={
+              <Fridge
+                items={items}
+                onItemUpdate={handleItemUpdate}
+                onItemDelete={handleItemDelete}
+                onItemAdd={handleItemAdd}
+              />
+            }
+          />
+          <Route path="/api/meal" element={<MealPlan />} />
+        </Routes>
+      </main>
       <Footer />
     </Router>
   );

@@ -1,3 +1,11 @@
+main {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
 .App {
   text-align: center;
 }
@@ -127,7 +135,8 @@
   justify-content: right;
   gap: 20px;
   list-style-type: none;
-  font-size: 20px;
+  font-size: 18px;
+  color: rgb(234, 234, 234);
 }
 
 .navbar-list a {
@@ -144,7 +153,7 @@
   height: 3px; /* 밑줄 두께 */
   bottom: -5px; /* 텍스트와 약간의 간격 */
   left: 0;
-  background-color: #00fff2; /* 밑줄 색상 */
+  background-color: hwb(177 0% 0%); /* 밑줄 색상 */
   visibility: hidden;
   transform: scaleX(0);
   transition: all 0.3s ease-in-out;
@@ -156,6 +165,135 @@
 }
 
 .navbar-container {
+  padding: 10px 10px 0px 20px;
+  background-color: rgba(0, 0, 0, 0.894);
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 10px;
+}
+
+.navbar-profile-link {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.navbar-profile-link img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+/*** HOME section ***/
+/*Meal Card 393 x 852*/
+.home-meal-container {
+  width: 373px;
   padding: 20px;
-  background-color: rgb(95, 211, 254);
+  border: 1px solid;
+  border-color: rgba(201, 201, 201, 0.671);
+    box-shadow: 1px 1px 1px rgba(156, 156, 156, 0.5);
+
+  border-radius: 15px;
+  background-color: #ffffffa8;
+}
+
+.home-fridge-container {
+  width: 373px;
+  padding: 20px;
+  background-color: rgba(207, 207, 207, 0.391);
+  border-radius: 15px;
+}
+
+.home-heading {
+  font-size: 20px;
+  font-weight: 700;
+}
+.home-fridge-card-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.home-fridge-card {
+  width: 155px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 1px 1px 1px rgba(156, 156, 156, 0.5);
+  margin: 5px 0px;
+  padding: 0px 10px ;
+  justify-self: center;
+  justify-content: space-between;
+}
+
+.home-fridge-card p {
+  font-size: 13px;
+  color: black;
+  font-weight: 500;
+}
+
+.home-fridge-container p {
+  margin: 0;
+  font-size: 12px;
+  font-weight:500;
+  color: rgb(93, 93, 93);  
+}
+
+.home-fridge-card .status-Fresh {
+  background-color: rgba(212, 237, 255);
+  border-radius:50%;
+  border: 1px solid;
+  border-color: rgb(210, 210, 210);
+  height: 15px;
+  width: 15px;
+}
+
+.home-fridge-card .status-Alive {
+  background-color: rgb(199, 248, 194);
+  border-radius:50%;
+  border: 1px solid;
+  border-color: rgb(210, 210, 210);
+  height: 15px;
+  width: 15px;
+}
+
+.home-fridge-card .status-Dying {
+  background-color: rgba(255, 212, 212);
+  border-radius:50%;
+  border: 1px solid;
+  border-color: rgb(210, 210, 210);
+  height: 15px;
+  width: 15px;
+}
+
+.home-fridge-card .status-Dead {
+  background-color: rgba(217, 217, 217);
+  color: rgb(114, 114, 114);
+  border-radius:50%;
+  border: 1px solid;
+  border-color: rgb(210, 210, 210);
+  height: 15px;
+  width: 15px;
+}
+
+.home-fridge-card .status-Unknown {
+  background-color: white;
+  border-radius:50%;
+  border: 1px solid;
+  border-color: rgb(210, 210, 210);
+  height: 15px;
+  width: 15px;
+}
+
+.fridge-graph {
+  background-color: mintcream;
+  height: 15px;
+  margin-bottom: 15px;
+  margin-top: 15px;
 }

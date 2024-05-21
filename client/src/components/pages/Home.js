@@ -20,25 +20,26 @@ function Home({ items }) {
   return (
     <>
       <h1>{homeData.message || "Loading..."}</h1>
-      <div>
-        <h2>Meal</h2>
-        <Link to={`/api/meal/`}>
-          <p>{"More"}</p>
-        </Link>
+
+      <div class="home-meal-container">
+        <h2 className="home-heading">Meal</h2>
+        <p>Galbijjim</p>
       </div>
-      <div>
-        <Link to={`/api/fridge/`}>
-          <h2>Fridge</h2>
-          <ul>
-            {items.slice(0, 10).map((item, index) => (
-              <li>
-                <p>{item.ingredient.name}</p>
-                <p>{item.status}</p>
-              </li>
-            ))}
-          </ul>
-          <p>{"More"}</p>
-        </Link>
+
+      <div class="home-fridge-container">
+        <h2 className="home-heading">My Fridge</h2>
+        <div className="fridge-graph">
+          <p></p>
+        </div>
+        <p>{items.length} items</p>
+        <ul className="home-fridge-card-container">
+          {items.slice(0, 10).map((item, index) => (
+            <li className="home-fridge-card">
+              <p>{item.ingredient.name}</p>
+              <p className={"status-" + item.status}> </p>
+            </li>
+          ))}
+        </ul>
       </div>
     </>
   );
