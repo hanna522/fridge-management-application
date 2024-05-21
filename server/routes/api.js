@@ -10,11 +10,26 @@ const Category = require("../model/category");
 
 // GET home page
 router.get("/home", (req, res) => {
-  const homeDate = { message: "Welcome to the Home API!" };
+  const homeDate = { message: "Hello, User Name" };
   res.json(homeDate);
 });
 
-/// FRIDGE ROUTES ///
+/// CATEGORY ROUTES ///
+
+// GET all category
+router.get("/category", async (req, res) => {
+  try {
+    const allCategory = await Category.find().exec({ name: 1});
+    return res.status(200).json({
+      category_list: allCategory
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).send();
+  }
+})
+
+/// INGREDIENT (FRIDGE INSTANCE) ROUTES ///
 
 // CREATE //
 

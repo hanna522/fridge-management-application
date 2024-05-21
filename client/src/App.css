@@ -3,7 +3,7 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
 }
 
 .App {
@@ -71,61 +71,151 @@ main {
 /*Fridge Card*/
 .fridge-card-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 10px;
 }
 
-.fridge-card {
+.fridge-card-container li{
+  list-style-type: none;
+}
+
+.status {
   display: flex;
-  flex-direction: column;
-  width: 300px;
-  justify-content: center;
+  justify-content: space-between;
+  width: 382px;
   border: 2px solid transparent; /* 기본 테두리 설정 */
   transition: border 0.3s ease; /* 테두리 애니메이션 추가 */
+  border-radius:10px;
+  padding: 15px 10px 0px 10px; 
 }
 
-.fridge-card:hover {
+.status:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 마우스를 올렸을 때 그림자 추가 */
 }
 
-.fridge-card .heading {
+.status .heading {
   display: flex;
+  width: 190px;
   gap: 1rem;
+  font-size: 14px;
 }
 
-.fridge-card .content {
-  font-size: 0.8rem;
+.status .content {
+  font-size: 12px;
 }
 
 .fridge-card .status-Fresh {
   background-color: rgba(212, 237, 255, 0.677);
-  border-radius:10px;
-  padding: 10px 10px 0px 15px;
+
 }
 
 .fridge-card .status-Alive {
   background-color: rgba(221, 255, 217, 0.677);
-  border-radius:10px;
-  padding: 10px 10px 0px 15px;
 }
 
 .fridge-card .status-Dying {
   background-color: rgba(255, 212, 212, 0.677);
-  border-radius:10px;
-  padding: 10px 10px 0px 15px;
+
 }
 
 .fridge-card .status-Dead {
   background-color: rgba(217, 217, 217, 0.677);
   color: rgb(114, 114, 114);
-  border-radius:10px;
-  padding: 10px 10px 0px 15px;
+
 }
 
 .fridge-card .status-Unknown {
   background-color: white;
-  border-radius:10px;
-  padding: 10px 10px 0px 15px;
+}
+
+.fridge-card-detail {
+  display: flex;
+}
+.add-btn {
+  position: fixed;
+  top: 93%;
+  left: 80%;
+  color: rgb(0, 136, 255);
+}
+
+.trash-btn {
+  color: gray;
+}
+
+.trash-btn:hover {
+  color: red;
+}
+
+.filtering {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.slider-item button {
+  background-color: rgb(240, 240, 240);
+  border: 0px;
+  border-radius: 15px;
+  width: auto;
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+.filtering button {
+    padding: 5px 10px;
+}
+
+.slider-item button:hover {
+  background-color: rgb(229, 229, 229);
+}
+
+.fridge-top {
+  margin-left: 30px;
+}
+
+.fridge-top p {
+  padding: 0;
+  margin: 10px 0px 0px 0px;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgb(134, 134, 134);
+}
+
+.fridge-filtering {
+  width: 383px;
+  overflow: hidden;
+  display: flex;
+}
+
+.fridge-filtering p {
+  font-size: 12px;
+  color: gray;
+  font-weight: 500;
+}
+
+.slick-slide > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: black; /* 화살표 색상 */
+}
+
+.fridge-top .top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.sort-toggle {
+  display: flex;
+}
+
+.sort-toggle .icon {
+  margin-top: 13px;
+  margin-right: 3px;
 }
 
 /*** NAVBAR section ***/
@@ -188,13 +278,34 @@ main {
 
 /*** HOME section ***/
 /*Meal Card 393 x 852*/
+.home-message-container {
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  gap: 100px;
+  margin-top: 10px;
+}
+
+.home-message-container h1 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.home-message-container button {
+  border-radius: 7px;
+  border: 0px;
+  height: 30px;
+  font-size: 12px;
+  font-weight: 700;
+  background-color: rgb(236, 236, 236);
+}
+
 .home-meal-container {
   width: 373px;
   padding: 20px;
   border: 1px solid;
   border-color: rgba(201, 201, 201, 0.671);
-    box-shadow: 1px 1px 1px rgba(156, 156, 156, 0.5);
-
+  box-shadow: 1px 1px 1px rgba(156, 156, 156, 0.5);
   border-radius: 15px;
   background-color: #ffffffa8;
 }

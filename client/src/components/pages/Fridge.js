@@ -2,8 +2,13 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import FridgeCard from "./FridgeCard";
 import FridgeAdd from "./FridgeAdd";
-import { getCreateFormFridgeInstance, createFridgeInstance } from "../../Api";
-import { PlusCircleFill } from "react-bootstrap-icons";
+import {
+  getCreateFormFridgeInstance,
+  createFridgeInstance,
+  fetchCategories,
+} from "../../Api";
+import { Cursor, PlusCircleFill, SortDown } from "react-bootstrap-icons";
+import CategorySlider from "./CategorySlider";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
@@ -17,11 +22,12 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd}) {
     exp_date: "",
     status: "Unknown",
   });
+  const [categories, setCategories] = useState({ category_list: [] });
   const [selectedAdd, setSelectedAdd] = useState(false);
-
   const [sortField, setSortField] = useState("status");
   const [sortOrder, setSortOrder] = useState("asc");
   const [filterValue, setFilterValue] = useState("");
+  const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
 
   useEffect(() => {
     getCreateFormFridgeInstance()
@@ -30,7 +36,16 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd}) {
         console.log("Create Fridge Instance");
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching creating form data:", error);
+      });
+
+    fetchCategories()
+      .then((res) => {
+        setCategories(res.data);
+        console.log("Get Category Data");
+      })
+      .catch((error) => {
+        console.error("Error fetching category data:", error);
       });
   }, []);
 
@@ -71,63 +86,75 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd}) {
   };
 
   const getNestedValue = (obj, path) =>
-   path.split(".").reduce((acc, part) => acc && acc[part], obj);
-  
- const sortedAndFilteredItems = items
-   .filter((item) => {
-     if (!filterValue) return true;
-     const category = getNestedValue(item, "ingredient.category.name");
-     return (
-       typeof category === "string" &&
-       category.toLowerCase().includes(filterValue.toLowerCase())
-     );
-   })
-   .sort((a, b) => {
-     const aValue = getNestedValue(a, sortField);
-     const bValue = getNestedValue(b, sortField);
-     if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
-     if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
-     return 0;
-   });
+    path.split(".").reduce((acc, part) => acc && acc[part], obj);
+
+  const sortedAndFilteredItems = items
+    .filter((item) => {
+      if (!filterValue) return true;
+      const category = getNestedValue(item, "ingredient.category.name");
+      return (
+        typeof category === "string" &&
+        category.toLowerCase().includes(filterValue.toLowerCase())
+      );
+    })
+    .sort((a, b) => {
+      const aValue = getNestedValue(a, sortField);
+      const bValue = getNestedValue(b, sortField);
+      if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
 
   console.log("sorted items: ", sortedAndFilteredItems);
 
   return (
     <>
       <h1>Your Fridge</h1>
-      <div>
-        <label>
-          Sort By:
-          <select
-            value={sortField}
-            onChange={(e) => setSortField(e.target.value)}
-          >
-            <option value="status">Status</option>
-            <option value="ingredient.name">Ingredient Name</option>
-            <option value="buy_date">Buy Date</option>
-            <option value="exp_date">Expiration Date</option>
-          </select>
-        </label>
-        <label>
-          Order:
-          <select
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
-          >
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
-        </label>
-      </div>
 
-      <div>
-        <label>
-          Category:
-          <button onClick={() => setFilterValue("")}>All</button>
-          <button onClick={() => setFilterValue("meat")}>Meat</button>
-          <button onClick={() => setFilterValue("vegetable")}>Vegetable</button>
-          <button onClick={() => setFilterValue("fruit")}>Fruit</button>
-        </label>
+      <div className="fridge-top">
+        <div className="top">
+          <p>Category</p>
+          <div
+            className="sort-toggle"
+            onClick={() => setIsSortMenuOpen(!isSortMenuOpen)}
+            style={{ cursor: "pointer" }}
+          >
+            <SortDown className="icon" size={13} color="gray" />
+            <p>Sort</p>
+          </div>
+          {isSortMenuOpen && (
+            <div className="sort-menu">
+              <label>
+                <select
+                  value={sortField}
+                  onChange={(e) => setSortField(e.target.value)}
+                >
+                  <option value="status">Status</option>
+                  <option value="ingredient.name">Ingredient Name</option>
+                  <option value="buy_date">Buy Date</option>
+                  <option value="exp_date">Expiration Date</option>
+                </select>
+              </label>
+
+              <label>
+                <select
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value)}
+                >
+                  <option value="asc">Ascending</option>
+                  <option value="desc">Descending</option>
+                </select>
+              </label>
+            </div>
+          )}
+        </div>
+
+        <CategorySlider
+          categories={categories}
+          setFilterValue={setFilterValue}
+        />
+
+        <p>{sortedAndFilteredItems.length} items</p>
       </div>
 
       <ul className="fridge-card-container">
@@ -141,9 +168,9 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd}) {
         ))}
       </ul>
       <PlusCircleFill
-        size={35}
-        color="blue"
+        size={45}
         onClick={handleAdd}
+        className="add-btn"
         style={{ cursor: "pointer" }}
       />
 

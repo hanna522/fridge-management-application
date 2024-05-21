@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { CardImage } from "react-bootstrap-icons";
 
 function Home({ items }) {
   const [homeData, setHomeData] = useState({});
@@ -19,10 +20,14 @@ function Home({ items }) {
   
   return (
     <>
-      <h1>{homeData.message || "Loading..."}</h1>
+      <div className="home-message-container">
+        <h1>{homeData.message || "Loading..."}</h1>
+        <button>
+          <CardImage/>  upload receipt</button>
+      </div>
 
       <div class="home-meal-container">
-        <h2 className="home-heading">Meal</h2>
+        <h2 className="home-heading">Today Menu</h2>
         <p>Galbijjim</p>
       </div>
 

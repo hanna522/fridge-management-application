@@ -25,3 +25,7 @@ export const updateFridgeInstance = (id, formData) => {
 export const deleteFridgeInstance = (id) => {
   return axios.delete(`${API_BASE_URL}/api/fridgeinstance/${id}/delete`);
 };
+
+export const fetchCategories = () => {
+  return axios.get(`${API_BASE_URL}/api/category`);
+}

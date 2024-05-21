@@ -32,31 +32,49 @@ function FridgeCard({ item, onItemUpdate, onItemDelete}) {
     setIsDeleteModalOpen(false);
   };
 
+  const getImoji = (cate) => {
+    if (cate === "Meat") {
+      return "🍖";
+    } else if (cate === "Fruit") {
+      return "🍎";
+    } else if (cate === "Vegetable") {
+      return "🥬";
+    } else if (cate === "Grain") {
+      return "🌾";
+    } else {
+      return "🥫";
+    }
+  }
+
   return (
     <>
       <li
         className="fridge-card"
-        onClick={() => setIsDetailOpen(true)}
         style={{ cursor: "pointer" }}
       >
-        <section className={"status-" + item.status}>
-          <div className="heading">
-            <p>
-              <b>{item.ingredient.name}</b>
+        <div className={"status status-" + item.status}>
+          <div
+            className="fridge-card-detail"
+            onClick={() => setIsDetailOpen(true)}
+          >
+            <div className="heading">
+              <p>{getImoji(item.ingredient.category.name)}</p>
+              <p>
+                <b>{item.ingredient.name}</b>
+              </p>
+            </div>
+            <p className="content">
+              {new Date(item.buy_date).toLocaleDateString()} -{" "}
+              {new Date(item.exp_date).toLocaleDateString()}
             </p>
-            <p>{item.ingredient.category.name}</p>
-            <Trash
-              size={15}
-              color="gray"
-              onClick={handleDeleteClick}
-              style={{ cursor: "pointer" }}
-            />
           </div>
-          <p className="content">
-            {new Date(item.buy_date).toLocaleDateString()} -{" "}
-            {new Date(item.exp_date).toLocaleDateString()}
-          </p>
-        </section>
+          <Trash
+            size={15}
+            className="trash-btn"
+            onClick={handleDeleteClick}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
       </li>
 
       <Modal
