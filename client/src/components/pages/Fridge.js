@@ -124,27 +124,42 @@ function Fridge({ items, onItemUpdate, onItemDelete, onItemAdd}) {
           </div>
           {isSortMenuOpen && (
             <div className="sort-menu">
-              <label>
-                <select
-                  value={sortField}
-                  onChange={(e) => setSortField(e.target.value)}
-                >
-                  <option value="status">Status</option>
-                  <option value="ingredient.name">Ingredient Name</option>
-                  <option value="buy_date">Buy Date</option>
-                  <option value="exp_date">Expiration Date</option>
-                </select>
-              </label>
-
-              <label>
-                <select
-                  value={sortOrder}
-                  onChange={(e) => setSortOrder(e.target.value)}
-                >
-                  <option value="asc">Ascending</option>
-                  <option value="desc">Descending</option>
-                </select>
-              </label>
+              <button
+                onClick={() => {
+                  setSortField("exp_date");
+                  setSortOrder("asc");
+                  setIsSortMenuOpen(false);
+                }}
+              >
+                Expiration Date: Close
+              </button>
+              <button
+                onClick={() => {
+                  setSortField("status");
+                  setSortOrder("asc");
+                  setIsSortMenuOpen(false);
+                }}
+              >
+                Status: Fresh
+              </button>
+              <button
+                onClick={() => {
+                  setSortField("ingredient.name");
+                  setSortOrder("asc");
+                  setIsSortMenuOpen(false);
+                }}
+              >
+                Name: A-Z
+              </button>
+              <button
+                onClick={() => {
+                  setSortField("buy_date");
+                  setSortOrder("asc");
+                  setIsSortMenuOpen(false);
+                }}
+              >
+                Buy Date: Recent
+              </button>
             </div>
           )}
         </div>
