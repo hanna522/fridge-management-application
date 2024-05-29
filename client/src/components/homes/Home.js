@@ -57,6 +57,8 @@ function Home({ items, categories }) {
 
   return (
     <>
+      {/** Intro Section */}
+
       <div className="home-message-container">
         <h1>{homeData.message || "Loading..."}</h1>
         <button>
@@ -64,15 +66,17 @@ function Home({ items, categories }) {
         </button>
       </div>
 
-      <div className="home-meal-container">
-        <h2 className="home-heading">Today Menu</h2>
-        <p>Galbijjim</p>
-      </div>
+      {/** Shopping List Summary Section */}
 
-      <ShoppingList />
+      <ShoppingList allItem={items} />
+
+      {/** My Fridge Summary Section */}
 
       <div className="home-fridge-container">
-        <h2 className="home-heading">My Fridge</h2>
+        <div className="home-heading">
+          <h2>My Fridge</h2>
+          <button className="btn btn-add">+ Add</button>
+        </div>
 
         <div className="fridge-graph">
           {categories.category_list.map((category) => (

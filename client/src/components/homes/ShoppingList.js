@@ -1,4 +1,3 @@
-// src/components/ShoppingList.js
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import {
@@ -7,7 +6,7 @@ import {
   createShoppingList,
   deleteShoppingList,
 } from "../../Api";
-import { Trash } from "react-bootstrap-icons";
+import { CheckCircle, Trash } from "react-bootstrap-icons";
 
 const ShoppingList = () => {
   const [shoppingLists, setShoppingLists] = useState([]);
@@ -21,6 +20,7 @@ const ShoppingList = () => {
   const [selectedAdd, setSelectedAdd] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [checkedItems, setCheckedItems] = useState({});
 
   useEffect(() => {
     fetchShoppingListData();
@@ -46,6 +46,7 @@ const ShoppingList = () => {
       });
   };
 
+  // for creating a shopping list
   const handleOpenModal = () => {
     setSelectedAdd(true);
   };
@@ -61,6 +62,7 @@ const ShoppingList = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     createShoppingList(shoppingListCreateForm)
       .then((res) => {
         console.log("Shopping List created", res.data);
@@ -74,6 +76,7 @@ const ShoppingList = () => {
       });
   };
 
+  // for deleting a shopping list
   const handleDeleteClick = (item) => {
     setItemToDelete(item);
     setIsDeleteModalOpen(true);
@@ -85,12 +88,14 @@ const ShoppingList = () => {
   };
 
   const onDeleteConfirm = () => {
-    deleteShoppingList(itemToDelete._id)
+    deleteShoppingListData(itemToDelete._id);
+  };
+
+  const deleteShoppingListData = (id) => {
+    deleteShoppingList(id)
       .then((res) => {
         console.log("Shopping List deleted:", res.data);
-        setShoppingLists(
-          shoppingLists.filter((list) => list._id !== itemToDelete._id)
-        );
+        setShoppingLists(shoppingLists.filter((list) => list._id !== id));
         setIsDeleteModalOpen(false);
         setItemToDelete(null);
       })
@@ -99,16 +104,51 @@ const ShoppingList = () => {
       });
   };
 
+  const handleCheckboxChange = (id) => {
+    setCheckedItems((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
+
+  const deleteCheckedItems = () => {
+    Object.keys(checkedItems).forEach((key) => {
+      if (checkedItems[key]) {
+        deleteShoppingListData(key);
+      }
+    });
+  };
+
   return (
     <div className="home-shop-container">
-      <h2 className="home-heading">Shopping List</h2>
-      <button onClick={handleOpenModal}>Add Item</button>
-      <ul>
+      <div className="home-heading">
+        <h2>Shopping List</h2>
+        <button className="btn btn-add" onClick={handleOpenModal}>
+          + Add
+        </button>
+      </div>
+      <ul className="home-shop-list">
         {shoppingLists.map((list, index) => (
-          <li>
-            {list.ingredient.name}
+          <li key={index}>
+            <input
+              type="checkbox"
+              id={`custom-checkbox-${index}`}
+              className="custom-checkbox"
+              checked={!!checkedItems[list._id]}
+              onChange={() => handleCheckboxChange(list._id)}
+            />
+            <label
+              htmlFor={`custom-checkbox-${index}`}
+              style={{
+                textDecoration: checkedItems[list._id]
+                  ? "line-through"
+                  : "none",
+              }}
+            >
+              {list.ingredient.name}
+            </label>
             <Trash
-              size={15}
+              size={12}
               className="trash-btn"
               onClick={() => handleDeleteClick(list)}
               style={{ cursor: "pointer" }}
@@ -116,6 +156,9 @@ const ShoppingList = () => {
           </li>
         ))}
       </ul>
+      <button className="btn btn-clear" onClick={deleteCheckedItems}>
+        Clear
+      </button>
 
       <Modal
         isOpen={selectedAdd}

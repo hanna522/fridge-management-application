@@ -323,9 +323,32 @@ main {
 }
 
 .home-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.home-heading h2{
   font-size: 16px;
   font-weight: 700;
 }
+
+.home-heading .btn-add {
+  font-size: 12px;
+  font-weight: 700;
+  color: gray;
+  border: none;
+}
+
+.btn-clear {
+  font-size: 12px;
+  font-weight: 700;
+  color: gray;
+  border: none;
+}
+
 .home-fridge-card-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -431,4 +454,72 @@ main {
   padding: 0;
   margin: 0;
   color: black;
+}
+
+/*Shopping List*/
+
+/* Home.css */
+
+/* 기본 체크박스를 숨기고 커스텀 스타일을 적용 */
+.home-shop-list {
+  list-style: none;
+  padding: 0;
+  font-size: 13px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.home-shop-list li {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 10px;
+  align-items: center;
+}
+
+.custom-checkbox {
+  display: none;
+}
+
+.custom-checkbox + label {
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox + label:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  background-color: white;
+}
+
+.custom-checkbox:checked + label:before {
+  background-color: #32ffeb;
+  border-color: #32ffeb;
+}
+
+.custom-checkbox + label:after {
+  content: "";
+  position: absolute;
+  margin-left: 3px;
+  margin-top: 3px;
+  left: 4px;
+  top: 0;
+  width: 7px;
+  height: 11px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+  opacity: 0;
+}
+
+.custom-checkbox:checked + label:after {
+  opacity: 1;
 }

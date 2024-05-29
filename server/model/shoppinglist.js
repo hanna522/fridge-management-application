@@ -5,11 +5,11 @@ const Schema = mongoose.Schema;
 const ShoppingListSchema = new Schema({
   ingredient: { type: Schema.Types.ObjectId, ref: "Ingredient", require: true },
   possess: {
-    type: String,
+    type: Boolean,
     required: true,
-    enum: ["yes", "no"],
-    default: "Unknown",
+    default: false,
   },
+  necessary: { type: Boolean, required: true, default: false },
 });
 
 ShoppingListSchema.virtual("url").get(function () {
