@@ -49,7 +49,6 @@ const ShoppingList = () => {
       });
   };
 
-  // for creating a shopping list
   const handleOpenModal = () => {
     setSelectedAdd(true);
   };
@@ -61,12 +60,27 @@ const ShoppingList = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setShoppingListCreateForm({ ...shoppingListCreateForm, [name]: value });
+
+    if (name === "ingredient") {
+      const selectedIngredient = ingredientOptions.ingredient_list.find(
+        (ingredient) => ingredient._id === value
+      );
+      if (selectedIngredient) {
+        setShoppingListCreateForm((prevFormData) => ({
+          ...prevFormData,
+          possess: selectedIngredient.necessary || false,
+        }));
+      }
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    createShoppingListData(shoppingListCreateForm);
+  };
 
-    createShoppingList(shoppingListCreateForm)
+  const createShoppingListData = (form) => {
+    createShoppingList(form)
       .then((res) => {
         console.log("Shopping List created", res.data);
         setShoppingLists([...shoppingLists, res.data]);
@@ -82,7 +96,19 @@ const ShoppingList = () => {
       });
   };
 
-  // for deleting a shopping list
+  const addNecessaryItems = () => {
+    const shoppingListsIngredientIds = shoppingLists.map((list) => list.ingredient._id)
+    ingredientOptions.ingredient_list.forEach((ingredient) => {
+      if (ingredient.necessary && !shoppingListsIngredientIds.includes(ingredient._id)) {
+        const shoppingListDataForm = {
+          ingredient: ingredient._id,
+          possess: false,
+        };
+        createShoppingListData(shoppingListDataForm);
+      }
+    });
+  };
+
   const handleDeleteClick = (item) => {
     setItemToDelete(item);
     setIsDeleteModalOpen(true);
@@ -171,9 +197,15 @@ const ShoppingList = () => {
           </li>
         ))}
       </ul>
-      <button className="btn btn-clear" onClick={deleteCheckedItems}>
-        Clear
-      </button>
+
+      <div className="home-shop-bottom">
+        <button className="btn btn-auto-add" onClick={addNecessaryItems}>
+          Auto-Add
+        </button>
+        <button className="btn btn-clear" onClick={deleteCheckedItems}>
+          Clear
+        </button>
+      </div>
 
       <Modal
         isOpen={selectedAdd}

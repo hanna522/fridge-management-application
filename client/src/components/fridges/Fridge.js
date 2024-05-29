@@ -196,7 +196,7 @@ function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
       </ul>
       <PlusCircleFill
         onClick={handleAdd}
-        className="add-btn"
+        className="btn-add-circle"
         style={{ cursor: "pointer" }}
       />
 

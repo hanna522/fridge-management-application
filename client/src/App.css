@@ -38,7 +38,7 @@ main {
 
 .fridge-card-container li{
   list-style-type: none;
-}
+} 
 
 .status {
   display: flex;
@@ -92,7 +92,7 @@ main {
 .fridge-card-detail {
   display: flex;
 }
-.add-btn {
+.btn-add-circle {
   position: fixed;
   top: 91%;
   font-size:45px;
@@ -101,9 +101,9 @@ main {
   color: rgb(17, 19, 22);
 }
 
-.add-btn:hover {
+.btn-add-circle:hover {
   font-size:50px;
-  color: #00c8c5;
+  color: #00fffb;
 }
 
 .trash-btn {
@@ -307,7 +307,7 @@ main {
 
 .home-meal-container, .home-shop-container {
   width: 373px;
-  padding: 15px 20px 0px;
+  padding: 15px 20px 10px;
   border: 1px solid;
   border-color: rgba(201, 201, 201, 0.671);
   box-shadow: 1px 1px 1px rgba(156, 156, 156, 0.5);
@@ -335,18 +335,43 @@ main {
   font-weight: 700;
 }
 
-.home-heading .btn-add {
+.btn-add {
   font-size: 12px;
   font-weight: 700;
   color: gray;
   border: none;
 }
 
-.btn-clear {
+.btn-add:hover {
+  color: black;
+}
+
+
+.home-shop-bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-clear, .btn-auto-add {
   font-size: 12px;
   font-weight: 700;
-  color: gray;
+  color: rgb(95, 95, 95);
   border: none;
+  text-align: center;
+  width: 50%;
+  background-color: rgb(232, 232, 232);
+}
+
+.btn-auto-add:hover {
+  background-color: #00eeea;
+  color: white;
+}
+
+.btn-clear:hover {
+  background-color: #ff0000;
+  color: white;
 }
 
 .home-fridge-card-container {
