@@ -15,7 +15,7 @@ const ShoppingList = () => {
   });
   const [shoppingListCreateForm, setShoppingListCreateForm] = useState({
     ingredient: "",
-    possess: "no",
+    possess: false,
   });
   const [selectedAdd, setSelectedAdd] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -70,7 +70,10 @@ const ShoppingList = () => {
       .then((res) => {
         console.log("Shopping List created", res.data);
         setShoppingLists([...shoppingLists, res.data]);
-        setShoppingListCreateForm({ ingredient: "", possess: "no" });
+        setShoppingListCreateForm({
+          ingredient: "",
+          possess: false,
+        });
         fetchShoppingListData();
         handleCloseModal();
       })
@@ -101,7 +104,7 @@ const ShoppingList = () => {
         setShoppingLists(shoppingLists.filter((list) => list._id !== id));
         setIsDeleteModalOpen(false);
         setItemToDelete(null);
-        // 로컬 스토리지에서 삭제된 항목 제거
+        fetchShoppingListData();
         const newCheckedItems = { ...checkedItems };
         delete newCheckedItems[id];
         setCheckedItems(newCheckedItems);

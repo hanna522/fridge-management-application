@@ -9,7 +9,6 @@ const ShoppingListSchema = new Schema({
     required: true,
     default: false,
   },
-  necessary: { type: Boolean, required: true, default: false },
 });
 
 ShoppingListSchema.virtual("url").get(function () {

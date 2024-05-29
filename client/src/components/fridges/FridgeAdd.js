@@ -7,6 +7,7 @@ function FridgeAdd({
   onHandleChange,
   onClose,
 }) {
+  
   return (
     <div>
       <h2>{formData._id ? "Edit Ingredient" : "Add Ingredient"}</h2>
@@ -45,6 +46,16 @@ function FridgeAdd({
             name="exp_date"
             required
             value={formData.exp_date}
+            onChange={onHandleChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="necessary">necessary</label>
+          <input
+            type="checkbox"
+            name="necessary"
+            value={formData.necessary}
             onChange={onHandleChange}
           />
         </div>

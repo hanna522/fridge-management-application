@@ -6,6 +6,7 @@ const IngredientSchema = new Schema({
   name: { type: String, required: true, maxLength: 50 },
   category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
   rec_exp_date: { type: Number },
+  necessary: { type: Boolean, required: true, default: false },
 });
 
 IngredientSchema.virtual("url").get(function() {

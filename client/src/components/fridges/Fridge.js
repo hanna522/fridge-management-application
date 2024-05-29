@@ -2,17 +2,13 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import FridgeCard from "./FridgeCard";
 import FridgeAdd from "./FridgeAdd";
-import {
-  getCreateFormFridgeInstance,
-  createFridgeInstance,
-  fetchCategories,
-} from "../../Api";
+import { getCreateFormFridgeInstance, createFridgeInstance } from "../../Api";
 import { Cursor, PlusCircleFill, SortDown } from "react-bootstrap-icons";
 import CategorySlider from "./CategorySlider";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
-function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd}) {
+function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
   const [createElements, setCreateElements] = useState({
     ingredient_list: [],
   });
@@ -21,6 +17,7 @@ function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd}) {
     buy_date: "",
     exp_date: "",
     status: "Unknown",
+    necessary: false,
   });
   const [selectedAdd, setSelectedAdd] = useState(false);
   const [sortField, setSortField] = useState("status");
@@ -58,6 +55,7 @@ function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd}) {
           buy_date: "",
           exp_date: "",
           status: "Unknown",
+          necessary: false,
         });
         setSelectedAdd(false);
         onItemAdd(res.data.ingredientInstance);
@@ -75,6 +73,8 @@ function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd}) {
     setSelectedAdd(false);
   };
 
+  const statusOrder = ["Fresh", "Alive", "Dying", "Dead"];
+
   const getNestedValue = (obj, path) =>
     path.split(".").reduce((acc, part) => acc && acc[part], obj);
 
@@ -90,6 +90,13 @@ function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd}) {
     .sort((a, b) => {
       const aValue = getNestedValue(a, sortField);
       const bValue = getNestedValue(b, sortField);
+
+      if (sortField === "status") {
+        const aIndex = statusOrder.indexOf(aValue);
+        const bIndex = statusOrder.indexOf(bValue);
+        return sortOrder === "asc" ? aIndex - bIndex : bIndex - aIndex;
+      }
+      
       if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
       if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
       return 0;
