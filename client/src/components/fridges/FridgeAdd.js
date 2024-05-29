@@ -55,7 +55,7 @@ function FridgeAdd({
           <input
             type="checkbox"
             name="necessary"
-            value={formData.necessary}
+            checked={formData.necessary}
             onChange={onHandleChange}
           />
         </div>

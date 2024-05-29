@@ -143,21 +143,28 @@ router.post("/fridgeinstance/create", [
   body("buy_date").toDate(),
   body("exp_date").toDate(),
   body("status").escape(),
+  body("necessary").escape(),
 
   async (req, res) => {
     const errors = validationResult(req);
-
+    
+    const ingredient = await Ingredient.findById(req.body.ingredient).exec();
+    if (!ingredient) {
+      return res.status(404).json({ message: "Ingredient not found" });
+    }
+    
     const ingredientInstance = new IngredientInstance({
       ingredient: req.body.ingredient,
       buy_date: req.body.buy_date,
       exp_date: req.body.exp_date,
       status: req.body.status,
     });
+
     if (!errors.isEmpty()) {
-    const allIngredients = await Ingredient.find({})
-      .populate("category")
-      .sort({ title: 1 })
-      .exec();
+      const allIngredients = await Ingredient.find({})
+        .populate("category")
+        .sort({ title: 1 })
+        .exec();
 
       return res.status(400).json({
         ingredient_list: allIngredients,
@@ -165,17 +172,18 @@ router.post("/fridgeinstance/create", [
         errors: errors.array(),
       });
     } else {
+      ingredient.necessary = req.body.necessary;
+      await ingredient.save();
+      
       await ingredientInstance.save();
       const addedIngredientInstance = await ingredientInstance.populate({
         path: "ingredient",
         populate: { path: "category" },
       });
-      res
-        .status(201)
-        .json({
-          message: "Ingredient instance created successfully",
-          ingredientInstance: addedIngredientInstance,
-        });
+      res.status(201).json({
+        message: "Ingredient instance created successfully",
+        ingredientInstance: addedIngredientInstance,
+      });
     }
   },
 ]);

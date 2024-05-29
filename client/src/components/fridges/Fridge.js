@@ -29,7 +29,7 @@ function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
     getCreateFormFridgeInstance()
       .then((res) => {
         setCreateElements(res.data);
-        console.log("Create Fridge Instance");
+        console.log("Create Fridge Instance", res.data);
       })
       .catch((error) => {
         console.error("Error fetching creating form data:", error);
@@ -37,11 +37,27 @@ function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value,
     });
+
+    if (name === "ingredient") {
+      const selectedIngredient = createElements.ingredient_list.find(
+        (ingredient) => ingredient._id === value
+      );
+      if (selectedIngredient) {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          buy_date: new Date().toISOString().split("T")[0], // today
+          exp_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+            .toISOString()
+            .split("T")[0], // today + 7 days
+          necessary: selectedIngredient.necessary
+        }));
+      }
+    }
   };
 
   const handleSubmit = (e) => {
