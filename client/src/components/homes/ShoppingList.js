@@ -20,7 +20,10 @@ const ShoppingList = () => {
   const [selectedAdd, setSelectedAdd] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-  const [checkedItems, setCheckedItems] = useState({});
+  const [checkedItems, setCheckedItems] = useState(() => {
+    const saved = localStorage.getItem("checkedItems");
+    return saved ? JSON.parse(saved) : {};
+  });
 
   useEffect(() => {
     fetchShoppingListData();
@@ -98,6 +101,11 @@ const ShoppingList = () => {
         setShoppingLists(shoppingLists.filter((list) => list._id !== id));
         setIsDeleteModalOpen(false);
         setItemToDelete(null);
+        // 로컬 스토리지에서 삭제된 항목 제거
+        const newCheckedItems = { ...checkedItems };
+        delete newCheckedItems[id];
+        setCheckedItems(newCheckedItems);
+        localStorage.setItem("checkedItems", JSON.stringify(newCheckedItems));
       })
       .catch((error) => {
         console.error("Error deleting shopping list:", error);
@@ -105,10 +113,14 @@ const ShoppingList = () => {
   };
 
   const handleCheckboxChange = (id) => {
-    setCheckedItems((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id],
-    }));
+    setCheckedItems((prevState) => {
+      const newState = {
+        ...prevState,
+        [id]: !prevState[id],
+      };
+      localStorage.setItem("checkedItems", JSON.stringify(newState));
+      return newState;
+    });
   };
 
   const deleteCheckedItems = () => {
