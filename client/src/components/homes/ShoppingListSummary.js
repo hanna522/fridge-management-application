@@ -6,6 +6,7 @@ import {
   createShoppingList,
   deleteShoppingList,
 } from "../../Api";
+import { Link } from "react-router-dom";
 import { CheckCircle, Trash } from "react-bootstrap-icons";
 
 const ShoppingList = () => {
@@ -163,7 +164,9 @@ const ShoppingList = () => {
   return (
     <div className="home-shop-container">
       <div className="home-heading">
-        <h2>Shopping List</h2>
+        <Link to="/api/shoppinglist">
+          <h2>Shopping List</h2>
+        </Link>
         <button className="btn btn-add" onClick={handleOpenModal}>
           + Add
         </button>

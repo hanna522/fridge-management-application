@@ -1,13 +1,13 @@
-// src/components/Home.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { CardImage } from "react-bootstrap-icons";
-import ShoppingList from "./ShoppingList";
+import ShoppingListSummary from "./ShoppingListSummary";
+import FridgeSummary from "./FridgeSummary";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
-function Home({ items, categories }) {
+function Home({ items, categories, onItemUpdate, onItemDelete }) {
   const [homeData, setHomeData] = useState({});
 
   useEffect(() => {
@@ -20,40 +20,6 @@ function Home({ items, categories }) {
         console.error("Error fetching data:", error);
       });
   }, []);
-
-  const getNestedValue = (obj, path) =>
-    path.split(".").reduce((acc, part) => acc && acc[part], obj);
-
-  const filterCategory = (cate) =>
-    items.filter((item) => {
-      const category = getNestedValue(item, "ingredient.category.name");
-      return (
-        typeof category === "string" &&
-        category.toLowerCase().includes(cate.name.toLowerCase())
-      );
-    });
-
-  const filterStatus = (status) => {
-    return items.filter((item) => item.status === status);
-  };
-
-  const getCategoryLength = (filtered) => {
-    const totalItems = items.length;
-    const filteredItems = filterCategory(filtered).length;
-    return (filteredItems / totalItems) * 100;
-  };
-
-  const getStatusLength = (s) => {
-    const totalItems = items.length;
-    const filteredItems = filterStatus(s).length;
-    return (filteredItems / totalItems) * 100;
-  };
-
-  const statusOrder = ["Fresh", "Alive", "Dying", "Dead"];
-
-  const sortedItems = [...items].sort(
-    (a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
-  );
 
   return (
     <>
@@ -68,51 +34,10 @@ function Home({ items, categories }) {
 
       {/** Shopping List Summary Section */}
 
-      <ShoppingList allItem={items} />
+      <ShoppingListSummary allItem={items} />
 
       {/** My Fridge Summary Section */}
-
-      <div className="home-fridge-container">
-        <div className="home-heading">
-          <h2>My Fridge</h2>
-          <button className="btn btn-add">+ Add</button>
-        </div>
-
-        <div className="fridge-graph">
-          {categories.category_list.map((category) => (
-            <div
-              key={category.name}
-              className={"fridge-graph-bar"}
-              style={{ width: `${getCategoryLength(category)}%` }}
-            >
-              <span>{category.name}</span>
-            </div>
-          ))}
-        </div>
-
-        <div className="fridge-graph">
-          {statusOrder.map((s) => (
-            <div
-              key={s}
-              className="fridge-graph-bar"
-              style={{ width: `${getStatusLength(s)}%` }}
-            >
-              <span>{s}</span>
-            </div>
-          ))}
-        </div>
-
-        <p>{items.length} items</p>
-
-        <ul className="home-fridge-card-container">
-          {sortedItems.map((item, index) => (
-            <li key={index} className="home-fridge-card">
-              <p>{item.ingredient.name}</p>
-              <p className={"status-" + item.status}> </p>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <FridgeSummary allItems={items} allCategories={categories} onItemUpdate={onItemUpdate} onItemDelete={onItemDelete}/>
     </>
   );
 }

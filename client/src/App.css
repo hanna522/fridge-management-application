@@ -17,6 +17,7 @@ main {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
 }
 
 .Overlay {
@@ -25,7 +26,19 @@ main {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.75); /* 반투명 검은색 배경 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+a {
+  color: rgb(84, 84, 84);
+  text-decoration: none;
+}
+
+a:hover {
+  color: rgb(0, 0, 0);
 }
 
 /*** FRIDGE section ***/
@@ -410,7 +423,7 @@ main {
 }
 
 .home-fridge-card .status-Fresh {
-  background-color: rgba(212, 237, 255);
+  background-color: rgb(0, 136, 255);
   border-radius:50%;
   border: 1px solid;
   border-color: rgb(210, 210, 210);
@@ -419,7 +432,7 @@ main {
 }
 
 .home-fridge-card .status-Alive {
-  background-color: rgb(199, 248, 194);
+  background-color: rgb(98, 255, 0);
   border-radius:50%;
   border: 1px solid;
   border-color: rgb(210, 210, 210);
@@ -428,7 +441,7 @@ main {
 }
 
 .home-fridge-card .status-Dying {
-  background-color: rgba(255, 212, 212);
+  background-color: rgb(255, 106, 0);
   border-radius:50%;
   border: 1px solid;
   border-color: rgb(210, 210, 210);
@@ -437,7 +450,7 @@ main {
 }
 
 .home-fridge-card .status-Dead {
-  background-color: rgba(217, 217, 217);
+  background-color: rgb(123, 123, 123);
   color: rgb(114, 114, 114);
   border-radius:50%;
   border: 1px solid;
@@ -462,16 +475,51 @@ main {
   margin-top: 15px;
 }
 
-.fridge-graph-bar {
-  background-color: #00e8e4;
+.fridge-graph div {
   color: white;
   text-align: center;
   padding: 5px;
   height: 10px;
 }
 
-.fridge-graph-bar:hover {
-  background-color: #01d1cd;
+.fridge-graph .status-Fresh {
+  background-color: #007bff;
+}
+
+.fridge-graph .status-Alive {
+  background-color: #87e800;
+}
+
+.fridge-graph .status-Dying {
+  background-color: #ff6f00;
+}
+
+.fridge-graph .status-Dead {
+  background-color: #656565;
+}
+
+.fridge-graph .category-Meat {
+  background-color: rgb(0, 255, 208);
+}
+
+.fridge-graph .category-Fruit {
+  background-color: rgb(0, 235, 192);
+}
+
+.fridge-graph .category-Grain {
+  background-color: rgb(0, 206, 168);
+}
+
+.fridge-graph div {
+  background-color: rgb(0, 155, 126);
+}
+
+.fridge-graph .category-Vegetable {
+  background-color: rgb(0, 125, 102);
+}
+
+.fridge-graph .category-Noodle {
+  background-color: rgb(0, 84, 69);
 }
 
 .fridge-graph span {

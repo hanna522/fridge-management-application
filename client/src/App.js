@@ -1,20 +1,19 @@
-import './App.css';
+import "./App.css";
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { fetchFridgeInstances, fetchCategories } from "./Api";
-import Home from './components/homes/Home';
+import Home from "./components/homes/Home";
 import MealPlan from "./components/pages/MealPlan";
 //import MyPage from "./components/pages/MyPage";
 //import Recipe from "./components/pages/Recipe";
 import Fridge from "./components/fridges/Fridge";
-import Navbar from './components/Navbar';
+import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 //import NotFoundPage from '/components/pages/NotFoundPage';
 
 function App() {
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState({ category_list: [] });
-
 
   useEffect(() => {
     fetchData();
@@ -40,7 +39,7 @@ function App() {
       .catch((error) => {
         console.error("Error fetching category data:", error);
       });
-  }
+  };
 
   const handleItemUpdate = (updatedItem) => {
     setItems((prevItems) =>
@@ -58,7 +57,6 @@ function App() {
     setItems((prevItems) => [...prevItems, newItem]);
   };
 
-
   return (
     <Router>
       <Navbar />
@@ -70,7 +68,14 @@ function App() {
           />
           <Route
             path="/api/home"
-            element={<Home items={items || []} categories={categories} />}
+            element={
+              <Home
+                items={items || []}
+                categories={categories}
+                onItemUpdate={handleItemUpdate}
+                onItemDelete={handleItemDelete}
+              />
+            }
           />
           <Route
             path="/api/fridge"
@@ -79,7 +84,7 @@ function App() {
                 items={items}
                 categories={categories}
                 onItemUpdate={handleItemUpdate}
-                onItemDelete={handleItemDelete}handleItemDelete
+                onItemDelete={handleItemDelete}
                 onItemAdd={handleItemAdd}
               />
             }
