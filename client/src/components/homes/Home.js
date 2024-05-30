@@ -7,7 +7,7 @@ import Modal from "react-modal";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
-function Home({ items, categories, onItemUpdate, onItemDelete }) {
+function Home({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
   const [homeData, setHomeData] = useState({});
 
   useEffect(() => {
@@ -37,7 +37,12 @@ function Home({ items, categories, onItemUpdate, onItemDelete }) {
       <ShoppingListSummary allItem={items} />
 
       {/** My Fridge Summary Section */}
-      <FridgeSummary allItems={items} allCategories={categories} onItemUpdate={onItemUpdate} onItemDelete={onItemDelete}/>
+      <FridgeSummary
+        allItems={items}
+        allCategories={categories}
+        onItemUpdate={onItemUpdate}
+        onItemDelete={onItemDelete}
+      />
     </>
   );
 }

@@ -74,6 +74,7 @@ function App() {
                 categories={categories}
                 onItemUpdate={handleItemUpdate}
                 onItemDelete={handleItemDelete}
+                onItemAdd={handleItemAdd}
               />
             }
           />

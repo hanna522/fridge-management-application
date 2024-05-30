@@ -1,27 +1,88 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { createFridgeInstance } from "../../Api";
+import { getCreateFormFridgeInstance } from "../../Api";
 
-function FridgeAdd({
-  formData,
-  selections,
-  onHandleSubmit,
-  onHandleChange,
-  onClose,
-}) {
-  
+function FridgeAdd({onItemAdd, onClose }) {
+  const [formData, setFormData] = useState({
+    ingredient: "",
+    buy_date: "",
+    exp_date: "",
+    status: "Unknown",
+    necessary: false,
+  });
+    const [createElements, setCreateElements] = useState({
+      ingredient_list: [],
+    });
+      useEffect(() => {
+        getCreateFormFridgeInstance()
+          .then((res) => {
+            setCreateElements(res.data);
+            console.log("Create Fridge Instance", res.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching creating form data:", error);
+          });
+      }, []);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+
+    if (name === "ingredient") {
+      const selectedIngredient = createElements.ingredient_list.find(
+        (ingredient) => ingredient._id === value
+      );
+      if (selectedIngredient) {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          buy_date: new Date().toISOString().split("T")[0], // today
+          exp_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+            .toISOString()
+            .split("T")[0], // today + 7 days
+          necessary: selectedIngredient.necessary,
+        }));
+      }
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    createFridgeInstance(formData)
+      .then((res) => {
+        console.log("Fridge instance created:", res.data);
+        // reset FormData
+        setFormData({
+          ingredient: "",
+          buy_date: "",
+          exp_date: "",
+          status: "Unknown",
+          necessary: false,
+        });
+        onClose();
+        onItemAdd(res.data.ingredientInstance);
+      })
+      .catch((error) => {
+        console.error("Error creating fridge instance:", error);
+      });
+  };
+
   return (
     <div>
       <h2>{formData._id ? "Edit Ingredient" : "Add Ingredient"}</h2>
-      <form onSubmit={onHandleSubmit}>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="ingredient">Ingredient:</label>
         <select
           className="form-control"
           name="ingredient"
           required
           value={formData.ingredient}
-          onChange={onHandleChange}
+          onChange={handleChange}
         >
           <option value="">Please select an ingredient</option>
-          {selections.ingredient_list.map((ingredient, index) => (
+          {createElements.ingredient_list.map((ingredient, index) => (
             <option key={index} value={ingredient._id}>
               {ingredient.name}
             </option>
@@ -35,7 +96,7 @@ function FridgeAdd({
             name="buy_date"
             required
             value={formData.buy_date}
-            onChange={onHandleChange}
+            onChange={handleChange}
           />
         </div>
 
@@ -46,7 +107,7 @@ function FridgeAdd({
             name="exp_date"
             required
             value={formData.exp_date}
-            onChange={onHandleChange}
+            onChange={handleChange}
           />
         </div>
 
@@ -56,7 +117,7 @@ function FridgeAdd({
             type="checkbox"
             name="necessary"
             checked={formData.necessary}
-            onChange={onHandleChange}
+            onChange={handleChange}
           />
         </div>
 

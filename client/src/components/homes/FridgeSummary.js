@@ -2,10 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Modal from "react-modal";
 import FridgeDetail from "../fridges/FridgeDetail";
+import FridgeAdd from "../fridges/FridgeAdd";
 import { Cursor } from "react-bootstrap-icons";
 
-function FridgeSummary({ allItems, allCategories, onItemUpdate, onItemDelete }) {
+Modal.setAppElement("#root");
+
+function FridgeSummary({
+  allItems,
+  allCategories,
+  onItemUpdate,
+  onItemAdd, onItemDelete,
+}) {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [selectedAdd, setSelectedAdd] = useState(false);
   const getNestedValue = (obj, path) =>
     path.split(".").reduce((acc, part) => acc && acc[part], obj);
 
@@ -39,14 +48,33 @@ function FridgeSummary({ allItems, allCategories, onItemUpdate, onItemDelete }) 
   const sortedItems = [...allItems].sort(
     (a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
   );
+  const handleAdd = () => {
+    setSelectedAdd(true);
+  };
 
+  const closeModal = () => {
+    setSelectedAdd(false);
+  };
   return (
     <div className="home-fridge-container">
       <div className="home-heading">
         <Link to="/api/fridge">
           <h2>My Fridge</h2>
         </Link>
-        <button className="btn btn-add">+ Add</button>
+        <button className="btn btn-add" onClick={handleAdd}>
+          + Add
+        </button>
+        <Modal
+          isOpen={!!selectedAdd}
+          onRequestClose={closeModal}
+          contentLabel="Add Ingredient"
+          className="Modal"
+          overlayClassName="Overlay"
+        >
+          {selectedAdd && (
+            <FridgeAdd onItemAdd={onItemAdd} onClose={closeModal} />
+          )}
+        </Modal>
       </div>
 
       <div className="fridge-graph">

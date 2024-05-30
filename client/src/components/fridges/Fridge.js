@@ -2,84 +2,20 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import FridgeCard from "./FridgeCard";
 import FridgeAdd from "./FridgeAdd";
-import { getCreateFormFridgeInstance, createFridgeInstance } from "../../Api";
 import { Cursor, PlusCircleFill, SortDown } from "react-bootstrap-icons";
 import CategorySlider from "./CategorySlider";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
 function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
-  const [createElements, setCreateElements] = useState({
-    ingredient_list: [],
-  });
-  const [formData, setFormData] = useState({
-    ingredient: "",
-    buy_date: "",
-    exp_date: "",
-    status: "Unknown",
-    necessary: false,
-  });
+
+
   const [selectedAdd, setSelectedAdd] = useState(false);
   const [sortField, setSortField] = useState("status");
   const [sortOrder, setSortOrder] = useState("asc");
   const [filterValue, setFilterValue] = useState("");
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
 
-  useEffect(() => {
-    getCreateFormFridgeInstance()
-      .then((res) => {
-        setCreateElements(res.data);
-        console.log("Create Fridge Instance", res.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching creating form data:", error);
-      });
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
-
-    if (name === "ingredient") {
-      const selectedIngredient = createElements.ingredient_list.find(
-        (ingredient) => ingredient._id === value
-      );
-      if (selectedIngredient) {
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          buy_date: new Date().toISOString().split("T")[0], // today
-          exp_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-            .toISOString()
-            .split("T")[0], // today + 7 days
-          necessary: selectedIngredient.necessary
-        }));
-      }
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    createFridgeInstance(formData)
-      .then((res) => {
-        console.log("Fridge instance created:", res.data);
-        // reset FormData
-        setFormData({
-          ingredient: "",
-          buy_date: "",
-          exp_date: "",
-          status: "Unknown",
-          necessary: false,
-        });
-        setSelectedAdd(false);
-        onItemAdd(res.data.ingredientInstance);
-      })
-      .catch((error) => {
-        console.error("Error creating fridge instance:", error);
-      });
-  };
 
   const handleAdd = () => {
     setSelectedAdd(true);
@@ -112,7 +48,7 @@ function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
         const bIndex = statusOrder.indexOf(bValue);
         return sortOrder === "asc" ? aIndex - bIndex : bIndex - aIndex;
       }
-      
+
       if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
       if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
       return 0;
@@ -209,10 +145,7 @@ function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
       >
         {selectedAdd && (
           <FridgeAdd
-            formData={formData}
-            selections={createElements}
-            onHandleSubmit={handleSubmit}
-            onHandleChange={handleChange}
+            onItemAdd={onItemAdd}
             onClose={closeModal}
           />
         )}
