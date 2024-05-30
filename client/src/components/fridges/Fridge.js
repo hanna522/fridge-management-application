@@ -140,14 +140,11 @@ function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
         isOpen={!!selectedAdd}
         onRequestClose={closeModal}
         contentLabel="Add Ingredient"
-        className="Modal"
+        className="Modal modal-add-shop"
         overlayClassName="Overlay"
       >
         {selectedAdd && (
-          <FridgeAdd
-            onItemAdd={onItemAdd}
-            onClose={closeModal}
-          />
+          <FridgeAdd onItemAdd={onItemAdd} onClose={closeModal} />
         )}
       </Modal>
     </>

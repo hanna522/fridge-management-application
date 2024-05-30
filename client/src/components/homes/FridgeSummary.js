@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Modal from "react-modal";
 import FridgeDetail from "../fridges/FridgeDetail";
 import FridgeAdd from "../fridges/FridgeAdd";
-import { Cursor } from "react-bootstrap-icons";
+import { deleteFridgeInstance } from "../../Api";
 
 Modal.setAppElement("#root");
 
@@ -11,10 +11,13 @@ function FridgeSummary({
   allItems,
   allCategories,
   onItemUpdate,
-  onItemAdd, onItemDelete,
+  onItemAdd,
+  onItemDelete,
 }) {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [selectedAdd, setSelectedAdd] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null); // Add state for selected item
+
   const getNestedValue = (obj, path) =>
     path.split(".").reduce((acc, part) => acc && acc[part], obj);
 
@@ -48,6 +51,7 @@ function FridgeSummary({
   const sortedItems = [...allItems].sort(
     (a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
   );
+
   const handleAdd = () => {
     setSelectedAdd(true);
   };
@@ -55,6 +59,12 @@ function FridgeSummary({
   const closeModal = () => {
     setSelectedAdd(false);
   };
+
+  const openDetailModal = (item) => {
+    setSelectedItem(item);
+    setIsDetailOpen(true);
+  };
+
   return (
     <div className="home-fridge-container">
       <div className="home-heading">
@@ -77,60 +87,67 @@ function FridgeSummary({
         </Modal>
       </div>
 
-      <div className="fridge-graph">
-        {allCategories.category_list.map((category) => (
-          <div
-            key={category.name}
-            className={"category-" + category.name}
-            style={{ width: `${getCategoryLength(category)}%` }}
-          >
-            <span>{category.name}</span>
-          </div>
-        ))}
-      </div>
+      <div className="fridge-graph-container">
+        <p>Analysis</p>
+        <div className="fridge-graph">
+          {statusOrder.map((s) => (
+            <p
+              key={s}
+              className={"status-" + s}
+              style={{ width: `${getStatusLength(s)}%` }}
+            >
+              {s}
+            </p>
+          ))}
+        </div>
 
-      <div className="fridge-graph">
-        {statusOrder.map((s) => (
-          <div
-            key={s}
-            className={"status-" + s}
-            style={{ width: `${getStatusLength(s)}%` }}
-          >
-            <span>{s}</span>
-          </div>
-        ))}
+        <div className="fridge-graph">
+          {allCategories.category_list.map((category) => (
+            <p
+              key={category.name}
+              className={"category-" + category.name}
+              style={{ width: `${getCategoryLength(category)}%` }}
+            >
+              {category.name}
+            </p>
+          ))}
+        </div>
       </div>
 
       <p>{allItems.length} items</p>
 
       <ul className="home-fridge-card-container">
         {sortedItems.map((item, index) => (
-          <div>
+          <div key={index}>
             <li
               key={index}
               className="home-fridge-card"
-              onClick={() => setIsDetailOpen(true)}
+              onClick={() => openDetailModal(item)}
               style={{ cursor: "pointer" }}
             >
               <p>{item.ingredient.name}</p>
               <p className={"status-" + item.status}> </p>
             </li>
-            <Modal
-              isOpen={isDetailOpen}
-              onRequestClose={() => setIsDetailOpen(false)}
-              contentLabel="Ingredient Details"
-              className="Modal"
-              overlayClassName="Overlay"
-            >
-              <FridgeDetail
-                item={item}
-                onClose={() => setIsDetailOpen(false)}
-                onItemUpdate={onItemUpdate}
-              />
-            </Modal>
           </div>
         ))}
       </ul>
+
+      {selectedItem && (
+        <Modal
+          isOpen={isDetailOpen}
+          onRequestClose={() => setIsDetailOpen(false)}
+          contentLabel="Ingredient Details"
+          className="Modal"
+          overlayClassName="Overlay"
+        >
+          <FridgeDetail
+            item={selectedItem}
+            onClose={() => setIsDetailOpen(false)}
+            onItemUpdate={onItemUpdate}
+            onItemDelete={onItemDelete}
+          />
+        </Modal>
+      )}
     </div>
   );
 }

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {getUpdateFormFridgeInstance, updateFridgeInstance} from "../../Api";
+import Modal from "react-modal";
+import { deleteFridgeInstance } from "../../Api";
 
-function FridgeDetail({ item, onClose, onItemUpdate }) {
+function FridgeDetail({ item, onClose, onItemUpdate, onItemDelete }) {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // For delete confirmation modal
   const [isEditing, setIsEditing] = useState(false);
   const [updateElements, setUpdateElements] = useState({
     ingredient_list: [],
@@ -47,8 +50,33 @@ function FridgeDetail({ item, onClose, onItemUpdate }) {
       });
   };
 
+    const handleDeleteClick = () => {
+      setIsDeleteModalOpen(true);
+    };
+
+    const closeDeleteModal = () => {
+      setIsDeleteModalOpen(false);
+    };
+
+      const onDeleteConfirm = (item) => {
+        deleteFridgeInstance(item._id)
+          .then((res) => {
+            console.log("Fridge instance deleted:", res.data);
+            onItemDelete(item._id);
+          })
+          .catch((error) => {
+            console.error("Error deleting fridge instance:", error);
+          });
+      };
+
+      const handleDeleteConfirm = () => {
+        onDeleteConfirm(item);
+        setIsDeleteModalOpen(false);
+        onClose();
+      };
+
   return (
-    <div>
+    <>
       <h2>Ingredient Details</h2>
       {isEditing ? (
         <div>
@@ -116,10 +144,24 @@ function FridgeDetail({ item, onClose, onItemUpdate }) {
           <p>Buy Date: {new Date(item.buy_date).toLocaleDateString()}</p>
           <p>Expiration Date: {new Date(item.exp_date).toLocaleDateString()}</p>
           <button onClick={() => setIsEditing(true)}>Edit</button>
+          <button onClick={handleDeleteClick}>Delete</button>
           <button onClick={onClose}>Close</button>
         </div>
       )}
-    </div>
+
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onRequestClose={closeDeleteModal}
+        contentLabel="Delete Confirmation"
+        className="Modal"
+        overlayClassName="Overlay"
+      >
+        <h2>Delete Confirmation</h2>
+        <p>Are you sure you want to delete this item?</p>
+        <button onClick={handleDeleteConfirm}>Yes, delete</button>
+        <button onClick={closeDeleteModal}>No, cancel</button>
+      </Modal>
+    </>
   );
 }
 

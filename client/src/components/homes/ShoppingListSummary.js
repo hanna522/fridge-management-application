@@ -9,7 +9,7 @@ import {
 import { Link } from "react-router-dom";
 import { CheckCircle, Trash } from "react-bootstrap-icons";
 
-const ShoppingList = () => {
+const ShoppingList = ({allItems}) => {
   const [shoppingLists, setShoppingLists] = useState([]);
   const [ingredientOptions, setIngredientOptions] = useState({
     ingredient_list: [],
@@ -98,9 +98,24 @@ const ShoppingList = () => {
   };
 
   const addNecessaryItems = () => {
-    const shoppingListsIngredientIds = shoppingLists.map((list) => list.ingredient._id)
+
+
+    const shoppingListsIngredientIds = shoppingLists.map(
+      (list) => list.ingredient._id
+    );
+
+    const allItemsIngredientIds = allItems.map((item) => item.ingredient._id);
+    const allBadItemsIngredientIds = allItems
+      .filter((item) => item.status === "Dying" || item.status === "Dead")
+      .map((item) => item.ingredient._id);
+
     ingredientOptions.ingredient_list.forEach((ingredient) => {
-      if (ingredient.necessary && !shoppingListsIngredientIds.includes(ingredient._id)) {
+      if (
+        ingredient.necessary &&
+        !shoppingListsIngredientIds.includes(ingredient._id) &&
+        (!allItemsIngredientIds.includes(ingredient._id) ||
+        allBadItemsIngredientIds.includes(ingredient._id))
+      ) {
         const shoppingListDataForm = {
           ingredient: ingredient._id,
           possess: false,
@@ -161,6 +176,14 @@ const ShoppingList = () => {
     });
   };
 
+  const isNecessary = (ingredient) => {
+      if (ingredient.necessary) {
+        return "R";
+      } else {
+        return "";
+      }
+    };
+
   return (
     <div className="home-shop-container">
       <div className="home-heading">
@@ -189,7 +212,10 @@ const ShoppingList = () => {
                   : "none",
               }}
             >
-              {list.ingredient.name}
+              <span>{list.ingredient.name}</span>
+              <span className="home-shop-r">
+                {isNecessary(list.ingredient)}
+              </span>
             </label>
             <Trash
               size={12}
@@ -214,10 +240,16 @@ const ShoppingList = () => {
         isOpen={selectedAdd}
         onRequestClose={handleCloseModal}
         contentLabel="Add Shopping List Item"
-        className="Modal"
+        className="Modal modal-add-shop"
         overlayClassName="Overlay"
       >
-        <h2>Add Shopping List Item</h2>
+        <div className="modal-heading">
+          <h2>Add Shopping List</h2>
+          <button type="button" className="close-btn" onClick={handleCloseModal}>
+            x
+          </button>
+        </div>
+
         <form onSubmit={handleSubmit}>
           <label>
             Ingredient:
@@ -235,10 +267,7 @@ const ShoppingList = () => {
               ))}
             </select>
           </label>
-          <button type="submit">Add Item</button>
-          <button type="button" onClick={handleCloseModal}>
-            Cancel
-          </button>
+          <button type="submit" className="confirm-btn">Add Item</button>
         </form>
       </Modal>
 

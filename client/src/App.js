@@ -3,9 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { fetchFridgeInstances, fetchCategories } from "./Api";
 import Home from "./components/homes/Home";
-import MealPlan from "./components/pages/MealPlan";
-//import MyPage from "./components/pages/MyPage";
-//import Recipe from "./components/pages/Recipe";
+import ShoppingList from "./components/shoppinglists/ShoppingList";
 import Fridge from "./components/fridges/Fridge";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -90,7 +88,8 @@ function App() {
               />
             }
           />
-          <Route path="/api/meal" element={<MealPlan />} />
+          <Route path="/api/shoppinglist" element={<ShoppingList />} />
+        
         </Routes>
       </main>
       <Footer />

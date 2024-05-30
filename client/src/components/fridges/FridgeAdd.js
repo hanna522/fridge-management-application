@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createFridgeInstance } from "../../Api";
 import { getCreateFormFridgeInstance } from "../../Api";
 
-function FridgeAdd({onItemAdd, onClose }) {
+function FridgeAdd({ onItemAdd, onClose }) {
   const [formData, setFormData] = useState({
     ingredient: "",
     buy_date: "",
@@ -10,19 +10,19 @@ function FridgeAdd({onItemAdd, onClose }) {
     status: "Unknown",
     necessary: false,
   });
-    const [createElements, setCreateElements] = useState({
-      ingredient_list: [],
-    });
-      useEffect(() => {
-        getCreateFormFridgeInstance()
-          .then((res) => {
-            setCreateElements(res.data);
-            console.log("Create Fridge Instance", res.data);
-          })
-          .catch((error) => {
-            console.error("Error fetching creating form data:", error);
-          });
-      }, []);
+  const [createElements, setCreateElements] = useState({
+    ingredient_list: [],
+  });
+  useEffect(() => {
+    getCreateFormFridgeInstance()
+      .then((res) => {
+        setCreateElements(res.data);
+        console.log("Create Fridge Instance", res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching creating form data:", error);
+      });
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -70,8 +70,14 @@ function FridgeAdd({onItemAdd, onClose }) {
   };
 
   return (
-    <div>
-      <h2>{formData._id ? "Edit Ingredient" : "Add Ingredient"}</h2>
+    <>
+      <div className="modal-heading">
+        <h2>{formData._id ? "Edit Ingredient" : "Add Ingredient"}</h2>
+        <button type="button" className="close-btn" onClick={onClose}>
+          x
+        </button>
+      </div>
+
       <form onSubmit={handleSubmit}>
         <label htmlFor="ingredient">Ingredient:</label>
         <select
@@ -121,14 +127,11 @@ function FridgeAdd({onItemAdd, onClose }) {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="confirm-btn">
           Add
         </button>
-        <button type="button" className="btn btn-secondary" onClick={onClose}>
-          Cancel
-        </button>
       </form>
-    </div>
+    </>
   );
 }
 

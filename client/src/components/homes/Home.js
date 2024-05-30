@@ -34,7 +34,7 @@ function Home({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
 
       {/** Shopping List Summary Section */}
 
-      <ShoppingListSummary allItem={items} />
+      <ShoppingListSummary allItems={items} />
 
       {/** My Fridge Summary Section */}
       <FridgeSummary

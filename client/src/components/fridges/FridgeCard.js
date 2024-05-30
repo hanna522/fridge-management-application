@@ -5,16 +5,7 @@ import { deleteFridgeInstance } from "../../Api";
 import { Trash } from "react-bootstrap-icons";
 
 function FridgeCard({ item, onItemUpdate, onItemDelete}) {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // For delete confirmation modal
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-
-  const handleDeleteClick = () => {
-    setIsDeleteModalOpen(true);
-  };
-
-  const closeDeleteModal = () => {
-    setIsDeleteModalOpen(false);
-  };
 
   const onDeleteConfirm = (item) => {
     deleteFridgeInstance(item._id)
@@ -29,7 +20,7 @@ function FridgeCard({ item, onItemUpdate, onItemDelete}) {
 
   const handleDeleteConfirm = () => {
     onDeleteConfirm(item);
-    setIsDeleteModalOpen(false);
+    setIsDetailOpen(false);
   };
 
   const getImoji = (cate) => {
@@ -48,10 +39,7 @@ function FridgeCard({ item, onItemUpdate, onItemDelete}) {
 
   return (
     <>
-      <li
-        className="fridge-card"
-        style={{ cursor: "pointer" }}
-      >
+      <li className="fridge-card" style={{ cursor: "pointer" }}>
         <div className={"status status-" + item.status}>
           <div
             className="fridge-card-detail"
@@ -71,7 +59,7 @@ function FridgeCard({ item, onItemUpdate, onItemDelete}) {
           <Trash
             size={15}
             className="trash-btn"
-            onClick={handleDeleteClick}
+            onClick={handleDeleteConfirm}
             style={{ cursor: "pointer" }}
           />
         </div>
@@ -88,20 +76,8 @@ function FridgeCard({ item, onItemUpdate, onItemDelete}) {
           item={item}
           onClose={() => setIsDetailOpen(false)}
           onItemUpdate={onItemUpdate}
+          onItemDelete={onItemDelete}
         />
-      </Modal>
-
-      <Modal
-        isOpen={isDeleteModalOpen}
-        onRequestClose={closeDeleteModal}
-        contentLabel="Delete Confirmation"
-        className="Modal"
-        overlayClassName="Overlay"
-      >
-        <h2>Delete Confirmation</h2>
-        <p>Are you sure you want to delete this item?</p>
-        <button onClick={handleDeleteConfirm}>Yes, delete</button>
-        <button onClick={closeDeleteModal}>No, cancel</button>
       </Modal>
     </>
   );
