@@ -1,10 +1,10 @@
 const ShoppingList = require("../model/shoppinglist");
 const Ingredient = require("../model/ingredient");
 
-// GET all single shopping list item by ID
+// GET all shopping list items for a specific user
 exports.getAllShoppingList = async (req, res) => {
   try {
-    const allShoppingList = await ShoppingList.find()
+    const allShoppingList = await ShoppingList.find({ user: req.user._id }) // Fetch only items for the logged-in user
       .populate("ingredient")
       .exec();
     return res.status(200).json({
@@ -48,7 +48,10 @@ exports.getShoppingListCreateForm = async (req, res) => {
 // POST create a new shopping list item
 exports.createShoppingList = async (req, res) => {
   try {
-    const newItem = new ShoppingList(req.body);
+    const newItem = new ShoppingList({
+      ...req.body,
+      user: req.user._id, // Associate with the logged-in user
+    });
     const savedItem = await newItem.save();
     return res.status(201).json(savedItem);
   } catch (err) {
@@ -62,7 +65,10 @@ exports.updateShoppingList = async (req, res) => {
   try {
     const updatedItem = await ShoppingList.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      {
+        ...req.body,
+        user: req.user._id, // Ensure the user association is maintained
+      },
       {
         new: true,
         runValidators: true,

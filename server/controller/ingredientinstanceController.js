@@ -1,7 +1,8 @@
 const { body, validationResult } = require("express-validator");
-const Ingredient = require("../model/ingredient"); // Adjust the path as needed
-const IngredientInstance = require("../model/ingredientInstance"); // Adjust the path as needed
+const Ingredient = require("../model/ingredient");
+const IngredientInstance = require("../model/ingredientInstance");
 
+/// Create ///
 // GET request for creating an ingredient instance. NOTE This must come before routes that display ingredient instances
 exports.getIngredientInstanceCreateForm = async (req, res) => {
   try {
@@ -19,7 +20,6 @@ exports.getIngredientInstanceCreateForm = async (req, res) => {
 };
 
 // Handle ingredient instance create on POST
-
 exports.createIngredientInstance = [
   body("ingredient").isLength({ min: 1 }).escape(),
   body("buy_date").toDate(),
@@ -40,6 +40,7 @@ exports.createIngredientInstance = [
       buy_date: req.body.buy_date,
       exp_date: req.body.exp_date,
       status: req.body.status,
+      user: req.user._id, // Associate with the logged-in user
     });
 
     if (!errors.isEmpty()) {
@@ -70,10 +71,12 @@ exports.createIngredientInstance = [
   },
 ];
 
-// GET request for list of all ingredient instances
+// GET request for list of all ingredient instances for a specific user
 exports.getIngredientInstance = async (req, res) => {
   try {
-    const allIngredientInstance = await IngredientInstance.find({})
+    const allIngredientInstance = await IngredientInstance.find({
+      user: req.user._id,
+    }) // Fetch only instances for the logged-in user
       .populate({
         path: "ingredient",
         populate: { path: "category" },
@@ -130,6 +133,7 @@ exports.updateIngredientInstance = [
       exp_date: req.body.exp_date,
       status: req.body.status,
       _id: req.params.id,
+      user: req.user._id, // Ensure the user association is maintained
     });
 
     if (!errors.isEmpty()) {

@@ -1,39 +1,65 @@
-// src/components/Navbar.js
+// Navbar component
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Modal from "react-modal";
-import Profile from "./profile.jpeg"; // 이미지 파일 가져오기
-import { ChevronDown, Cursor, GearFill} from "react-bootstrap-icons";
+import Profile from "./profile.jpeg";
+import { ChevronDown, GearFill } from "react-bootstrap-icons";
 import Login from "./Login";
-import Register from "./Register"
+import Register from "./Register";
 
 Modal.setAppElement("#root");
 
-function Navbar() {
+function Navbar({ isLoggedIn, handleRegister, handleLogout, handleLogin }) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   return (
     <>
       <div className="navbar-container">
-        <Link to="/api/home" className="navbar-title">
+        <Link to="/home" className="navbar-title">
           <span className="mint">Fridge</span>
         </Link>
-        <div
-          className="navbar-profile-container"
-          onClick={() => setIsProfileOpen(true)}
-          style={{ cursor: "pointer" }}
-        >
-          <img src={Profile} alt="Profile" className="navbar-profile-image" />
-          <p className="navbar-username">Account</p>
-          <ChevronDown></ChevronDown>
-        </div>
+        {isLoggedIn ? (
+          <div
+            className="navbar-profile-container"
+            onClick={() => setIsProfileOpen(true)}
+            style={{ cursor: "pointer" }}
+          >
+            <img src={Profile} alt="Profile" className="navbar-profile-image" />
+            <p className="navbar-username">Account</p>
+            <ChevronDown />
+          </div>
+        ) : (
+          <div className="navbar-auth-buttons">
+            <button onClick={() => setIsLoginOpen(true)}>Login</button>
+            <button onClick={() => setIsRegisterOpen(true)}>Register</button>
+          </div>
+        )}
       </div>
-      <Login/>
-      <Register/>
+
+      <Modal
+        isOpen={isLoginOpen}
+        onRequestClose={() => setIsLoginOpen(false)}
+        contentLabel="Login"
+        className="auth-modal"
+      >
+        <Login onLogin={handleLogin} />
+      </Modal>
+
+      <Modal
+        isOpen={isRegisterOpen}
+        onRequestClose={() => setIsRegisterOpen(false)}
+        contentLabel="Register"
+        className="auth-modal"
+      >
+        <Register onRegister={handleRegister} />
+      </Modal>
+
       <Modal
         isOpen={isProfileOpen}
         onRequestClose={() => setIsProfileOpen(false)}
-        contentLabel="Ingredient Details"
+        contentLabel="Profile"
         className="profile-modal"
       >
         <div className="navbar-list-profile">
@@ -49,32 +75,34 @@ function Navbar() {
           </div>
         </div>
 
-        <div class="line-with-shadow"></div>
+        <div className="line-with-shadow"></div>
 
         <ul className="navbar-list">
           <li className="navbar-list-item">
-            <Link to="/api/home" className="navbar-link">
+            <Link to="/home" className="navbar-link">
               Home
             </Link>
           </li>
           <li className="navbar-list-item">
-            <Link to="/api/fridge" className="navbar-link">
+            <Link to="/fridge" className="navbar-link">
               Fridge
             </Link>
           </li>
           <li className="navbar-list-item">
-            <Link to="/api/shoppinglist" className="navbar-link">
+            <Link to="/shoppinglist" className="navbar-link">
               Shopping List
             </Link>
           </li>
           <li className="navbar-list-item">
-            <Link to="/api/shoppinglist" className="navbar-link">
+            <Link to="/analysis" className="navbar-link">
               Analysis
             </Link>
           </li>
         </ul>
 
-        <button className="confirm-btn">Sign Out</button>
+        <button className="confirm-btn" onClick={handleLogout}>
+          Sign Out
+        </button>
       </Modal>
     </>
   );

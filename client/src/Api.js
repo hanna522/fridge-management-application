@@ -2,17 +2,36 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:5050";
 
+const axiosInstance = axios.create({
+  baseURL: API_BASE_URL,
+});
+
+// 인터셉터 설정
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      config.headers.Authorization = `Bearer ${user.token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // Authentication services
-export const register = (email, password) => {
-  return axios.post(`${API_BASE_URL}/api/register`, { email, password })
-  .then((response) => {
-    console.log(response.data.message);
-  })
+export const register = (email, password, groupName) => {
+  return axiosInstance
+    .post("/api/register", { email, password, groupName })
+    .then((response) => {
+      console.log(response.data.message);
+    });
 };
 
 export const login = (email, password) => {
-  return axios
-    .post(`${API_BASE_URL}/api/login`, { email, password })
+  return axiosInstance
+    .post("/api/login", { email, password })
     .then((response) => {
       if (response.data.token) {
         localStorage.setItem("user", JSON.stringify(response.data));
@@ -28,47 +47,47 @@ export const logout = () => {
 
 // Fridge Instance services
 export const fetchFridgeInstances = () => {
-  return axios.get(`${API_BASE_URL}/api/fridgeinstance`);
+  return axiosInstance.get("/api/fridgeinstance");
 };
 
 export const getCreateFormFridgeInstance = () => {
-  return axios.get(`${API_BASE_URL}/api/fridgeinstance/create`);
+  return axiosInstance.get("/api/fridgeinstance/create");
 };
 
 export const createFridgeInstance = (formData) => {
-  return axios.post(`${API_BASE_URL}/api/fridgeinstance/create`, formData);
+  return axiosInstance.post("/api/fridgeinstance/create", formData);
 };
 
 export const getUpdateFormFridgeInstance = (id) => {
-  return axios.get(`${API_BASE_URL}/api/fridgeinstance/${id}/update`);
+  return axiosInstance.get(`/api/fridgeinstance/${id}/update`);
 };
 
 export const updateFridgeInstance = (id, formData) => {
-  return axios.put(`${API_BASE_URL}/api/fridgeinstance/${id}/update`, formData);
+  return axiosInstance.put(`/api/fridgeinstance/${id}/update`, formData);
 };
 
 export const deleteFridgeInstance = (id) => {
-  return axios.delete(`${API_BASE_URL}/api/fridgeinstance/${id}/delete`);
+  return axiosInstance.delete(`/api/fridgeinstance/${id}/delete`);
 };
 
 // Category services
 export const fetchCategories = () => {
-  return axios.get(`${API_BASE_URL}/api/category`);
+  return axiosInstance.get("/api/category");
 };
 
 // Shopping List services
 export const fetchShoppingList = () => {
-  return axios.get(`${API_BASE_URL}/api/shoppinglist`);
+  return axiosInstance.get("/api/shoppinglist");
 };
 
 export const getCreateFormShoppingList = () => {
-  return axios.get(`${API_BASE_URL}/api/shoppinglist/create`);
+  return axiosInstance.get("/api/shoppinglist/create");
 };
 
 export const createShoppingList = (formData) => {
-  return axios.post(`${API_BASE_URL}/api/shoppinglist/create`, formData);
+  return axiosInstance.post("/api/shoppinglist/create", formData);
 };
 
 export const deleteShoppingList = (id) => {
-  return axios.delete(`${API_BASE_URL}/api/shoppinglist/${id}`);
+  return axiosInstance.delete(`/api/shoppinglist/${id}`);
 };

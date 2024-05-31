@@ -1,3 +1,4 @@
+// in the future...
 const mongoose = require("mongoose");
 
 const GroupSchema = new mongoose.Schema({

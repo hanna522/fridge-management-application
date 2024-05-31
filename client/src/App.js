@@ -1,25 +1,41 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { fetchFridgeInstances, fetchCategories } from "./Api";
+import {
+  fetchFridgeInstances,
+  fetchCategories,
+  login,
+  register,
+  logout,
+} from "./Api";
 import Home from "./components/homes/Home";
 import ShoppingList from "./components/shoppinglists/ShoppingList";
 import Fridge from "./components/fridges/Fridge";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-//import NotFoundPage from '/components/pages/NotFoundPage';
+import Login from "./components/Login";
+import Register from "./components/Register";
 
 function App() {
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState({ category_list: [] });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    fetchData();
-    fetchCategory();
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("token");
+
+    if (storedUser && token) {
+      setUser(storedUser);
+      setIsLoggedIn(true);
+      fetchData(token); // Pass the token to fetchData
+      fetchCategory(token); // Pass the token to fetchCategory
+    }
   }, []);
 
-  const fetchData = () => {
-    fetchFridgeInstances()
+  const fetchData = (token) => {
+    fetchFridgeInstances(token)
       .then((res) => {
         setItems(res.data.data);
       })
@@ -28,8 +44,8 @@ function App() {
       });
   };
 
-  const fetchCategory = () => {
-    fetchCategories()
+  const fetchCategory = (token) => {
+    fetchCategories(token)
       .then((res) => {
         setCategories(res.data);
         console.log("Get Category Data");
@@ -55,17 +71,52 @@ function App() {
     setItems((prevItems) => [...prevItems, newItem]);
   };
 
+  const handleLogin = async (email, password) => {
+    try {
+      const userData = await login(email, password);
+      setUser(userData);
+      setIsLoggedIn(true);
+      const token = localStorage.getItem("token");
+      fetchData(token);
+      fetchCategory(token);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
+  const handleRegister = async (email, password, groupName) => {
+    try {
+      await register(email, password, groupName);
+      await handleLogin(email, password);
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    setUser(null);
+    setIsLoggedIn(false);
+    setItems([]);
+    setCategories({ category_list: [] });
+  };
+
   return (
     <Router>
-      <Navbar />
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        handleRegister={handleRegister}
+        handleLogout={handleLogout}
+        handleLogin={handleLogin}
+      />
       <main>
         <Routes>
           <Route
-            path="/api/"
+            path="/"
             element={<Home items={items || []} categories={categories} />}
           />
           <Route
-            path="/api/home"
+            path="/home"
             element={
               <Home
                 items={items || []}
@@ -77,7 +128,7 @@ function App() {
             }
           />
           <Route
-            path="/api/fridge"
+            path="/fridge"
             element={
               <Fridge
                 items={items}
@@ -88,8 +139,7 @@ function App() {
               />
             }
           />
-          <Route path="/api/shoppinglist" element={<ShoppingList />} />
-        
+          <Route path="/shoppinglist" element={<ShoppingList />} />
         </Routes>
       </main>
       <Footer />

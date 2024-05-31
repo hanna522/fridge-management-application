@@ -5,12 +5,17 @@ const Schema = mongoose.Schema;
 const IngredientInstanceSchema = new Schema({
   ingredient: { type: Schema.Types.ObjectId, ref: "Ingredient", require: true },
   buy_date: { type: Date, required: true },
-  exp_date: {type: Date, required: true },
+  exp_date: { type: Date, required: true },
   status: {
     type: String,
     required: true,
     enum: ["Fresh", "Alive", "Dying", "Dead", "Unknown"],
-    default: "Unknown"
+    default: "Unknown",
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
 });
 
