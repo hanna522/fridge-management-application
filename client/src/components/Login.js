@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import authService from "../services/authService";
+import {login} from "../Api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -8,7 +8,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await authService.login(email, password);
+      await login(email, password);
       // 로그인 성공 후 리디렉션
     } catch (err) {
       const errorMessage =

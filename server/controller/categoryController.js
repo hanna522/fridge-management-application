@@ -1,8 +1,10 @@
+const Category = require("../model/category");
+
 exports.getCategory = async (req, res) => {
   try {
-    const allCategory = await Category.find().exec({ name: 1});
+    const allCategory = await Category.find().exec({ name: 1 });
     return res.status(200).json({
-      category_list: allCategory
+      category_list: allCategory,
     });
   } catch (err) {
     console.log(err.message);

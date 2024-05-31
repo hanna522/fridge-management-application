@@ -1,3 +1,4 @@
+// ./model/user.js
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
@@ -10,10 +11,6 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-  },
-  group: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Group",
   },
 });
 
