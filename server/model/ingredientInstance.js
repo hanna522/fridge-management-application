@@ -11,7 +11,7 @@ const IngredientInstanceSchema = new Schema({
     required: true,
     enum: ["Fresh", "Alive", "Dying", "Dead", "Unknown"],
     default: "Unknown"
-  }
+  },
 });
 
 IngredientInstanceSchema.virtual("url").get(function() {

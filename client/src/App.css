@@ -1,3 +1,7 @@
+:root {
+  --primary-color: rgb(113, 66, 255);
+}
+
 main {
   margin: 10px;
   display: flex;
@@ -116,7 +120,7 @@ a:hover {
 
 .btn-add-circle:hover {
   font-size:50px;
-  color: #00fffb;
+  color: var(--primary-color);
 }
 
 .trash-btn {
@@ -237,61 +241,116 @@ a:hover {
 }
 
 /*** NAVBAR section ***/
+.navbar-container {
+  padding: 10px 10px 0px 20px;
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 1px 1px 1px rgba(156, 156, 156, 0.5);
+  padding-bottom: 5px;
+}
+
 .navbar-list {
   display: flex;
-  align-items: right;
-  justify-content: right;
-  gap: 20px;
+  flex-direction: column;
+  gap: 10px;
   list-style-type: none;
-  font-size: 18px;
-  color: rgb(234, 234, 234);
+  padding:0;
+  margin: 15px;
 }
 
 .navbar-list a {
-  text-decoration: none;
-  color: inherit;
+  text-decoration: none;  
+}
+
+.navbar-link {
+  font-size: 14px;
+}
+
+.profile-detail {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.navbar-list-profile img {
+  height: 60px;
+  width: auto;
+}
+
+.navbar-list-profile h2 {
+  font-size: 18px;
   font-weight: 700;
-  position: relative;
+  margin-top: 7px;
 }
 
-.navbar-list a::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 3px; /* 밑줄 두께 */
-  bottom: -5px; /* 텍스트와 약간의 간격 */
-  left: 0;
-  background-color: hwb(177 0% 0%); /* 밑줄 색상 */
-  visibility: hidden;
-  transform: scaleX(0);
-  transition: all 0.3s ease-in-out;
+.navbar-list-profile p {
+  font-size: 16px;
+  font-weight: 500;
 }
 
-.navbar-list a:hover::after {
-  visibility: visible;
-  transform: scaleX(1);
+.navbar-title {
+  color: black;
+  font-size: 30px;
+  font-weight: 900;
 }
 
-.navbar-container {
-  padding: 10px 10px 0px 20px;
-  background-color: rgba(0, 0, 0, 0.894);
+.mint {
+  color: var(--primary-color);
+}
+
+.user-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-profile-container {
+  display: flex;
+  gap: 10px;
+  margin: 0px 5px;
+  align-items: center;
+}
+
+.navbar-profile-container p {
+  font-weight: 500;
+  font-size: 14px;
+  margin-top: 12px;
+  padding:0;
+}
+
+.navbar-profile-container img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.profile-modal {
   display: flex;
   flex-direction: column;
-  align-items: end;
-  gap: 10px;
+  position: absolute;
+  top: 20.7%;
+  left: 78%;
+  right: auto;
+  bottom: auto;
+  width: 230px;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+
 }
 
-.navbar-profile-link {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  font-size: 12px;
-}
-
-.navbar-profile-link img {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+.line-with-shadow {
+  width: 100%;
+  height: 1px; /* 선의 두께 */
+  background-color: #ffffff; /* 선의 색깔 */
+  box-shadow: 1px 2px 1px rgba(82, 82, 82, 0.3); /* 그림자 효과 */
+  margin: 0px; /* 선의 위아래 여백 */
 }
 
 /*** HOME section ***/
@@ -398,18 +457,18 @@ a:hover {
 }
 
 .modal-heading h2 {
-  margin-top: 15px;
-  font-size: 20px;
+  margin-top: 24px;
+  font-size: 18px;
 }
 
 .close-btn {
-  background-color: red;
-  color: rgb(255, 255, 255);
+  background-color: transparent;
   border: none;
-  font-size: 0.8rem;
-  font-weight: 900;
-  height: 18px;
-  width: 18px;
+  color: rgb(81, 81, 81);
+  font-size: 1.3rem;
+  font-weight: 500;
+  height: 20px;
+  width: 20px;
   padding: 0;
   margin:0;
   cursor: pointer;
@@ -422,7 +481,7 @@ a:hover {
   border-radius: 5px;
   box-shadow: 0.5px 0.5px 0.5px 0.5px rgba(0, 0, 0, 0.3);
   font-weight: 500;
-  background-color: #0088ff;
+  background-color: var(--primary-color);
   color: white;
   margin-top: 10px;
 }
@@ -442,7 +501,7 @@ a:hover {
 }
 
 .btn-auto-add:hover {
-  background-color: #00eeea;
+  background-color: var(--primary-color);
   color: white;
 }
 
@@ -572,34 +631,32 @@ a:hover {
 }
 
 .fridge-graph .category-Meat {
-  background-color: rgb(0, 255, 208);
+  background-color: rgb(143, 106, 253);
 }
 
 .fridge-graph .category-Fruit {
-  background-color: rgb(0, 235, 192);
+  background-color: rgb(113, 66, 255);
 }
 
 .fridge-graph .category-Grain {
-  background-color: rgb(0, 206, 168);
+  background-color: rgb(67, 22, 201);
 }
 
 .fridge-graph p {
-  background-color: rgb(0, 155, 126);
+  background-color: rgb(103, 70, 202);
 }
 
 .fridge-graph .category-Vegetable {
-  background-color: rgb(0, 125, 102);
+  background-color: rgb(81, 22, 255);
 }
 
 .fridge-graph .category-Noodle {
-  background-color: rgb(0, 84, 69);
+  background-color: rgb(64, 27, 175);
 }
 
 /*Shopping List*/
 
 /* Home.css */
-
-/* 기본 체크박스를 숨기고 커스텀 스타일을 적용 */
 .home-shop-list {
   list-style: none;
   padding: 0;
@@ -626,7 +683,7 @@ a:hover {
   font-size: 10px;
   font-weight: 900;
   text-align: right;
-  color: rgb(0, 240, 228)
+  color: var(--primary-color);
 }
 
 .custom-checkbox {
@@ -653,8 +710,8 @@ a:hover {
 }
 
 .custom-checkbox:checked + label:before {
-  background-color: #32ffeb;
-  border-color: #32ffeb;
+  background-color: #ae00ff;
+  border-color: #cc67ff;
 }
 
 .custom-checkbox + label:after {
