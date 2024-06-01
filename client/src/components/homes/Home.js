@@ -41,6 +41,7 @@ function Home({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
         allItems={items}
         allCategories={categories}
         onItemUpdate={onItemUpdate}
+        onItemAdd={onItemAdd}
         onItemDelete={onItemDelete}
       />
     </>

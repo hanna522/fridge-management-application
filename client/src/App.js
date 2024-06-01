@@ -52,7 +52,6 @@ function App() {
        });
  };
 
-
   const handleItemUpdate = (updatedItem) => {
     setItems((prevItems) =>
       prevItems.map((item) =>
@@ -101,6 +100,7 @@ function App() {
   return (
     <Router>
       <Navbar
+        user={user}
         isLoggedIn={isLoggedIn}
         handleRegister={handleRegister}
         handleLogout={handleLogout}

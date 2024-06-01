@@ -78,7 +78,7 @@ function FridgeSummary({
           isOpen={!!selectedAdd}
           onRequestClose={closeModal}
           contentLabel="Add Ingredient"
-          className="Modal"
+          className="Modal modal-add-shop"
           overlayClassName="Overlay"
         >
           {selectedAdd && (

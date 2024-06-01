@@ -353,6 +353,39 @@ a:hover {
   margin: 0px; /* 선의 위아래 여백 */
 }
 
+.navbar-auth-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form-content {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgb(94, 94, 94);
+}
+
+.auth-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  width: 300px;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
 /*** HOME section ***/
 /*Meal Card 393 x 852*/
 .home-message-container {
@@ -731,4 +764,12 @@ a:hover {
 
 .custom-checkbox:checked + label:after {
   opacity: 1;
+}
+
+/** Footer **/
+.footer {
+  position: absolute;
+  bottom: 0%;
+  display: flex;
+  gap: 5px;
 }

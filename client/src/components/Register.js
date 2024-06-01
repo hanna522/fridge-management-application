@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { register } from "../Api";
 
-const Register = ({ onRegister }) => {
+const Register = ({ onRegister, setIsRegisterOpen }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [groupName, setGroupName] = useState("");
@@ -11,6 +11,7 @@ const Register = ({ onRegister }) => {
     e.preventDefault();
     try {
       await onRegister(email, password, groupName);
+      setIsRegisterOpen(false);
       setError("");
     } catch (err) {
       const errorMessage =
@@ -24,29 +25,42 @@ const Register = ({ onRegister }) => {
 
   return (
     <div>
-      <form onSubmit={handleRegister}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-        />
-        <input
-          type="text"
-          value={groupName}
-          onChange={(e) => setGroupName(e.target.value)}
-          placeholder="Group Name"
-          required
-        />
-        <button type="submit">Register</button>
+      <form onSubmit={handleRegister} className="login-form">
+        <label htmlFor="email" className="login-form-content">
+          Email
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            required
+          />
+        </label>
+        <label htmlFor="password" className="login-form-content">
+          Password
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+          />
+        </label>
+        <label htmlFor="password" className="login-form-content">
+          Group Name
+          <input
+            id="text"
+            type="text"
+            value={groupName}
+            onChange={(e) => setGroupName(e.target.value)}
+            placeholder="Group Name"
+            required
+          />
+        </label>
+        <button type="submit" className="confirm-btn">
+          Register
+        </button>
       </form>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </div>

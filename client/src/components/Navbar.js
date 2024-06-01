@@ -9,10 +9,15 @@ import Register from "./Register";
 
 Modal.setAppElement("#root");
 
-function Navbar({ isLoggedIn, handleRegister, handleLogout, handleLogin }) {
+function Navbar({ user, isLoggedIn, handleRegister, handleLogout, handleLogin }) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+
+  const handleLogoutAndCloseProfile = () => {
+    handleLogout();
+    setIsProfileOpen(false); // Assuming 'close' means setting to false
+  };
 
   return (
     <>
@@ -32,8 +37,18 @@ function Navbar({ isLoggedIn, handleRegister, handleLogout, handleLogin }) {
           </div>
         ) : (
           <div className="navbar-auth-buttons">
-            <button onClick={() => setIsLoginOpen(true)}>Login</button>
-            <button onClick={() => setIsRegisterOpen(true)}>Register</button>
+            <button
+              className="confirm-btn"
+              onClick={() => setIsLoginOpen(true)}
+            >
+              Login
+            </button>
+            <button
+              className="confirm-btn"
+              onClick={() => setIsRegisterOpen(true)}
+            >
+              Register
+            </button>
           </div>
         )}
       </div>
@@ -44,7 +59,7 @@ function Navbar({ isLoggedIn, handleRegister, handleLogout, handleLogin }) {
         contentLabel="Login"
         className="auth-modal"
       >
-        <Login onLogin={handleLogin} />
+        <Login onLogin={handleLogin} setIsLoginOpen={setIsLoginOpen}/>
       </Modal>
 
       <Modal
@@ -53,7 +68,10 @@ function Navbar({ isLoggedIn, handleRegister, handleLogout, handleLogin }) {
         contentLabel="Register"
         className="auth-modal"
       >
-        <Register onRegister={handleRegister} />
+        <Register
+          onRegister={handleRegister}
+          setIsRegisterOpen={setIsRegisterOpen}
+        />
       </Modal>
 
       <Modal
@@ -67,7 +85,7 @@ function Navbar({ isLoggedIn, handleRegister, handleLogout, handleLogin }) {
             <img src={Profile} alt="Profile" className="navbar-profile-image" />
             <div>
               <div className="user-name">
-                <h2>UserName</h2>
+                <h2>User's Name</h2>
                 <GearFill size={15} />
               </div>
               <p>User's Home</p>
@@ -100,7 +118,7 @@ function Navbar({ isLoggedIn, handleRegister, handleLogout, handleLogin }) {
           </li>
         </ul>
 
-        <button className="confirm-btn" onClick={handleLogout}>
+        <button className="confirm-btn" onClick={handleLogoutAndCloseProfile}>
           Sign Out
         </button>
       </Modal>
