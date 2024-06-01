@@ -13,8 +13,6 @@ import ShoppingList from "./components/shoppinglists/ShoppingList";
 import Fridge from "./components/fridges/Fridge";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Login from "./components/Login";
-import Register from "./components/Register";
 
 function App() {
   const [items, setItems] = useState([]);
@@ -24,36 +22,36 @@ function App() {
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    const token = localStorage.getItem("token");
 
-    if (storedUser && token) {
+    if (storedUser && storedUser.token) {
       setUser(storedUser);
       setIsLoggedIn(true);
-      fetchData(token); // Pass the token to fetchData
-      fetchCategory(token); // Pass the token to fetchCategory
+      fetchData();
+      fetchCategory();
     }
   }, []);
 
-  const fetchData = (token) => {
-    fetchFridgeInstances(token)
-      .then((res) => {
-        setItems(res.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching items:", error);
-      });
+  const fetchData = () => {
+      fetchFridgeInstances()
+        .then((res) => {
+          setItems(res.data.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching items:", error);
+        });
   };
 
-  const fetchCategory = (token) => {
-    fetchCategories(token)
-      .then((res) => {
-        setCategories(res.data);
-        console.log("Get Category Data");
-      })
-      .catch((error) => {
-        console.error("Error fetching category data:", error);
-      });
-  };
+ const fetchCategory = () => {
+     fetchCategories()
+       .then((res) => {
+         setCategories(res.data);
+         console.log("Get Category Data");
+       })
+       .catch((error) => {
+         console.error("Error fetching category data:", error);
+       });
+ };
+
 
   const handleItemUpdate = (updatedItem) => {
     setItems((prevItems) =>
@@ -76,9 +74,8 @@ function App() {
       const userData = await login(email, password);
       setUser(userData);
       setIsLoggedIn(true);
-      const token = localStorage.getItem("token");
-      fetchData(token);
-      fetchCategory(token);
+      fetchData();
+      fetchCategory();
     } catch (error) {
       console.error("Login failed:", error);
     }

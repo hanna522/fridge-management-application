@@ -6,13 +6,18 @@ const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
 });
 
-// 인터셉터 설정
+// Axios request interceptor to add JWT token to headers
 axiosInstance.interceptors.request.use(
   (config) => {
+    // Retrieve the user object from localStorage
     const user = JSON.parse(localStorage.getItem("user"));
+
+    // If the user object exists and has a token, add it to the request headers
     if (user && user.token) {
       config.headers.Authorization = `Bearer ${user.token}`;
     }
+
+    // Return the modified config
     return config;
   },
   (error) => {
