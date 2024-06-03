@@ -122,6 +122,7 @@ function App() {
     try {
       const userData = await login(email, password);
       setUser(userData);
+      fetchUserData();
       setIsLoggedIn(true);
       fetchData();
       fetchShoppingListData();

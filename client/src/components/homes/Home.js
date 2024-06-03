@@ -35,9 +35,12 @@ function Home({
   return (
     <>
       {/** Intro Section */}
-
       <div className="home-message-container">
-        <h1>Hello, {userInfo.userName}</h1>
+        {userInfo.userName ? (
+          <h1>Hello, {userInfo.userName}</h1>
+        ) : (
+          <h1 style={{ color: "rgb(113, 66, 255)" }}>Login or Register</h1>
+        )}
         <button>
           <CardImage /> upload receipt
         </button>
