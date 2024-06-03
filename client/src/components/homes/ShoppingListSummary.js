@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Modal from "react-modal";
 import {
   fetchShoppingList,
@@ -6,11 +7,15 @@ import {
   createShoppingList,
   deleteShoppingList,
 } from "../../Api";
-import { Link } from "react-router-dom";
 import { CheckCircle, Trash } from "react-bootstrap-icons";
 
-const ShoppingList = ({allItems}) => {
-  const [shoppingLists, setShoppingLists] = useState([]);
+function ShoppingListSummary({
+  allShoppingLists,
+  allItems,
+  onShoppingListUpdate,
+  onShoppingListAdd,
+  onShoppingListDelete,
+}) {
   const [ingredientOptions, setIngredientOptions] = useState({
     ingredient_list: [],
   });
@@ -27,8 +32,6 @@ const ShoppingList = ({allItems}) => {
   });
 
   useEffect(() => {
-    fetchShoppingListData();
-
     getCreateFormFridgeInstance()
       .then((res) => {
         setIngredientOptions(res.data);
@@ -38,17 +41,6 @@ const ShoppingList = ({allItems}) => {
         console.error("Error fetching shopping list create form:", error);
       });
   }, []);
-
-  const fetchShoppingListData = () => {
-    fetchShoppingList()
-      .then((res) => {
-        setShoppingLists(res.data.shopping_list);
-        console.log("Fetch Shopping List");
-      })
-      .catch((error) => {
-        console.error("Error fetching shopping list:", error);
-      });
-  };
 
   const handleOpenModal = () => {
     setSelectedAdd(true);
@@ -84,12 +76,11 @@ const ShoppingList = ({allItems}) => {
     createShoppingList(form)
       .then((res) => {
         console.log("Shopping List created", res.data);
-        setShoppingLists([...shoppingLists, res.data]);
         setShoppingListCreateForm({
           ingredient: "",
           possess: false,
         });
-        fetchShoppingListData();
+        onShoppingListAdd(res.data);
         handleCloseModal();
       })
       .catch((error) => {
@@ -98,9 +89,7 @@ const ShoppingList = ({allItems}) => {
   };
 
   const addNecessaryItems = () => {
-
-
-    const shoppingListsIngredientIds = shoppingLists.map(
+    const shoppingListsIngredientIds = allShoppingLists.map(
       (list) => list.ingredient._id
     );
 
@@ -114,7 +103,7 @@ const ShoppingList = ({allItems}) => {
         ingredient.necessary &&
         !shoppingListsIngredientIds.includes(ingredient._id) &&
         (!allItemsIngredientIds.includes(ingredient._id) ||
-        allBadItemsIngredientIds.includes(ingredient._id))
+          allBadItemsIngredientIds.includes(ingredient._id))
       ) {
         const shoppingListDataForm = {
           ingredient: ingredient._id,
@@ -143,10 +132,9 @@ const ShoppingList = ({allItems}) => {
     deleteShoppingList(id)
       .then((res) => {
         console.log("Shopping List deleted:", res.data);
-        setShoppingLists(shoppingLists.filter((list) => list._id !== id));
         setIsDeleteModalOpen(false);
         setItemToDelete(null);
-        fetchShoppingListData();
+        onShoppingListDelete(id);
         const newCheckedItems = { ...checkedItems };
         delete newCheckedItems[id];
         setCheckedItems(newCheckedItems);
@@ -177,12 +165,12 @@ const ShoppingList = ({allItems}) => {
   };
 
   const isNecessary = (ingredient) => {
-      if (ingredient.necessary) {
-        return "R";
-      } else {
-        return "";
-      }
-    };
+    if (ingredient.necessary) {
+      return "R";
+    } else {
+      return "";
+    }
+  };
 
   return (
     <div className="home-shop-container">
@@ -195,7 +183,7 @@ const ShoppingList = ({allItems}) => {
         </button>
       </div>
       <ul className="home-shop-list">
-        {shoppingLists.map((list, index) => (
+        {allShoppingLists.map((list, index) => (
           <li key={index}>
             <input
               type="checkbox"
@@ -245,7 +233,11 @@ const ShoppingList = ({allItems}) => {
       >
         <div className="modal-heading">
           <h2>Add Shopping List</h2>
-          <button type="button" className="close-btn" onClick={handleCloseModal}>
+          <button
+            type="button"
+            className="close-btn"
+            onClick={handleCloseModal}
+          >
             x
           </button>
         </div>
@@ -267,7 +259,9 @@ const ShoppingList = ({allItems}) => {
               ))}
             </select>
           </label>
-          <button type="submit" className="confirm-btn">Add Item</button>
+          <button type="submit" className="confirm-btn">
+            Add Item
+          </button>
         </form>
       </Modal>
 
@@ -285,6 +279,6 @@ const ShoppingList = ({allItems}) => {
       </Modal>
     </div>
   );
-};
+}
 
-export default ShoppingList;
+export default ShoppingListSummary;

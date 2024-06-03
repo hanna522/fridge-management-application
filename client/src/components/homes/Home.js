@@ -17,7 +17,7 @@ function Home({
   onItemAdd,
   onShoppingListUpdate,
   onShoppingListAdd,
-  onShoppingListDelete
+  onShoppingListDelete,
 }) {
   const [homeData, setHomeData] = useState({});
 

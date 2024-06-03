@@ -4,10 +4,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import {
   fetchFridgeInstances,
   fetchCategories,
+  fetchShoppingList,
   login,
   register,
   logout,
-  getUserInfo
+  getUserInfo,
 } from "./Api";
 import Home from "./components/homes/Home";
 import ShoppingList from "./components/shoppinglists/ShoppingList";
@@ -21,13 +22,14 @@ function App() {
   const [categories, setCategories] = useState({ category_list: [] });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
-  const [userInfo, setUserInfo] = useState({email: "", userName: ""});
+  const [userInfo, setUserInfo] = useState({ email: "", userName: "" });
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
     if (storedUser && storedUser.token) {
       setUser(storedUser);
+      fetchShoppingListData();
       fetchUserData();
       setIsLoggedIn(true);
       fetchData();
@@ -35,16 +37,20 @@ function App() {
     }
   }, []);
 
+    useEffect(() => {
+      console.log("Updated Shopping Lists: ", shoppingLists);
+    }, [shoppingLists]);
+
   const fetchUserData = () => {
     getUserInfo()
-      .then(response => {
-          console.log("User name response:", response);
-          setUserInfo(response);
-        })
-        .catch(error => {
-          console.error("Error fetching user name:", error);
-        });
-    };
+      .then((response) => {
+        console.log("User name response:", response);
+        setUserInfo(response);
+      })
+      .catch((error) => {
+        console.error("Error fetching user name:", error);
+      });
+  };
 
   const fetchData = () => {
     fetchFridgeInstances()
@@ -56,11 +62,11 @@ function App() {
       });
   };
 
-  const fetchShoppingList = () => {
+  const fetchShoppingListData = () => {
     fetchShoppingList()
       .then((res) => {
-        setShoppingLists(res.data.shopping_list);
-        console.log("Fetch Shopping List");
+        console.log(res.data.data);
+        setShoppingLists(res.data.data);
       })
       .catch((error) => {
         console.error("Error fetching shopping list:", error);
@@ -103,12 +109,14 @@ function App() {
   };
 
   const handleShoppingListDelete = (id) => {
-    setShoppingLists((prevLists) => prevLists.filter((list) => list._id !== id));
+    setShoppingLists((prevLists) =>
+      prevLists.filter((list) => list._id !== id)
+    );
   };
 
   const handleShoppingListAdd = (newList) => {
     setShoppingLists((prevLists) => [...prevLists, newList]);
-  }
+  };
 
   const handleLogin = async (email, password) => {
     try {
@@ -116,6 +124,7 @@ function App() {
       setUser(userData);
       setIsLoggedIn(true);
       fetchData();
+      fetchShoppingListData();
       fetchCategory();
     } catch (error) {
       console.error("Login failed:", error);
@@ -137,6 +146,7 @@ function App() {
     setUserInfo({ email: "", userName: "" });
     setIsLoggedIn(false);
     setItems([]);
+    setShoppingLists([]);
     setCategories({ category_list: [] });
   };
 
@@ -161,7 +171,7 @@ function App() {
               <Home
                 userInfo={userInfo}
                 items={items || []}
-                shoppinglists={shoppingLists || []}
+                shoppingLists={shoppingLists || []}
                 categories={categories}
                 onItemUpdate={handleItemUpdate}
                 onItemDelete={handleItemDelete}
@@ -185,6 +195,7 @@ function App() {
             }
           />
           <Route path="/shoppinglist" element={<ShoppingList />} />
+          <Route path="/analysis" element={<ShoppingList />} />
         </Routes>
       </main>
       <Footer />

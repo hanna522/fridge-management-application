@@ -8,7 +8,7 @@ exports.getAllShoppingList = async (req, res) => {
       .populate("ingredient")
       .exec();
     return res.status(200).json({
-      shopping_list: allShoppingList,
+      data: allShoppingList,
     });
   } catch (err) {
     console.log(err.message);
@@ -52,7 +52,11 @@ exports.createShoppingList = async (req, res) => {
       ...req.body,
       user: req.user._id, // Associate with the logged-in user
     });
-    const savedItem = await newItem.save();
+    await newItem.save();
+    const savedItem = await newItem.populate({
+      path: "ingredient",
+    });
+
     return res.status(201).json(savedItem);
   } catch (err) {
     console.log(err.message);
