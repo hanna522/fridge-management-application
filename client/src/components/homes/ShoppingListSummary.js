@@ -182,38 +182,42 @@ function ShoppingListSummary({
           + Add
         </button>
       </div>
-      <ul className="home-shop-list">
-        {allShoppingLists.map((list, index) => (
-          <li key={index}>
-            <input
-              type="checkbox"
-              id={`custom-checkbox-${index}`}
-              className="custom-checkbox"
-              checked={!!checkedItems[list._id]}
-              onChange={() => handleCheckboxChange(list._id)}
-            />
-            <label
-              htmlFor={`custom-checkbox-${index}`}
-              style={{
-                textDecoration: checkedItems[list._id]
-                  ? "line-through"
-                  : "none",
-              }}
-            >
-              <span>{list.ingredient.name}</span>
-              <span className="home-shop-r">
-                {isNecessary(list.ingredient)}
-              </span>
-            </label>
-            <Trash
-              size={12}
-              className="trash-btn"
-              onClick={() => handleDeleteClick(list)}
-              style={{ cursor: "pointer" }}
-            />
-          </li>
-        ))}
-      </ul>
+      {allShoppingLists && allShoppingLists.length > 0 ? (
+        <ul className="home-shop-list">
+          {allShoppingLists.map((list, index) => (
+            <li key={index}>
+              <input
+                type="checkbox"
+                id={`custom-checkbox-${index}`}
+                className="custom-checkbox"
+                checked={!!checkedItems[list._id]}
+                onChange={() => handleCheckboxChange(list._id)}
+              />
+              <label
+                htmlFor={`custom-checkbox-${index}`}
+                style={{
+                  textDecoration: checkedItems[list._id]
+                    ? "line-through"
+                    : "none",
+                }}
+              >
+                <span>{list.ingredient.name}</span>
+                <span className="home-shop-r">
+                  {isNecessary(list.ingredient)}
+                </span>
+              </label>
+              <Trash
+                size={12}
+                className="trash-btn"
+                onClick={() => handleDeleteClick(list)}
+                style={{ cursor: "pointer" }}
+              />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div className="empty-content">There is no ingredient</div>
+      )}
 
       <div className="home-shop-bottom">
         <button className="btn btn-auto-add" onClick={addNecessaryItems}>

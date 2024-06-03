@@ -87,50 +87,56 @@ function FridgeSummary({
         </Modal>
       </div>
 
-      <div className="fridge-graph-container">
-        <p>Analysis</p>
-        <div className="fridge-graph">
-          {statusOrder.map((s) => (
-            <p
-              key={s}
-              className={"status-" + s}
-              style={{ width: `${getStatusLength(s)}%` }}
-            >
-              {s}
-            </p>
-          ))}
-        </div>
+      {sortedItems && sortedItems.length > 0 ? (
+        <div>
+          <div className="fridge-graph-container">
+            <p>Analysis</p>
+            <div className="fridge-graph">
+              {statusOrder.map((s) => (
+                <p
+                  key={s}
+                  className={"status-" + s}
+                  style={{ width: `${getStatusLength(s)}%` }}
+                >
+                  {s}
+                </p>
+              ))}
+            </div>
 
-        <div className="fridge-graph">
-          {allCategories.category_list.map((category) => (
-            <p
-              key={category.name}
-              className={"category-" + category.name}
-              style={{ width: `${getCategoryLength(category)}%` }}
-            >
-              {category.name}
-            </p>
-          ))}
-        </div>
-      </div>
-
-      <p>{allItems.length} items</p>
-
-      <ul className="home-fridge-card-container">
-        {sortedItems.map((item, index) => (
-          <div key={index}>
-            <li
-              key={index}
-              className="home-fridge-card"
-              onClick={() => openDetailModal(item)}
-              style={{ cursor: "pointer" }}
-            >
-              <p>{item.ingredient.name}</p>
-              <p className={"status-" + item.status}> </p>
-            </li>
+            <div className="fridge-graph">
+              {allCategories.category_list.map((category) => (
+                <p
+                  key={category.name}
+                  className={"category-" + category.name}
+                  style={{ width: `${getCategoryLength(category)}%` }}
+                >
+                  {category.name}
+                </p>
+              ))}
+            </div>
           </div>
-        ))}
-      </ul>
+
+          <p>{allItems.length} items</p>
+
+          <ul className="home-fridge-card-container">
+            {sortedItems.map((item, index) => (
+              <div key={index}>
+                <li
+                  key={index}
+                  className="home-fridge-card"
+                  onClick={() => openDetailModal(item)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <p>{item.ingredient.name}</p>
+                  <p className={"status-" + item.status}> </p>
+                </li>
+              </div>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <div className="empty-content">There is no ingredient</div>
+      )}
 
       {selectedItem && (
         <Modal

@@ -388,6 +388,13 @@ a:hover {
 
 /*** HOME section ***/
 /*Meal Card 393 x 852*/
+.empty-content {
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: rgb(93, 93, 93);
+}
 .home-message-container {
   text-align: left;
   display: flex;
