@@ -50,6 +50,13 @@ export const logout = () => {
   localStorage.removeItem("user");
 };
 
+export const getUserInfo = (id) => {
+  return axiosInstance.get(`/api/user/${id}/`)
+    .then((response) => {
+      return response.data;
+    })
+}
+
 // Fridge Instance services
 export const fetchFridgeInstances = () => {
   return axiosInstance.get("/api/fridgeinstance");

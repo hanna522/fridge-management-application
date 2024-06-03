@@ -25,8 +25,6 @@ exports.login = async (req, res) => {
     }
 
     console.log("User found:", user);
-    console.log("Stored password hash:", user.password);
-    console.log("Entered password:", password);
 
     const isMatch = await bcrypt.compare(password, user.password);
     console.log("Password match result:", isMatch);
@@ -43,6 +41,19 @@ exports.login = async (req, res) => {
     res.json({ token });
   } catch (err) {
     console.log("Error:", err.message);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.getUserInfo = async (req, res) => {
+  const userId = req.user._id;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(400).json({ message: "Invalid user" });
+    }
+    res.json({ email: user.email, userName: user.email.split('@')[0] });
+  } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };

@@ -7,6 +7,7 @@ import {
   login,
   register,
   logout,
+  getUserInfo
 } from "./Api";
 import Home from "./components/homes/Home";
 import ShoppingList from "./components/shoppinglists/ShoppingList";
@@ -16,41 +17,66 @@ import Footer from "./components/Footer";
 
 function App() {
   const [items, setItems] = useState([]);
+  const [shoppingLists, setShoppingLists] = useState([]);
   const [categories, setCategories] = useState({ category_list: [] });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const [userInfo, setUserInfo] = useState({email: "", userName: ""});
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
     if (storedUser && storedUser.token) {
       setUser(storedUser);
+      fetchUserData();
       setIsLoggedIn(true);
       fetchData();
       fetchCategory();
     }
   }, []);
 
-  const fetchData = () => {
-      fetchFridgeInstances()
-        .then((res) => {
-          setItems(res.data.data);
+  const fetchUserData = () => {
+    getUserInfo()
+      .then(response => {
+          console.log("User name response:", response);
+          setUserInfo(response);
         })
-        .catch((error) => {
-          console.error("Error fetching items:", error);
+        .catch(error => {
+          console.error("Error fetching user name:", error);
         });
+    };
+
+  const fetchData = () => {
+    fetchFridgeInstances()
+      .then((res) => {
+        setItems(res.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching items:", error);
+      });
   };
 
- const fetchCategory = () => {
-     fetchCategories()
-       .then((res) => {
-         setCategories(res.data);
-         console.log("Get Category Data");
-       })
-       .catch((error) => {
-         console.error("Error fetching category data:", error);
-       });
- };
+  const fetchShoppingList = () => {
+    fetchShoppingList()
+      .then((res) => {
+        setShoppingLists(res.data.shopping_list);
+        console.log("Fetch Shopping List");
+      })
+      .catch((error) => {
+        console.error("Error fetching shopping list:", error);
+      });
+  };
+
+  const fetchCategory = () => {
+    fetchCategories()
+      .then((res) => {
+        setCategories(res.data);
+        console.log("Get Category Data");
+      })
+      .catch((error) => {
+        console.error("Error fetching category data:", error);
+      });
+  };
 
   const handleItemUpdate = (updatedItem) => {
     setItems((prevItems) =>
@@ -67,6 +93,22 @@ function App() {
   const handleItemAdd = (newItem) => {
     setItems((prevItems) => [...prevItems, newItem]);
   };
+
+  const handleShoppingListUpdate = (updatedList) => {
+    setShoppingLists((prevLists) =>
+      prevLists.map((list) =>
+        list._id === updatedList._id ? updatedList : list
+      )
+    );
+  };
+
+  const handleShoppingListDelete = (id) => {
+    setShoppingLists((prevLists) => prevLists.filter((list) => list._id !== id));
+  };
+
+  const handleShoppingListAdd = (newList) => {
+    setShoppingLists((prevLists) => [...prevLists, newList]);
+  }
 
   const handleLogin = async (email, password) => {
     try {
@@ -92,6 +134,7 @@ function App() {
   const handleLogout = () => {
     logout();
     setUser(null);
+    setUserInfo({ email: "", userName: "" });
     setIsLoggedIn(false);
     setItems([]);
     setCategories({ category_list: [] });
@@ -100,7 +143,7 @@ function App() {
   return (
     <Router>
       <Navbar
-        user={user}
+        userInfo={userInfo}
         isLoggedIn={isLoggedIn}
         handleRegister={handleRegister}
         handleLogout={handleLogout}
@@ -116,11 +159,16 @@ function App() {
             path="/home"
             element={
               <Home
+                userInfo={userInfo}
                 items={items || []}
+                shoppinglists={shoppingLists || []}
                 categories={categories}
                 onItemUpdate={handleItemUpdate}
                 onItemDelete={handleItemDelete}
                 onItemAdd={handleItemAdd}
+                onShoppingListUpdate={handleShoppingListUpdate}
+                onShoppingListAdd={handleShoppingListAdd}
+                onShoppingListDelete={handleShoppingListDelete}
               />
             }
           />

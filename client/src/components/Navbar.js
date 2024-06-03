@@ -9,7 +9,7 @@ import Register from "./Register";
 
 Modal.setAppElement("#root");
 
-function Navbar({ user, isLoggedIn, handleRegister, handleLogout, handleLogin }) {
+function Navbar({ userInfo, isLoggedIn, handleRegister, handleLogout, handleLogin }) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -85,10 +85,10 @@ function Navbar({ user, isLoggedIn, handleRegister, handleLogout, handleLogin })
             <img src={Profile} alt="Profile" className="navbar-profile-image" />
             <div>
               <div className="user-name">
-                <h2>User's Name</h2>
+                <h2>{userInfo.userName}</h2>
                 <GearFill size={15} />
               </div>
-              <p>User's Home</p>
+              <p style={{fontSize:"10px", color:"gray"}}>{userInfo.email}</p>
             </div>
           </div>
         </div>

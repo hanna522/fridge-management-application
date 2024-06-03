@@ -7,7 +7,18 @@ import Modal from "react-modal";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
-function Home({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
+function Home({
+  userInfo,
+  items,
+  shoppingLists,
+  categories,
+  onItemUpdate,
+  onItemDelete,
+  onItemAdd,
+  onShoppingListUpdate,
+  onShoppingListAdd,
+  onShoppingListDelete
+}) {
   const [homeData, setHomeData] = useState({});
 
   useEffect(() => {
@@ -26,7 +37,7 @@ function Home({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
       {/** Intro Section */}
 
       <div className="home-message-container">
-        <h1>{homeData.message || "Loading..."}</h1>
+        <h1>Hello, {userInfo.userName}</h1>
         <button>
           <CardImage /> upload receipt
         </button>
@@ -34,7 +45,13 @@ function Home({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
 
       {/** Shopping List Summary Section */}
 
-      <ShoppingListSummary allItems={items} />
+      <ShoppingListSummary
+        allShoppingLists={shoppingLists}
+        allItems={items}
+        onShoppingListUpdate={onShoppingListUpdate}
+        onShoppingListAdd={onShoppingListAdd}
+        onShoppingListDelete={onShoppingListDelete}
+      />
 
       {/** My Fridge Summary Section */}
       <FridgeSummary

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { createFridgeInstance } from "../../Api";
-import { getCreateFormFridgeInstance } from "../../Api";
+import { createFridgeInstance, getCreateFormFridgeInstance } from "../../Api";
 
 function FridgeAdd({ onItemAdd, onClose }) {
   const [formData, setFormData] = useState({
@@ -13,6 +12,7 @@ function FridgeAdd({ onItemAdd, onClose }) {
   const [createElements, setCreateElements] = useState({
     ingredient_list: [],
   });
+  
   useEffect(() => {
     getCreateFormFridgeInstance()
       .then((res) => {

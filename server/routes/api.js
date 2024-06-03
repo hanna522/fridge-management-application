@@ -23,10 +23,12 @@ const {
   getIngredientInstanceUpdateForm,
   deleteIngredientInstance,
 } = require("../controller/ingredientinstanceController");
-const { register, login } = require("../controller/authController");
+const { register, login, getUserInfo: getUserInfo } = require("../controller/authController");
 
 router.post("/register", register);
 router.post("/login", login);
+
+router.get("/user/:id", auth, getUserInfo);
 
 //// HOME ROUTES ////
 router.get("/home", getHome);
