@@ -8,14 +8,11 @@ import CategorySlider from "./CategorySlider";
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
 function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
-
-
   const [selectedAdd, setSelectedAdd] = useState(false);
   const [sortField, setSortField] = useState("status");
   const [sortOrder, setSortOrder] = useState("asc");
   const [filterValue, setFilterValue] = useState("");
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
-
 
   const handleAdd = () => {
     setSelectedAdd(true);

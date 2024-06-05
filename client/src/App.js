@@ -23,26 +23,42 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [userInfo, setUserInfo] = useState({ email: "", userName: "" });
+  const [loading, setLoading] = useState(true); // 로딩 상태 변수 추가
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
     if (storedUser && storedUser.token) {
       setUser(storedUser);
-      fetchShoppingListData();
-      fetchUserData();
-      setIsLoggedIn(true);
-      fetchData();
-      fetchCategory();
+      setIsLoggedIn(true); // 로그인 상태 설정
+      fetchAllData();
+    } else {
+      setLoading(false); // 로딩 완료 설정
     }
   }, []);
 
-    useEffect(() => {
-      console.log("Updated Shopping Lists: ", shoppingLists);
-    }, [shoppingLists]);
+  useEffect(() => {
+    console.log("Updated Shopping Lists: ", shoppingLists);
+  }, [shoppingLists]);
+
+  const fetchAllData = async () => {
+    try {
+      setLoading(true); // 데이터 로딩 시작
+      await Promise.all([
+        fetchUserData(),
+        fetchData(),
+        fetchShoppingListData(),
+        fetchCategory(),
+      ]);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false); // 모든 데이터 로딩 완료
+    }
+  };
 
   const fetchUserData = () => {
-    getUserInfo()
+    return getUserInfo()
       .then((response) => {
         console.log("User name response:", response);
         setUserInfo(response);
@@ -53,7 +69,7 @@ function App() {
   };
 
   const fetchData = () => {
-    fetchFridgeInstances()
+    return fetchFridgeInstances()
       .then((res) => {
         setItems(res.data.data);
       })
@@ -63,7 +79,7 @@ function App() {
   };
 
   const fetchShoppingListData = () => {
-    fetchShoppingList()
+    return fetchShoppingList()
       .then((res) => {
         console.log(res.data.data);
         setShoppingLists(res.data.data);
@@ -74,7 +90,7 @@ function App() {
   };
 
   const fetchCategory = () => {
-    fetchCategories()
+    return fetchCategories()
       .then((res) => {
         setCategories(res.data);
         console.log("Get Category Data");
@@ -122,11 +138,9 @@ function App() {
     try {
       const userData = await login(email, password);
       setUser(userData);
-      fetchUserData();
       setIsLoggedIn(true);
-      fetchData();
-      fetchShoppingListData();
-      fetchCategory();
+      localStorage.setItem("user", JSON.stringify(userData)); // 사용자 정보를 로컬 스토리지에 저장
+      fetchAllData();
     } catch (error) {
       console.error("Login failed:", error);
     }
@@ -149,7 +163,20 @@ function App() {
     setItems([]);
     setShoppingLists([]);
     setCategories({ category_list: [] });
+    localStorage.removeItem("user"); // 로컬 스토리지에서 사용자 정보 제거
   };
+
+  if (loading) {
+    return (
+      <div className="loading-spinner">
+        <div className="spinner">
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Router>
@@ -180,6 +207,9 @@ function App() {
                 onShoppingListUpdate={handleShoppingListUpdate}
                 onShoppingListAdd={handleShoppingListAdd}
                 onShoppingListDelete={handleShoppingListDelete}
+                handleRegister={handleRegister}
+                handleLogout={handleLogout}
+                handleLogin={handleLogin}
               />
             }
           />

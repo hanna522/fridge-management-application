@@ -30,6 +30,7 @@ function ShoppingListSummary({
     const saved = localStorage.getItem("checkedItems");
     return saved ? JSON.parse(saved) : {};
   });
+  const [statusMessage, setStatusMessage] = useState(""); // 상태 메시지 추가
 
   useEffect(() => {
     getCreateFormFridgeInstance()
@@ -88,7 +89,8 @@ function ShoppingListSummary({
       });
   };
 
-  const addNecessaryItems = () => {
+  const addNecessaryItems = async () => {
+    setStatusMessage("Processing...");
     const shoppingListsIngredientIds = allShoppingLists.map(
       (list) => list.ingredient._id
     );
@@ -98,7 +100,8 @@ function ShoppingListSummary({
       .filter((item) => item.status === "Dying" || item.status === "Dead")
       .map((item) => item.ingredient._id);
 
-    ingredientOptions.ingredient_list.forEach((ingredient) => {
+    let added = false;
+    for (const ingredient of ingredientOptions.ingredient_list) {
       if (
         ingredient.necessary &&
         !shoppingListsIngredientIds.includes(ingredient._id) &&
@@ -109,9 +112,17 @@ function ShoppingListSummary({
           ingredient: ingredient._id,
           possess: false,
         };
-        createShoppingListData(shoppingListDataForm);
+        await createShoppingListData(shoppingListDataForm);
+        added = true;
       }
-    });
+    }
+
+    if (!added) {
+      setStatusMessage("No items to add");
+    } else {
+      setStatusMessage("Completed!");
+    }
+    setTimeout(() => setStatusMessage(""), 1000); // 2초 후 상태 메시지 숨기기
   };
 
   const handleDeleteClick = (item) => {
@@ -128,8 +139,8 @@ function ShoppingListSummary({
     deleteShoppingListData(itemToDelete._id);
   };
 
-  const deleteShoppingListData = (id) => {
-    deleteShoppingList(id)
+  const deleteShoppingListData = async (id) => {
+    await deleteShoppingList(id)
       .then((res) => {
         console.log("Shopping List deleted:", res.data);
         setIsDeleteModalOpen(false);
@@ -156,12 +167,17 @@ function ShoppingListSummary({
     });
   };
 
-  const deleteCheckedItems = () => {
-    Object.keys(checkedItems).forEach((key) => {
+  const deleteCheckedItems = async () => {
+    setStatusMessage("Processing...");
+    const deletePromises = Object.keys(checkedItems).map((key) => {
       if (checkedItems[key]) {
-        deleteShoppingListData(key);
+        return deleteShoppingListData(key);
       }
+      return Promise.resolve();
     });
+    await Promise.all(deletePromises);
+    setStatusMessage("Completed!");
+    setTimeout(() => setStatusMessage(""), 1000); // 2초 후 상태 메시지 숨기기
   };
 
   const isNecessary = (ingredient) => {
@@ -182,6 +198,7 @@ function ShoppingListSummary({
           + Add
         </button>
       </div>
+      {statusMessage && <div className="status-message">{statusMessage}</div>}
       {allShoppingLists && allShoppingLists.length > 0 ? (
         <ul className="home-shop-list">
           {allShoppingLists.map((list, index) => (
@@ -264,7 +281,7 @@ function ShoppingListSummary({
             </select>
           </label>
           <button type="submit" className="confirm-btn">
-            Add Item
+            Add
           </button>
         </form>
       </Modal>

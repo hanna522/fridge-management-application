@@ -4,6 +4,9 @@ import { CardImage } from "react-bootstrap-icons";
 import ShoppingListSummary from "./ShoppingListSummary";
 import FridgeSummary from "./FridgeSummary";
 import Modal from "react-modal";
+import Typewriter from "typewriter-effect";
+import Login from "../Login";
+import Register from "../Register";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
@@ -18,29 +21,72 @@ function Home({
   onShoppingListUpdate,
   onShoppingListAdd,
   onShoppingListDelete,
+  handleLogin,
+  handleRegister,
 }) {
-  const [homeData, setHomeData] = useState({});
+  const [isStartOpen, setIsStartOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:5050/api/home")
-      .then((res) => {
-        setHomeData(res.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+  if (!userInfo.userName)
+    return (
+      <>
+        {" "}
+        <div className="before-login-background">
+          <div className="before-login-content">
+            <Typewriter
+              options={{
+                strings: [
+                  "Manage your ingredients with Fridge",
+                  "Login or Register to start",
+                ],
+                autoStart: true,
+                loop: true,
+              }}
+            />
+            <button
+              className="confirm-btn start-btn"
+              onClick={() => setIsStartOpen(true)}
+            >
+              Start
+            </button>
+          </div>
+        </div>
+        <Modal
+          isOpen={isStartOpen}
+          onRequestClose={() => setIsStartOpen(false)}
+          contentLabel="Start"
+          className="auth-modal"
+        >
+          <div className="home-start-modal">
+            <Login onLogin={handleLogin} />
+            <p style={{margin:0, textAlign:"center", paddingTop: "5px"}}>or</p>
+            <button
+              className="confirm-btn register-btn"
+              onClick={() => setIsRegisterOpen(true)}
+            >
+              Register
+            </button>
+          </div>
+        </Modal>
+        <Modal
+          isOpen={isRegisterOpen}
+          onRequestClose={() => setIsRegisterOpen(false)}
+          contentLabel="Register"
+          className="auth-modal"
+        >
+          <Register
+            onRegister={handleRegister}
+            setIsRegisterOpen={setIsRegisterOpen}
+          />
+        </Modal>
+      </>
+    );
 
   return (
     <>
       {/** Intro Section */}
       <div className="home-message-container">
-        {userInfo.userName ? (
-          <h1>Hello, {userInfo.userName}</h1>
-        ) : (
-          <h1 style={{ color: "rgb(113, 66, 255)" }}>Login or Register</h1>
-        )}
+        <h1>Hello, {userInfo.userName}</h1>
         <button>
           <CardImage /> upload receipt
         </button>

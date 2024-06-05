@@ -1,9 +1,13 @@
 :root {
   --primary-color: rgb(113, 66, 255);
+  --secondary-color: rgb(142, 104, 255);
+  --third-color: rgb(159, 130, 248);
+  --dark-color: rgb(81, 0, 186);
+  --background-color: rgb(26, 0, 58);
 }
 
 main {
-  margin: 10px;
+  margin: 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,6 +49,64 @@ a:hover {
   color: rgb(0, 0, 0);
 }
 
+/* App.css */
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* 전체 화면 높이 */
+}
+
+.spinner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80px;
+}
+
+.spinner div {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  animation: bounce 0.6s infinite alternate;
+}
+
+.spinner div:nth-child(1) {
+  background-color: var(--primary-color);
+}
+
+.spinner div:nth-child(2) {
+  animation-delay: 0.2s;
+  background-color: var(--secondary-color);
+}
+
+.spinner div:nth-child(3) {
+  animation-delay: 0.4s;
+  background-color: var(--third-color);
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-20px);
+  }
+}
+.status-message {
+  position: absolute;
+  top: 20%;
+  left: 38%;
+  background-color: rgba(212, 237, 255, 0.677);
+  box-shadow: 0 1px 1px 1px rgba(124, 124, 124, 0.2);
+  padding: 10px;
+  border-radius: 10px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+  z-index: 2000;
+  font-size: 15px;
+}
 /*** FRIDGE section ***/
 /*Fridge Card*/
 .fridge-card-container {
@@ -356,6 +418,15 @@ a:hover {
 .navbar-auth-buttons {
   display: flex;
   gap: 8px;
+}
+
+.login-btn {
+  background-color: #ffffff;
+  color: rgb(65, 65, 65);
+  box-shadow: none;
+  margin: 0;
+  border: none;
+  font-weight: 700;
 }
 
 .login-form {
@@ -692,6 +763,47 @@ a:hover {
 
 .fridge-graph .category-Noodle {
   background-color: rgb(64, 27, 175);
+}
+
+.before-login-background {
+  background: linear-gradient(0deg,#ffffff, var(--primary-color));
+  width: 100%;
+  display:flex;
+  justify-content: center;
+}
+.before-login-content {
+  width:393px;
+  height: 400px;
+  padding: 24px;
+  color: white;
+  font-weight: 700;
+  font-size: 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.start-btn {
+  font-size: 24px;
+  width: 180px;
+  background-color: var(--dark-color);
+}
+
+.start-btn:hover {
+  background-color: var(--primary-color);
+}
+
+.home-start-modal {
+  display: flex;
+  flex-direction: column;
+  gap:3px;
+  text-align: left;
+}
+
+.register-btn {
+  background-color: white;
+  color: var(--primary-color);
 }
 
 /*Shopping List*/

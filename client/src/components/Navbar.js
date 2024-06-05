@@ -9,7 +9,13 @@ import Register from "./Register";
 
 Modal.setAppElement("#root");
 
-function Navbar({ userInfo, isLoggedIn, handleRegister, handleLogout, handleLogin }) {
+function Navbar({
+  userInfo,
+  isLoggedIn,
+  handleRegister,
+  handleLogout,
+  handleLogin,
+}) {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
@@ -38,13 +44,13 @@ function Navbar({ userInfo, isLoggedIn, handleRegister, handleLogout, handleLogi
         ) : (
           <div className="navbar-auth-buttons">
             <button
-              className="confirm-btn"
+              className="login-btn"
               onClick={() => setIsLoginOpen(true)}
             >
               Login
             </button>
             <button
-              className="confirm-btn"
+              className="login-btn"
               onClick={() => setIsRegisterOpen(true)}
             >
               Register
@@ -59,7 +65,7 @@ function Navbar({ userInfo, isLoggedIn, handleRegister, handleLogout, handleLogi
         contentLabel="Login"
         className="auth-modal"
       >
-        <Login onLogin={handleLogin} setIsLoginOpen={setIsLoginOpen}/>
+        <Login onLogin={handleLogin} setIsLoginOpen={setIsLoginOpen} />
       </Modal>
 
       <Modal
@@ -88,7 +94,9 @@ function Navbar({ userInfo, isLoggedIn, handleRegister, handleLogout, handleLogi
                 <h2>{userInfo.userName}</h2>
                 <GearFill size={15} />
               </div>
-              <p style={{fontSize:"10px", color:"gray"}}>{userInfo.email}</p>
+              <p style={{ fontSize: "10px", color: "gray" }}>
+                {userInfo.email}
+              </p>
             </div>
           </div>
         </div>
