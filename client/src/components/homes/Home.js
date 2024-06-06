@@ -86,7 +86,7 @@ function Home({
     <>
       {/** Intro Section */}
       <div className="home-message-container">
-        <h1>Hello, {userInfo.userName}</h1>
+        <h1>Hello, {userInfo.userName}!</h1>
         <button>
           <CardImage /> upload receipt
         </button>

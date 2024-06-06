@@ -31,6 +31,10 @@ function ShoppingListSummary({
     return saved ? JSON.parse(saved) : {};
   });
   const [statusMessage, setStatusMessage] = useState(""); // 상태 메시지 추가
+  const [favoriteItems, setFavoriteItems] = useState(() => {
+    const favorite = localStorage.getItem("favoriteItems");
+    return favorite ? JSON.parse(favorite) : {};
+  });
 
   useEffect(() => {
     getCreateFormFridgeInstance()
@@ -62,7 +66,7 @@ function ShoppingListSummary({
       if (selectedIngredient) {
         setShoppingListCreateForm((prevFormData) => ({
           ...prevFormData,
-          possess: selectedIngredient.necessary || false,
+          possess: true,
         }));
       }
     }
@@ -94,16 +98,16 @@ function ShoppingListSummary({
     const shoppingListsIngredientIds = allShoppingLists.map(
       (list) => list.ingredient._id
     );
-
     const allItemsIngredientIds = allItems.map((item) => item.ingredient._id);
     const allBadItemsIngredientIds = allItems
       .filter((item) => item.status === "Dying" || item.status === "Dead")
       .map((item) => item.ingredient._id);
-
     let added = false;
-    for (const ingredient of ingredientOptions.ingredient_list) {
+
+    for (const ingredientId of Object.keys(favoriteItems)) {
+      const ingredient = favoriteItems[ingredientId];
+      console.log(ingredient);
       if (
-        ingredient.necessary &&
         !shoppingListsIngredientIds.includes(ingredient._id) &&
         (!allItemsIngredientIds.includes(ingredient._id) ||
           allBadItemsIngredientIds.includes(ingredient._id))
@@ -181,11 +185,7 @@ function ShoppingListSummary({
   };
 
   const isNecessary = (ingredient) => {
-    if (ingredient.necessary) {
-      return "R";
-    } else {
-      return "";
-    }
+    return favoriteItems[ingredient._id] ? "R" : "";
   };
 
   return (
@@ -238,7 +238,7 @@ function ShoppingListSummary({
 
       <div className="home-shop-bottom">
         <button className="btn btn-auto-add" onClick={addNecessaryItems}>
-          Auto-Add
+          Add Favorites
         </button>
         <button className="btn btn-clear" onClick={deleteCheckedItems}>
           Clear
@@ -290,13 +290,27 @@ function ShoppingListSummary({
         isOpen={isDeleteModalOpen}
         onRequestClose={closeDeleteModal}
         contentLabel="Delete Confirmation"
-        className="Modal"
+        className="Modal modal-add-shop"
         overlayClassName="Overlay"
       >
-        <h2>Delete Confirmation</h2>
+        <h2 style={{ paddingTop: "20px" }}>Delete Confirmation</h2>
         <p>Are you sure you want to delete this item?</p>
-        <button onClick={onDeleteConfirm}>Yes, delete</button>
-        <button onClick={closeDeleteModal}>No, cancel</button>
+        <div className="button-container">
+          <button
+            className="confirm-btn"
+            style={{ backgroundColor: "red" }}
+            onClick={onDeleteConfirm}
+          >
+            Yes, delete
+          </button>
+          <button
+            className="confirm-btn"
+            style={{ backgroundColor: "darkgray" }}
+            onClick={closeDeleteModal}
+          >
+            No, cancel
+          </button>
+        </div>
       </Modal>
     </div>
   );

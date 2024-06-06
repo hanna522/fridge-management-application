@@ -7,7 +7,6 @@ function FridgeAdd({ onItemAdd, onClose }) {
     buy_date: "",
     exp_date: "",
     status: "Unknown",
-    necessary: false,
   });
   const [createElements, setCreateElements] = useState({
     ingredient_list: [],
@@ -42,7 +41,6 @@ function FridgeAdd({ onItemAdd, onClose }) {
           exp_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
             .toISOString()
             .split("T")[0], // today + 7 days
-          necessary: selectedIngredient.necessary,
         }));
       }
     }
@@ -59,7 +57,6 @@ function FridgeAdd({ onItemAdd, onClose }) {
           buy_date: "",
           exp_date: "",
           status: "Unknown",
-          necessary: false,
         });
         onClose();
         onItemAdd(res.data.ingredientInstance);
@@ -79,6 +76,7 @@ function FridgeAdd({ onItemAdd, onClose }) {
       </div>
 
       <form onSubmit={handleSubmit}>
+        <div className="form-group">
         <label htmlFor="ingredient">Ingredient:</label>
         <select
           className="form-control"
@@ -94,7 +92,8 @@ function FridgeAdd({ onItemAdd, onClose }) {
             </option>
           ))}
         </select>
-
+        </div>
+        
         <div className="form-group">
           <label htmlFor="buy_date">Buy Date:</label>
           <input
@@ -113,16 +112,6 @@ function FridgeAdd({ onItemAdd, onClose }) {
             name="exp_date"
             required
             value={formData.exp_date}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="necessary">necessary</label>
-          <input
-            type="checkbox"
-            name="necessary"
-            checked={formData.necessary}
             onChange={handleChange}
           />
         </div>

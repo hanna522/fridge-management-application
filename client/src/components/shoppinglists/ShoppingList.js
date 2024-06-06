@@ -8,174 +8,323 @@ import {
   deleteShoppingList,
   updateFridgeInstance,
 } from "../../Api";
-import { CheckCircle, Trash, PencilSquare } from "react-bootstrap-icons";
+import { DashCircleFill, Trash, PencilSquare } from "react-bootstrap-icons";
+import ShoppingListAdd from "./ShoppingListAdd";
 
 function ShoppingList({
+  shoppingLists,
   allItems,
   categories,
-  onItemUpdate,
-  onItemDelete,
-  onShoppingListAdd,
+  onShoppingListUpdate,
   onShoppingListDelete,
+  onShoppingListAdd,
 }) {
-  const [shoppingLists, setShoppingLists] = useState([]);
   const [ingredientOptions, setIngredientOptions] = useState({
     ingredient_list: [],
   });
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [statusMessage, setStatusMessage] = useState(""); // 상태 메시지 추가
+  const [itemToDelete, setItemToDelete] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [checkedItems, setCheckedItems] = useState(() => {
+    const saved = localStorage.getItem("checkedItems");
+    return saved ? JSON.parse(saved) : {};
+  });
+  const [favoriteItems, setFavoriteItems] = useState(() => {
+    const favorite = localStorage.getItem("favoriteItems");
+    return favorite ? JSON.parse(favorite) : {};
+  });
+
+  const [selectedAdd, setSelectedAdd] = useState(false);
+  const [isFavoriteModalOpen, setIsFavoriteModalOpen] = useState(false);
+  const [selectedFavorite, setSelectedFavorite] = useState("");
 
   useEffect(() => {
-    fetchShoppingListData();
     getCreateFormFridgeInstance()
       .then((res) => {
         setIngredientOptions(res.data);
+        console.log("Fetch Shopping List Creating Form");
       })
       .catch((error) => {
         console.error("Error fetching shopping list create form:", error);
       });
   }, []);
 
-  const fetchShoppingListData = () => {
-    fetchShoppingList()
+  const handleOpenModal = () => {
+    setSelectedAdd(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedAdd(false);
+  };
+
+  const handleOpenFavoriteModal = () => {
+    setIsFavoriteModalOpen(true);
+  };
+
+  const handleCloseFavoriteModal = () => {
+    setIsFavoriteModalOpen(false);
+  };
+
+  const handleDeleteClick = (item) => {
+    setItemToDelete(item);
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setItemToDelete(null);
+  };
+
+  const onDeleteConfirm = () => {
+    deleteShoppingListData(itemToDelete._id);
+  };
+
+  const deleteShoppingListData = async (id) => {
+    console.log("Trying to delete shoppinglist");
+    await deleteShoppingList(id)
       .then((res) => {
-        setShoppingLists(res.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching shopping list:", error);
-      });
-  };
-
-  const handleOpenEditModal = (item) => {
-    setSelectedItem(item);
-    setIsEditModalOpen(true);
-  };
-
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
-    setSelectedItem(null);
-  };
-
-  const handleUpdate = (e) => {
-    e.preventDefault();
-    updateFridgeInstance(selectedItem._id, selectedItem)
-      .then((res) => {
-        onItemUpdate(res.data);
-        handleCloseEditModal();
-      })
-      .catch((error) => {
-        console.error("Error updating item:", error);
-      });
-  };
-
-  const handleDeleteClick = (id) => {
-    deleteShoppingList(id)
-      .then((res) => {
+        console.log("Shopping List deleted:", res.data);
+        setIsDeleteModalOpen(false);
+        setItemToDelete(null);
         onShoppingListDelete(id);
+        const newCheckedItems = { ...checkedItems };
+        delete newCheckedItems[id];
+        setCheckedItems(newCheckedItems);
+        localStorage.setItem("checkedItems", JSON.stringify(newCheckedItems));
       })
       .catch((error) => {
-        console.error("Error deleting shopping list item:", error);
+        console.error("Error deleting shopping list:", error);
       });
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setSelectedItem((prevItem) => ({
-      ...prevItem,
-      [name]: value,
-    }));
+  const handleCheckboxChange = (id) => {
+    setCheckedItems((prevState) => {
+      const newState = {
+        ...prevState,
+        [id]: !prevState[id],
+      };
+      localStorage.setItem("checkedItems", JSON.stringify(newState));
+      return newState;
+    });
+  };
+
+  const deleteCheckedItems = async () => {
+    setStatusMessage("Processing...");
+    const deletePromises = Object.keys(checkedItems).map((key) => {
+      if (checkedItems[key]) {
+        return deleteShoppingListData(key);
+      }
+      return Promise.resolve();
+    });
+    await Promise.all(deletePromises);
+    setStatusMessage("Completed!");
+    setTimeout(() => setStatusMessage(""), 1000); // 2초 후 상태 메시지 숨기기
+  };
+
+  const handleFavoriteSelect = (e) => {
+    setSelectedFavorite(e.target.value);
+  };
+
+  const addFavoriteItem = () => {
+    if (selectedFavorite) {
+      const favoriteIngredient = ingredientOptions.ingredient_list.find(
+        (ingredient) => ingredient._id === selectedFavorite
+      );
+      if (favoriteIngredient) {
+        const newFavoriteItems = {
+          ...favoriteItems,
+          [favoriteIngredient._id]: favoriteIngredient,
+        };
+        setFavoriteItems(newFavoriteItems);
+        localStorage.setItem("favoriteItems", JSON.stringify(newFavoriteItems));
+        console.log("Favorite item added:", favoriteIngredient);
+        handleCloseFavoriteModal();
+      }
+    }
+  };
+
+  const deleteFavoriteItem = (ingredientId) => {
+    const newFavoriteItems = { ...favoriteItems };
+    delete newFavoriteItems[ingredientId];
+    setFavoriteItems(newFavoriteItems);
+    localStorage.setItem("favoriteItems", JSON.stringify(newFavoriteItems));
+    console.log("Favorite item deleted:", ingredientId);
+  };
+
+  const isNecessary = (ingredient) => {
+    return favoriteItems[ingredient._id] ? "R" : "";
+  };
+
+  const getImoji = (cate) => {
+    if (cate === "Meat") {
+      return "🍖";
+    } else if (cate === "Fruit") {
+      return "🍎";
+    } else if (cate === "Vegetable") {
+      return "🥬";
+    } else if (cate === "Grain") {
+      return "🌾";
+    } else {
+      return "🥫";
+    }
   };
 
   return (
-    <div className="fridge-container">
-      <div className="fridge-heading">
-        <Link to="/shoppinglist">
-          <h2>Shopping List</h2>
-        </Link>
-      </div>
+    <div>
+      <div className="fridge-top">
+        <h1>Shopping List</h1>
+        <div className="top">
+          <p>Favorite</p>
+        </div>
+        <ul className="favorite-item-list">
+          {Object.keys(favoriteItems).map((key) => (
+            <li key={key} className="favorite-item">
+              <span>{favoriteItems[key].name}</span>
+              <DashCircleFill
+                size={15}
+                color="red"
+                style={{ cursor: "pointer" }}
+                onClick={() => deleteFavoriteItem(key)}
+              />
+            </li>
+          ))}
+          <button className="shop-add-btn" onClick={handleOpenFavoriteModal}>
+            + Add Favorite
+          </button>
+        </ul>
 
-      <div className="shopping-list-items">
-        <h3>Shopping List</h3>
+        <p>{shoppingLists.length} items</p>
+
         {shoppingLists && shoppingLists.length > 0 ? (
-          <ul className="fridge-list">
-            {shoppingLists.map((list) => (
-              <li key={list._id} className="fridge-item">
-                <span>{list.ingredient.name}</span>
-                <div className="fridge-item-actions">
-                  <PencilSquare
-                    size={18}
-                    className="edit-btn"
-                    onClick={() => handleOpenEditModal(list)}
-                  />
-                  <Trash
-                    size={18}
-                    className="trash-btn"
-                    onClick={() => handleDeleteClick(list._id)}
-                  />
-                </div>
+          <ul className="shop-list">
+            {shoppingLists.map((list, index) => (
+              <li key={index}>
+                <input
+                  type="checkbox"
+                  id={`custom-checkbox-${index}`}
+                  className="custom-checkbox"
+                  checked={!!checkedItems[list._id]}
+                  onChange={() => handleCheckboxChange(list._id)}
+                />
+                <label
+                  htmlFor={`custom-checkbox-${index}`}
+                  style={{
+                    textDecoration: checkedItems[list._id]
+                      ? "line-through"
+                      : "none",
+                  }}
+                >
+                  <span>{list.ingredient.name}</span>
+                  <span className="home-shop-r">
+                    {isNecessary(list.ingredient)}
+                  </span>
+                </label>
+                <Trash
+                  size={12}
+                  className="trash-btn"
+                  onClick={() => handleDeleteClick(list)}
+                  style={{ cursor: "pointer" }}
+                />
               </li>
             ))}
+            <button className="shop-add-btn" onClick={handleOpenModal}>
+              + Add Items
+            </button>
           </ul>
         ) : (
-          <div className="empty-content">There are no shopping list items.</div>
+          <div>
+            <div className="empty-content">There is no ingredient</div>
+            <button className="shop-add-btn" onClick={handleOpenModal}>
+              + Add Items
+            </button>
+          </div>
         )}
       </div>
 
       <Modal
-        isOpen={isEditModalOpen}
-        onRequestClose={handleCloseEditModal}
-        contentLabel="Edit Item"
-        className="Modal"
+        isOpen={selectedAdd}
+        onRequestClose={handleCloseModal}
+        contentLabel="Add Shopping List Item"
+        className="Modal modal-add-shop"
+        overlayClassName="Overlay"
+      >
+        <ShoppingListAdd
+          ingredientOptions={ingredientOptions}
+          onShoppingListAdd={onShoppingListAdd}
+          handleCloseModal={handleCloseModal}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isFavoriteModalOpen}
+        onRequestClose={handleCloseFavoriteModal}
+        contentLabel="Add Favorite Item"
+        className="Modal modal-add-shop"
         overlayClassName="Overlay"
       >
         <div className="modal-heading">
-          <h2>Edit Item</h2>
+          <h2>Add Favorite Item</h2>
           <button
             type="button"
             className="close-btn"
-            onClick={handleCloseEditModal}
+            onClick={handleCloseFavoriteModal}
           >
             x
           </button>
         </div>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            addFavoriteItem();
+          }}
+        >
+          <label>
+            Ingredient:
+            <select
+              name="ingredient"
+              value={selectedFavorite}
+              onChange={handleFavoriteSelect}
+              required
+            >
+              <option value="">Select an ingredient</option>
+              {ingredientOptions.ingredient_list.map((ingredient) => (
+                <option key={ingredient._id} value={ingredient._id}>
+                  {ingredient.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button type="submit" className="confirm-btn">
+            Add
+          </button>
+        </form>
+      </Modal>
 
-        {selectedItem && (
-          <form onSubmit={handleUpdate}>
-            <label>
-              Ingredient:
-              <select
-                name="ingredient"
-                value={selectedItem.ingredient._id}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select an ingredient</option>
-                {ingredientOptions.ingredient_list.map((ingredient) => (
-                  <option key={ingredient._id} value={ingredient._id}>
-                    {ingredient.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Necessary:
-              <input
-                type="checkbox"
-                name="necessary"
-                checked={selectedItem.necessary}
-                onChange={(e) =>
-                  setSelectedItem((prevItem) => ({
-                    ...prevItem,
-                    necessary: e.target.checked,
-                  }))
-                }
-              />
-            </label>
-            <button type="submit" className="confirm-btn">
-              Update
-            </button>
-          </form>
-        )}
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onRequestClose={closeDeleteModal}
+        contentLabel="Delete Confirmation"
+        className="Modal modal-add-shop"
+        overlayClassName="Overlay"
+      >
+        <h2 style={{ paddingTop: "20px" }}>Delete Confirmation</h2>
+        <p>Are you sure you want to delete this item?</p>
+        <div className="button-container">
+          <button
+            className="confirm-btn"
+            style={{ backgroundColor: "red" }}
+            onClick={onDeleteConfirm}
+          >
+            Yes, delete
+          </button>
+          <button
+            className="confirm-btn"
+            style={{ backgroundColor: "darkgray" }}
+            onClick={closeDeleteModal}
+          >
+            No, cancel
+          </button>
+        </div>
       </Modal>
     </div>
   );

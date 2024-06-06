@@ -5,8 +5,7 @@ const Schema = mongoose.Schema;
 const IngredientSchema = new Schema({
   name: { type: String, required: true, maxLength: 50 },
   category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
-  rec_exp_date: { type: Number },
-  necessary: { type: Boolean, required: true, default: false },
+  rec_exp_date: { type: Number }
 });
 
 IngredientSchema.virtual("url").get(function() {

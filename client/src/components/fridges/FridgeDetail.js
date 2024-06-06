@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {getUpdateFormFridgeInstance, updateFridgeInstance} from "../../Api";
+import { getUpdateFormFridgeInstance, updateFridgeInstance } from "../../Api";
 import Modal from "react-modal";
 import { deleteFridgeInstance } from "../../Api";
 
@@ -50,50 +50,62 @@ function FridgeDetail({ item, onClose, onItemUpdate, onItemDelete }) {
       });
   };
 
-    const handleDeleteClick = () => {
-      setIsDeleteModalOpen(true);
-    };
+  const handleDeleteClick = () => {
+    setIsDeleteModalOpen(true);
+  };
 
-    const closeDeleteModal = () => {
-      setIsDeleteModalOpen(false);
-    };
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+  };
 
-      const onDeleteConfirm = (item) => {
-        deleteFridgeInstance(item._id)
-          .then((res) => {
-            console.log("Fridge instance deleted:", res.data);
-            onItemDelete(item._id);
-          })
-          .catch((error) => {
-            console.error("Error deleting fridge instance:", error);
-          });
-      };
+  const onDeleteConfirm = (item) => {
+    deleteFridgeInstance(item._id)
+      .then((res) => {
+        console.log("Fridge instance deleted:", res.data);
+        onItemDelete(item._id);
+      })
+      .catch((error) => {
+        console.error("Error deleting fridge instance:", error);
+      });
+  };
 
-      const handleDeleteConfirm = () => {
-        onDeleteConfirm(item);
-        setIsDeleteModalOpen(false);
-        onClose();
-      };
+  const handleDeleteConfirm = () => {
+    onDeleteConfirm(item);
+    setIsDeleteModalOpen(false);
+    onClose();
+  };
 
   return (
     <>
-      <h2>Ingredient Details</h2>
+      <div className="modal-heading">
+        <h2>Ingredient Details</h2>
+        <button
+          type="button"
+          className="close-btn"
+          onClick={() => onClose(false)}
+        >
+          x
+        </button>
+      </div>
+
       {isEditing ? (
         <div>
-          <label htmlFor="ingredient">Ingredient:</label>
-          <select
-            className="form-control"
-            name="ingredient"
-            required
-            value={formData.ingredient}
-            onChange={handleChange}
-          >
-            {updateElements.ingredient_list.map((ingredient) => (
-              <option key={ingredient._id} value={ingredient._id}>
-                {ingredient.name}
-              </option>
-            ))}
-          </select>
+          <div className="form-group">
+            <label htmlFor="ingredient">Ingredient:</label>
+            <select
+              className="form-control"
+              name="ingredient"
+              required
+              value={formData.ingredient}
+              onChange={handleChange}
+            >
+              {updateElements.ingredient_list.map((ingredient) => (
+                <option key={ingredient._id} value={ingredient._id}>
+                  {ingredient.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
           <div className="form-group">
             <label htmlFor="status">Status:</label>
@@ -134,8 +146,9 @@ function FridgeDetail({ item, onClose, onItemUpdate, onItemDelete }) {
             />
           </div>
 
-          <button onClick={handleSave}>Save</button>
-          <button onClick={() => setIsEditing(false)}>Cancel</button>
+          <button className="confirm-btn" onClick={handleSave}>
+            Save
+          </button>
         </div>
       ) : (
         <div>
@@ -143,23 +156,49 @@ function FridgeDetail({ item, onClose, onItemUpdate, onItemDelete }) {
           <p>Status: {item.status}</p>
           <p>Buy Date: {new Date(item.buy_date).toLocaleDateString()}</p>
           <p>Expiration Date: {new Date(item.exp_date).toLocaleDateString()}</p>
-          <button onClick={() => setIsEditing(true)}>Edit</button>
-          <button onClick={handleDeleteClick}>Delete</button>
-          <button onClick={onClose}>Close</button>
+          <div className="button-container">
+            <button
+              className="confirm-btn"
+              style={{ backgroundColor: "white", color: "black" }}
+              onClick={() => setIsEditing(true)}
+            >
+              Edit
+            </button>
+            <button
+              className="confirm-btn"
+              style={{ backgroundColor: "red" }}
+              onClick={handleDeleteClick}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       )}
-
       <Modal
         isOpen={isDeleteModalOpen}
         onRequestClose={closeDeleteModal}
         contentLabel="Delete Confirmation"
-        className="Modal"
+        className="Modal modal-add-shop"
         overlayClassName="Overlay"
       >
-        <h2>Delete Confirmation</h2>
+        <h2 style={{ paddingTop: "20px" }}>Delete Confirmation</h2>
         <p>Are you sure you want to delete this item?</p>
-        <button onClick={handleDeleteConfirm}>Yes, delete</button>
-        <button onClick={closeDeleteModal}>No, cancel</button>
+        <div className="button-container">
+          <button
+            className="confirm-btn"
+            style={{ backgroundColor: "red" }}
+            onClick={handleDeleteConfirm}
+          >
+            Yes, delete
+          </button>
+          <button
+            className="confirm-btn"
+            style={{ backgroundColor: "darkgray" }}
+            onClick={closeDeleteModal}
+          >
+            No, cancel
+          </button>
+        </div>
       </Modal>
     </>
   );

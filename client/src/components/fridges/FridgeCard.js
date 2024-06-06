@@ -69,7 +69,7 @@ function FridgeCard({ item, onItemUpdate, onItemDelete}) {
         isOpen={isDetailOpen}
         onRequestClose={() => setIsDetailOpen(false)}
         contentLabel="Ingredient Details"
-        className="Modal"
+        className="Modal modal-add-shop"
         overlayClassName="Overlay"
       >
         <FridgeDetail

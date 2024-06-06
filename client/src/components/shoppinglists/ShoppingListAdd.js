@@ -1,99 +1,105 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import Modal from "react-modal";
 import {
+  fetchShoppingList,
   getCreateFormFridgeInstance,
   createShoppingList,
   deleteShoppingList,
+  updateFridgeInstance,
 } from "../../Api";
+import { CheckCircle, Trash, PencilSquare } from "react-bootstrap-icons";
 
-function ShoppingListAdd({ onShoppingListAdd, onClose}) {
-    const [shoppingListCreateForm, setShoppingListCreateForm] = useState({
-      ingredient: "",
-      possess: false,
-    });
-    const [ingredientOptions, setIngredientOptions] = useState({
-      ingredient_list: [],
-    });
+function ShoppingListAdd({
+  ingredientOptions,
+  onShoppingListAdd,
+  handleCloseModal
+}) {
+  useEffect(() => {
+    getCreateFormFridgeInstance()
+      .then((res) => {
+        console.log("Fetch Shopping List Creating Form");
+      })
+      .catch((error) => {
+        console.error("Error fetching shopping list create form:", error);
+      });
+  }, []);
+  const [selectedAdd, setSelectedAdd] = useState(false);
+  const [shoppingListCreateForm, setShoppingListCreateForm] = useState({
+    ingredient: "",
+    possess: false,
+  });
 
-    useEffect(() => {
-      getCreateFormFridgeInstance()
-        .then((res) => {
-          setIngredientOptions(res.data);
-          console.log("Fetch Shopping List Creating Form");
-        })
-        .catch((error) => {
-          console.error("Error fetching shopping list create form:", error);
-        });
-    }, []);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setShoppingListCreateForm({ ...shoppingListCreateForm, [name]: value });
 
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      setShoppingListCreateForm({ ...shoppingListCreateForm, [name]: value });
-
-      if (name === "ingredient") {
-        const selectedIngredient = ingredientOptions.ingredient_list.find(
-          (ingredient) => ingredient._id === value
-        );
-        if (selectedIngredient) {
-          setShoppingListCreateForm((prevFormData) => ({
-            ...prevFormData,
-            possess: selectedIngredient.necessary || false,
-          }));
-        }
+    if (name === "ingredient") {
+      const selectedIngredient = ingredientOptions.ingredient_list.find(
+        (ingredient) => ingredient._id === value
+      );
+      if (selectedIngredient) {
+        setShoppingListCreateForm((prevFormData) => ({
+          ...prevFormData,
+          possess: true,
+        }));
       }
-    };
+    }
+  };
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
-        createShoppingList(shoppingListCreateForm)
-          .then((res) => {
-            console.log("Shopping List created", res.data);
-            setShoppingListCreateForm({
-              ingredient: "",
-              possess: false,
-            });
-            onClose();
-            onShoppingListAdd(res.data.shoppingList); // 대문자 아닐수도
-          })
-          .catch((error) => {
-            console.error("Error creating shopping list item:", error);
-          });
-    };
-    
-    return (
-      <>
-        <div className="modal-heading">
-          <h2>Add Shopping List</h2>
-          <button
-            type="button"
-            className="close-btn"
-            onClick={onClose}
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    createShoppingListData(shoppingListCreateForm);
+  };
+
+  const createShoppingListData = (form) => {
+    createShoppingList(form)
+      .then((res) => {
+        console.log("Shopping List created", res.data);
+        setShoppingListCreateForm({
+          ingredient: "",
+          possess: false,
+        });
+        onShoppingListAdd(res.data);
+        handleCloseModal();
+      })
+      .catch((error) => {
+        console.error("Error creating shopping list item:", error);
+      });
+  };
+  
+  return (
+    <>
+      <div className="modal-heading">
+        <h2>Add Shopping List</h2>
+        <button type="button" className="close-btn" onClick={handleCloseModal}>
+          x
+        </button>
+      </div>
+
+      <form onSubmit={handleSubmit}>
+        <label>
+          Ingredient:
+          <select
+            name="ingredient"
+            value={shoppingListCreateForm.ingredient}
+            onChange={handleChange}
+            required
           >
-            x
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          <label>
-            Ingredient:
-            <select
-              name="ingredient"
-              value={shoppingListCreateForm.ingredient}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select an ingredient</option>
-              {ingredientOptions.ingredient_list.map((ingredient) => (
-                <option key={ingredient._id} value={ingredient._id}>
-                  {ingredient.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <button type="submit" className="confirm-btn">
-            Add Item
-          </button>
-        </form>
-      </>
-    );
-
+            <option value="">Select an ingredient</option>
+            {ingredientOptions.ingredient_list.map((ingredient) => (
+              <option key={ingredient._id} value={ingredient._id}>
+                {ingredient.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <button type="submit" className="confirm-btn">
+          Add
+        </button>
+      </form>
+    </>
+  );
 }
+
+export default ShoppingListAdd;

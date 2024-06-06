@@ -115,9 +115,9 @@ a:hover {
   gap: 10px;
 }
 
-.fridge-card-container li{
+.fridge-card-container li {
   list-style-type: none;
-} 
+}
 
 .status {
   display: flex;
@@ -125,8 +125,8 @@ a:hover {
   width: 382px;
   border: 2px solid transparent; /* 기본 테두리 설정 */
   transition: border 0.3s ease; /* 테두리 애니메이션 추가 */
-  border-radius:10px;
-  padding: 15px 10px 0px 10px; 
+  border-radius: 10px;
+  padding: 15px 10px 0px 10px;
 }
 
 .status:hover {
@@ -146,7 +146,6 @@ a:hover {
 
 .fridge-card .status-Fresh {
   background-color: rgba(212, 237, 255, 0.677);
-
 }
 
 .fridge-card .status-Alive {
@@ -155,13 +154,11 @@ a:hover {
 
 .fridge-card .status-Dying {
   background-color: rgba(255, 212, 212, 0.677);
-
 }
 
 .fridge-card .status-Dead {
   background-color: rgba(217, 217, 217, 0.677);
   color: rgb(114, 114, 114);
-
 }
 
 .fridge-card .status-Unknown {
@@ -174,14 +171,14 @@ a:hover {
 .btn-add-circle {
   position: fixed;
   top: 91%;
-  font-size:45px;
+  font-size: 45px;
   left: 80%;
   cursor: pointer;
   color: rgb(17, 19, 22);
 }
 
 .btn-add-circle:hover {
-  font-size:50px;
+  font-size: 50px;
   color: var(--primary-color);
 }
 
@@ -209,7 +206,7 @@ a:hover {
 }
 
 .filtering button {
-    padding: 5px 10px;
+  padding: 5px 10px;
 }
 
 .slider-item button:hover {
@@ -224,6 +221,7 @@ a:hover {
 .fridge-top h1 {
   font-size: 25px;
   font-weight: 700;
+  margin-top: 15px;
 }
 
 .fridge-top p {
@@ -319,12 +317,12 @@ a:hover {
   flex-direction: column;
   gap: 10px;
   list-style-type: none;
-  padding:0;
+  padding: 0;
   margin: 15px;
 }
 
 .navbar-list a {
-  text-decoration: none;  
+  text-decoration: none;
 }
 
 .navbar-link {
@@ -380,7 +378,7 @@ a:hover {
   font-weight: 500;
   font-size: 14px;
   margin-top: 12px;
-  padding:0;
+  padding: 0;
 }
 
 .navbar-profile-container img {
@@ -404,7 +402,6 @@ a:hover {
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   z-index: 1000;
-
 }
 
 .line-with-shadow {
@@ -469,9 +466,10 @@ a:hover {
 .home-message-container {
   text-align: left;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 100px;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .home-message-container h1 {
@@ -488,7 +486,8 @@ a:hover {
   background-color: rgb(236, 236, 236);
 }
 
-.home-meal-container, .home-shop-container {
+.home-meal-container,
+.home-shop-container {
   width: 373px;
   padding: 15px 20px 10px;
   border: 1px solid;
@@ -513,7 +512,7 @@ a:hover {
   padding: 0;
 }
 
-.home-heading h2{
+.home-heading h2 {
   font-size: 16px;
   font-weight: 700;
 }
@@ -528,7 +527,6 @@ a:hover {
 .btn-add:hover {
   color: black;
 }
-
 
 .home-shop-bottom {
   display: flex;
@@ -572,6 +570,11 @@ a:hover {
   font-size: 18px;
 }
 
+.button-container {
+  display: flex;
+  gap: 10px;
+}
+
 .close-btn {
   background-color: transparent;
   border: none;
@@ -581,7 +584,7 @@ a:hover {
   height: 20px;
   width: 20px;
   padding: 0;
-  margin:0;
+  margin: 0;
   cursor: pointer;
   border-radius: 50%;
 }
@@ -598,10 +601,11 @@ a:hover {
 }
 
 .confirm-btn:hover {
-    box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.402);
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.402);
 }
 
-.btn-clear, .btn-auto-add {
+.btn-clear,
+.btn-auto-add {
   font-size: 12px;
   font-weight: 700;
   color: rgb(95, 95, 95);
@@ -638,7 +642,7 @@ a:hover {
   border-radius: 10px;
   box-shadow: 1px 1px 1px rgba(156, 156, 156, 0.5);
   margin: 5px 0px;
-  padding: 0px 10px ;
+  padding: 0px 10px;
   justify-self: center;
   justify-content: space-between;
 }
@@ -660,13 +664,13 @@ a:hover {
 .home-fridge-container p {
   margin: 0;
   font-size: 12px;
-  font-weight:500;
-  color: rgb(93, 93, 93);  
+  font-weight: 500;
+  color: rgb(93, 93, 93);
 }
 
 .home-fridge-card .status-Fresh {
   background-color: rgb(0, 136, 255);
-  border-radius:50%;
+  border-radius: 50%;
   border: 1px solid;
   border-color: rgb(210, 210, 210);
   height: 15px;
@@ -675,7 +679,7 @@ a:hover {
 
 .home-fridge-card .status-Alive {
   background-color: rgb(98, 255, 0);
-  border-radius:50%;
+  border-radius: 50%;
   border: 1px solid;
   border-color: rgb(210, 210, 210);
   height: 15px;
@@ -684,7 +688,7 @@ a:hover {
 
 .home-fridge-card .status-Dying {
   background-color: rgb(255, 106, 0);
-  border-radius:50%;
+  border-radius: 50%;
   border: 1px solid;
   border-color: rgb(210, 210, 210);
   height: 15px;
@@ -694,7 +698,7 @@ a:hover {
 .home-fridge-card .status-Dead {
   background-color: rgb(123, 123, 123);
   color: rgb(114, 114, 114);
-  border-radius:50%;
+  border-radius: 50%;
   border: 1px solid;
   border-color: rgb(210, 210, 210);
   height: 15px;
@@ -703,7 +707,7 @@ a:hover {
 
 .home-fridge-card .status-Unknown {
   background-color: white;
-  border-radius:50%;
+  border-radius: 50%;
   border: 1px solid;
   border-color: rgb(210, 210, 210);
   height: 15px;
@@ -766,13 +770,13 @@ a:hover {
 }
 
 .before-login-background {
-  background: linear-gradient(0deg,#ffffff, var(--primary-color));
+  background: linear-gradient(0deg, #ffffff, var(--primary-color));
   width: 100%;
-  display:flex;
+  display: flex;
   justify-content: center;
 }
 .before-login-content {
-  width:393px;
+  width: 393px;
   height: 400px;
   padding: 24px;
   color: white;
@@ -797,7 +801,7 @@ a:hover {
 .home-start-modal {
   display: flex;
   flex-direction: column;
-  gap:3px;
+  gap: 3px;
   text-align: left;
 }
 
@@ -883,6 +887,64 @@ a:hover {
 
 .custom-checkbox:checked + label:after {
   opacity: 1;
+}
+
+.favorite-item-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 393px;
+  border: 1px solid;
+  border-color: rgba(201, 201, 201, 0.671);
+  box-shadow: 1px 1px 1px rgba(156, 156, 156, 0.5);
+  border-radius: 15px;
+  padding:10px;
+}
+
+.favorite-item, .shop-add-btn {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  width: auto;
+  height: 30px;
+  border-radius: 10px;
+  background-color: rgb(229, 229, 229);
+  font-size: 14px;
+}
+
+.shop-add-btn {
+  background-color: white;
+  border: 1.5px dashed gray;
+  color: gray;
+  box-shadow: none;
+  font-weight: 500;
+}
+
+.shop-add-btn:hover {
+  color: var(--primary-color);
+  border: 1.5px dashed var(--primary-color);
+}
+
+.shop-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  gap: 10px;
+  margin: 0;
+  padding: 15px 0;
+}
+
+.shop-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.shop-list .home-shop-r {
+  padding-left: 8px;
 }
 
 /** Footer **/

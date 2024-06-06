@@ -25,7 +25,6 @@ exports.createIngredientInstance = [
   body("buy_date").toDate(),
   body("exp_date").toDate(),
   body("status").escape(),
-  body("necessary").escape(),
 
   async (req, res) => {
     const errors = validationResult(req);
@@ -55,9 +54,6 @@ exports.createIngredientInstance = [
         errors: errors.array(),
       });
     } else {
-      ingredient.necessary = req.body.necessary;
-      await ingredient.save();
-
       await ingredientInstance.save();
       const addedIngredientInstance = await ingredientInstance.populate({
         path: "ingredient",
@@ -122,7 +118,6 @@ exports.updateIngredientInstance = [
   body("buy_date").toDate(),
   body("exp_date").toDate(),
   body("status").escape(),
-  body("necessary").escape(),
 
   async (req, res) => {
     const errors = validationResult(req);

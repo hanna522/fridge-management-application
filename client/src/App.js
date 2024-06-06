@@ -15,6 +15,7 @@ import ShoppingList from "./components/shoppinglists/ShoppingList";
 import Fridge from "./components/fridges/Fridge";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Analysis from "./components/analysis/Analysis";
 
 function App() {
   const [items, setItems] = useState([]);
@@ -125,6 +126,7 @@ function App() {
   };
 
   const handleShoppingListDelete = (id) => {
+    console.log("Still Trying...");
     setShoppingLists((prevLists) =>
       prevLists.filter((list) => list._id !== id)
     );
@@ -225,8 +227,20 @@ function App() {
               />
             }
           />
-          <Route path="/shoppinglist" element={<ShoppingList />} />
-          <Route path="/analysis" element={<ShoppingList />} />
+          <Route
+            path="/shoppinglist"
+            element={
+              <ShoppingList
+                shoppingLists={shoppingLists || []}
+                allItems={items}
+                categories={categories}
+                onShoppingListUpdate={handleShoppingListUpdate}
+                onShoppingListAdd={handleShoppingListAdd}
+                onShoppingListDelete={handleShoppingListDelete}
+              />
+            }
+          />
+          <Route path="/analysis" element={<Analysis />} />
         </Routes>
       </main>
       <Footer />
