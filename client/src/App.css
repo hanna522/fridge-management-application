@@ -214,17 +214,17 @@ a:hover {
   color: black;
 }
 
-.fridge-top {
+.fridge-top .analysis-top {
   margin-left: 30px;
 }
 
-.fridge-top h1 {
+.fridge-top h1, .analysis-top h1 {
   font-size: 25px;
   font-weight: 700;
   margin-top: 15px;
 }
 
-.fridge-top p {
+.fridge-top p, .analysis-top p {
   padding: 0;
   margin: 10px 0px 0px 0px;
   font-size: 13px;
@@ -949,8 +949,9 @@ a:hover {
 
 /** Footer **/
 .footer {
-  position: absolute;
+  position: relative;
   bottom: 0%;
   display: flex;
   gap: 5px;
+  padding-top: 30px;
 }
