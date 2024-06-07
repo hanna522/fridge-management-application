@@ -103,3 +103,28 @@ export const createShoppingList = (formData) => {
 export const deleteShoppingList = (id) => {
   return axiosInstance.delete(`/api/shoppinglist/${id}`);
 };
+
+// Ingredient services
+export const getIngredientCreateForm = () => {
+  return axiosInstance.get("/api/ingredient/create");
+}
+
+export const createIngredient = (formData) => {
+  return axiosInstance.post("/api/ingredient/create", formData);
+}
+
+export const fetchIngredients = () => {
+  return axiosInstance.get("/api/ingredient");
+}
+
+export const getIngredientUpdateForm = (id) => {
+  return axiosInstance.get(`/api/ingredient/${id}/update`);
+}
+
+export const updateIngredient = (id, formData) => {
+  return axiosInstance.put(`/api/ingredient/${id}/update`, formData);
+}
+
+export const deleteIngredient = (id) => {
+  return axiosInstance.delete(`/api/ingredient/${id}`);
+}

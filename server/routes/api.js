@@ -24,6 +24,7 @@ const {
   deleteIngredientInstance,
 } = require("../controller/ingredientinstanceController");
 const { register, login, getUserInfo: getUserInfo } = require("../controller/authController");
+const { getIngredientCreateForm, createIngredient, getIngredient, deleteIngredient, getIngredientUpdateForm, updateIngredient } = require("../controller/ingredientController");
 
 router.post("/register", register);
 router.post("/login", login);
@@ -57,5 +58,16 @@ router.get("/fridgeinstance/:id/update", auth, getIngredientInstanceUpdateForm);
 router.put("/fridgeinstance/:id/update", auth, updateIngredientInstance);
 
 router.delete("/fridgeinstance/:id/delete", auth, deleteIngredientInstance);
+
+/// INGREDIENT ROUTES ///
+router.get("/ingredient/create", auth, getIngredientCreateForm);
+router.post("/ingredient/create", auth, createIngredient);
+
+router.get("/ingredient", auth, getIngredient);
+
+router.get("/ingredient/:id/update", getIngredientUpdateForm);
+router.put("ingredient/:id/update", updateIngredient);
+
+router.delete("/ingredient/:id/delete", auth, deleteIngredient);
 
 module.exports = router;

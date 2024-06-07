@@ -9,6 +9,7 @@ import {
   register,
   logout,
   getUserInfo,
+  fetchIngredients,
 } from "./Api";
 import Home from "./components/homes/Home";
 import ShoppingList from "./components/shoppinglists/ShoppingList";
@@ -16,25 +17,27 @@ import Fridge from "./components/fridges/Fridge";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Analysis from "./components/analysis/Analysis";
+import Ingredient from "./components/ingredients/ingredient";
 
 function App() {
   const [items, setItems] = useState([]);
   const [shoppingLists, setShoppingLists] = useState([]);
   const [categories, setCategories] = useState({ category_list: [] });
+  const [ingredients, setIngredients] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [userInfo, setUserInfo] = useState({ email: "", userName: "" });
-  const [loading, setLoading] = useState(true); // 로딩 상태 변수 추가
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
     if (storedUser && storedUser.token) {
       setUser(storedUser);
-      setIsLoggedIn(true); // 로그인 상태 설정
+      setIsLoggedIn(true);
       fetchAllData();
     } else {
-      setLoading(false); // 로딩 완료 설정
+      setLoading(false);
     }
   }, []);
 
@@ -44,61 +47,67 @@ function App() {
 
   const fetchAllData = async () => {
     try {
-      setLoading(true); // 데이터 로딩 시작
+      setLoading(true);
       await Promise.all([
         fetchUserData(),
         fetchData(),
         fetchShoppingListData(),
-        fetchCategory(),
+        fetchIngredientData(),
+        fetchCategoryData(),
       ]);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setLoading(false); // 모든 데이터 로딩 완료
+      setLoading(false);
     }
   };
 
-  const fetchUserData = () => {
-    return getUserInfo()
-      .then((response) => {
-        console.log("User name response:", response);
-        setUserInfo(response);
-      })
-      .catch((error) => {
-        console.error("Error fetching user name:", error);
-      });
+  const fetchUserData = async () => {
+    try {
+      const response = await getUserInfo();
+      console.log("User name response:", response);
+      setUserInfo(response);
+    } catch (error) {
+      console.error("Error fetching user name:", error);
+    }
   };
 
-  const fetchData = () => {
-    return fetchFridgeInstances()
-      .then((res) => {
-        setItems(res.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching items:", error);
-      });
+  const fetchData = async () => {
+    try {
+      const res = await fetchFridgeInstances();
+      setItems(res.data.data);
+    } catch (error) {
+      console.error("Error fetching items:", error);
+    }
   };
 
-  const fetchShoppingListData = () => {
-    return fetchShoppingList()
-      .then((res) => {
-        console.log(res.data.data);
-        setShoppingLists(res.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching shopping list:", error);
-      });
+  const fetchShoppingListData = async () => {
+    try {
+      const res = await fetchShoppingList();
+      setShoppingLists(res.data.data);
+    } catch (error) {
+      console.error("Error fetching shopping list:", error);
+    }
   };
 
-  const fetchCategory = () => {
-    return fetchCategories()
-      .then((res) => {
-        setCategories(res.data);
-        console.log("Get Category Data");
-      })
-      .catch((error) => {
-        console.error("Error fetching category data:", error);
-      });
+  const fetchIngredientData = async () => {
+    try {
+      const res = await fetchIngredients();
+      console.log("Fetch Ingredient Data:", res.data.data);
+      setIngredients(res.data.data);
+    } catch (error) {
+      console.error("Error fetching ingredient:", error);
+    }
+  };
+
+  const fetchCategoryData = async () => {
+    try {
+      const res = await fetchCategories();
+      setCategories(res.data);
+      console.log("Get Category Data");
+    } catch (error) {
+      console.error("Error fetching category data:", error);
+    }
   };
 
   const handleItemUpdate = (updatedItem) => {
@@ -125,6 +134,26 @@ function App() {
     );
   };
 
+  const handleIngredientUpdate = (updatedIngredient) => {
+    setIngredients((prevIngredients) =>
+      prevIngredients.map((ingredient) =>
+        ingredient._id === updatedIngredient._id
+          ? updatedIngredient
+          : ingredient
+      )
+    );
+  };
+
+  const handleIngredientDelete = (id) => {
+    setIngredients((prevIngredients) =>
+      prevIngredients.filter((ingredient) => ingredient._id !== id)
+    );
+  };
+
+  const handleIngredientAdd = (newIngredient) => {
+    setIngredients((prevIngredients) => [...prevIngredients, newIngredient]);
+  };
+
   const handleShoppingListDelete = (id) => {
     console.log("Still Trying...");
     setShoppingLists((prevLists) =>
@@ -141,7 +170,7 @@ function App() {
       const userData = await login(email, password);
       setUser(userData);
       setIsLoggedIn(true);
-      localStorage.setItem("user", JSON.stringify(userData)); // 사용자 정보를 로컬 스토리지에 저장
+      localStorage.setItem("user", JSON.stringify(userData));
       fetchAllData();
     } catch (error) {
       console.error("Login failed:", error);
@@ -165,7 +194,7 @@ function App() {
     setItems([]);
     setShoppingLists([]);
     setCategories({ category_list: [] });
-    localStorage.removeItem("user"); // 로컬 스토리지에서 사용자 정보 제거
+    localStorage.removeItem("user");
   };
 
   if (loading) {
@@ -237,6 +266,18 @@ function App() {
                 onShoppingListUpdate={handleShoppingListUpdate}
                 onShoppingListAdd={handleShoppingListAdd}
                 onShoppingListDelete={handleShoppingListDelete}
+              />
+            }
+          />
+          <Route
+            path="/ingredient"
+            element={
+              <Ingredient
+                ingredients={ingredients || []}
+                categories={categories}
+                onIngredientAdd={handleIngredientAdd}
+                onIngredientUpdate={handleIngredientUpdate}
+                onIngredientDelete={handleIngredientDelete}
               />
             }
           />

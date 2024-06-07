@@ -43,10 +43,7 @@ function Navbar({
           </div>
         ) : (
           <div className="navbar-auth-buttons">
-            <button
-              className="login-btn"
-              onClick={() => setIsLoginOpen(true)}
-            >
+            <button className="login-btn" onClick={() => setIsLoginOpen(true)}>
               Login
             </button>
             <button
@@ -117,6 +114,11 @@ function Navbar({
           <li className="navbar-list-item">
             <Link to="/shoppinglist" className="navbar-link">
               Shopping List
+            </Link>
+          </li>
+          <li className="navbar-list-item">
+            <Link to="/ingredient" className="navbar-link">
+              Ingredients
             </Link>
           </li>
           <li className="navbar-list-item">
