@@ -18,8 +18,8 @@ function IngredientAdd({ onIngredientAdd, closeForm, IngredientName }) {
         if (IngredientName) {
           setFormData({
             ...formData,
-            name: IngredientName
-          })
+            name: IngredientName,
+          });
         }
         console.log("Create Ingredient Form Data", res.data);
       })
@@ -49,8 +49,8 @@ function IngredientAdd({ onIngredientAdd, closeForm, IngredientName }) {
   };
 
   return (
-    <div>
-      <label>
+    <>
+      <label htmlFor="name">
         Name:
         <input
           type="text"
@@ -87,13 +87,10 @@ function IngredientAdd({ onIngredientAdd, closeForm, IngredientName }) {
           required
         />
       </label>
-      <button type="button" onClick={handleSubmit}>
+      <button type="button" className="confirm-btn" onClick={handleSubmit}>
         Save
       </button>
-      <button type="button" onClick={closeForm}>
-        Cancel
-      </button>
-    </div>
+    </>
   );
 }
 

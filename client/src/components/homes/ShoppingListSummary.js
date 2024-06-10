@@ -96,7 +96,7 @@ function ShoppingListSummary({
   const addNecessaryItems = async () => {
     setStatusMessage("Processing...");
     const shoppingListsIngredientIds = allShoppingLists.map(
-      (list) => list.ingredient._id
+      (list) => {list.ingredient && <>list.ingredient._id</>;}
     );
     const allItemsIngredientIds = allItems.map((item) => item.ingredient._id);
     const allBadItemsIngredientIds = allItems
@@ -218,10 +218,14 @@ function ShoppingListSummary({
                     : "none",
                 }}
               >
-                <span>{list.ingredient.name}</span>
-                <span className="home-shop-r">
-                  {isNecessary(list.ingredient)}
-                </span>
+                {list.ingredient && (
+                  <>
+                    <span>{list.ingredient.name}</span>
+                    <span className="home-shop-r">
+                      {isNecessary(list.ingredient)}
+                    </span>
+                  </>
+                )}
               </label>
               <Trash
                 size={12}

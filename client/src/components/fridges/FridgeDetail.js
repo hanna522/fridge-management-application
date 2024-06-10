@@ -12,7 +12,7 @@ function FridgeDetail({ item, onClose, onItemUpdate, onItemDelete }) {
     ingredientinstance: "",
   });
   const [formData, setFormData] = useState({
-    ingredient: item.ingredient._id,
+    ingredient: item.ingredient ? item.ingredient._id : "",
     buy_date: item.buy_date.split("T")[0],
     exp_date: item.exp_date.split("T")[0],
     status: item.status,
@@ -152,7 +152,13 @@ function FridgeDetail({ item, onClose, onItemUpdate, onItemDelete }) {
         </div>
       ) : (
         <div>
-          <p>Ingredient: {item.ingredient.name}</p>
+          {item.ingredient && (
+            <>
+              {item.ingredient.name && (
+                <p>Ingredient: {item.ingredient.name}</p>
+              )}
+            </>
+          )}
           <p>Status: {item.status}</p>
           <p>Buy Date: {new Date(item.buy_date).toLocaleDateString()}</p>
           <p>Expiration Date: {new Date(item.exp_date).toLocaleDateString()}</p>

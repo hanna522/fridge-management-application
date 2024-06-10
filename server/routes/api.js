@@ -68,6 +68,6 @@ router.get("/ingredient", auth, getIngredient);
 router.get("/ingredient/:id/update", getIngredientUpdateForm);
 router.put("ingredient/:id/update", updateIngredient);
 
-router.delete("/ingredient/:id/delete", auth, deleteIngredient);
+router.delete("/ingredient/:id/", auth, deleteIngredient);
 
 module.exports = router;

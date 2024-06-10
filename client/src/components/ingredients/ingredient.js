@@ -8,6 +8,7 @@ import {
   deleteIngredient,
 } from "../../Api";
 import IngredientAdd from "./IngredientAdd";
+import IngredientCard from "./IngredientCard";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
@@ -23,14 +24,6 @@ function Ingredient({
   const [sortOrder, setSortOrder] = useState("asc");
   const [filterValue, setFilterValue] = useState("");
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    category: "",
-    rec_exp_date: "",
-  });
-  const [createElements, setCreateElements] = useState({
-    category_list: [],
-  });
 
   const handleAdd = () => {
     setSelectedAdd(true);
@@ -64,27 +57,12 @@ function Ingredient({
   useEffect(() => {
     getIngredientCreateForm()
       .then((res) => {
-        setCreateElements(res.data);
         console.log("Create Ingredient Form Data", res.data);
       })
       .catch((error) => {
         console.error("Error fetching creating form data:", error);
       });
   }, []);
-
-  const handleDelete = async (id) => {
-    try {
-      await deleteIngredient(id);
-      onIngredientDelete(id);
-    } catch (error) {
-      console.error("Error deleting ingredient:", error);
-    }
-  };
-
-  const openEditModal = (ingredient) => {
-    setFormData(ingredient);
-    setSelectedAdd(true);
-  };
 
   return (
     <>
@@ -134,22 +112,19 @@ function Ingredient({
 
       <ul className="fridge-card-container">
         {sortedAndFilteredItems.map((item) => (
-          <li key={item._id} className="fridge-card">
-            <p>{item.name}</p>
-            <p>{item.category ? item.category.name : "No category"}</p>
-            <p>{item.rec_exp_date}</p>
-            <button onClick={() => openEditModal(item)}>Edit</button>
-            <button onClick={() => handleDelete(item._id)}>Delete</button>
-          </li>
+          <IngredientCard
+            key={item._id}
+            item={item}
+            onItemUpdate={onIngredientUpdate}
+            onItemDelete={onIngredientDelete}
+          />
         ))}
       </ul>
-      <button
+      <PlusCircleFill
         onClick={handleAdd}
         className="btn-add-circle"
         style={{ cursor: "pointer" }}
-      >
-        <PlusCircleFill size={50} />
-      </button>
+      />
 
       <Modal
         isOpen={selectedAdd}
@@ -158,6 +133,13 @@ function Ingredient({
         className="Modal modal-add-shop"
         overlayClassName="Overlay"
       >
+        <div className="modal-heading">
+          <h2>Add Ingredient</h2>
+          <button type="button" className="close-btn" onClick={closeModal}>
+            x
+          </button>
+        </div>
+
         {selectedAdd && (
           <IngredientAdd
             onIngredientAdd={onIngredientAdd}

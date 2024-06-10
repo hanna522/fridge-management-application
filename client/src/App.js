@@ -10,6 +10,8 @@ import {
   logout,
   getUserInfo,
   fetchIngredients,
+  deleteFridgeInstance,
+  deleteShoppingList,
 } from "./Api";
 import Home from "./components/homes/Home";
 import ShoppingList from "./components/shoppinglists/ShoppingList";
@@ -144,14 +146,54 @@ function App() {
     );
   };
 
-  const handleIngredientDelete = (id) => {
+  const handleIngredientDelete = async (id) => {
+    console.log("Deleting Ingredient and its related items...");
+    // Delete related fridge items
+    const relatedFridgeItems = items.filter(
+      (item) => item.ingredient._id === id
+    );
+    for (const item of relatedFridgeItems) {
+      await deleteFridgeInstance(item._id)
+        .then(() => {
+          console.log("Fridge instance deleted:", item._id);
+        })
+        .catch((error) => {
+          console.error("Error deleting fridge instance:", error);
+        });
+    }
+    setItems((prevItems) =>
+      prevItems.filter((item) => item.ingredient._id !== id)
+    );
+
+    // Delete related shopping list items
+    const relatedShoppingListItems = shoppingLists.filter(
+      (list) => list.ingredient._id === id
+    );
+    for (const list of relatedShoppingListItems) {
+      await deleteShoppingList(list._id)
+        .then(() => {
+          console.log("Shopping list item deleted:", list._id);
+        })
+        .catch((error) => {
+          console.error("Error deleting shopping list item:", error);
+        });
+    }
+    setShoppingLists((prevLists) =>
+      prevLists.filter((list) => list.ingredient._id !== id)
+    );
+
+    // Delete the ingredient
     setIngredients((prevIngredients) =>
       prevIngredients.filter((ingredient) => ingredient._id !== id)
     );
   };
 
   const handleIngredientAdd = (newIngredient) => {
-    setIngredients((prevIngredients) => [...prevIngredients, newIngredient]);
+    console.log("Fetching Data with new Ingredient...:", newIngredient);
+    setIngredients((prevIngredients) => [
+      ...prevIngredients,
+      newIngredient.ingredient,
+    ]);
   };
 
   const handleShoppingListDelete = (id) => {

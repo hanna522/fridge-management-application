@@ -22,7 +22,7 @@ function ShoppingList({
   const [ingredientOptions, setIngredientOptions] = useState({
     ingredient_list: [],
   });
-  const [statusMessage, setStatusMessage] = useState(""); // 상태 메시지 추가
+  const [statusMessage, setStatusMessage] = useState("");
   const [itemToDelete, setItemToDelete] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [checkedItems, setCheckedItems] = useState(() => {

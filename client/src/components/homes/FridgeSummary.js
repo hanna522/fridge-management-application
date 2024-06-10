@@ -127,7 +127,8 @@ function FridgeSummary({
                   onClick={() => openDetailModal(item)}
                   style={{ cursor: "pointer" }}
                 >
-                  <p>{item.ingredient.name}</p>
+                  {item.ingredient && <p>{item.ingredient.name}</p>}
+
                   <p className={"status-" + item.status}> </p>
                 </li>
               </div>
