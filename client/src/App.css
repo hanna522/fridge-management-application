@@ -300,6 +300,37 @@ a:hover {
   padding: 10px 0px;
 }
 
+.ingredient-suggestions {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+  max-height: 150px;
+  overflow-y: auto;
+  position: absolute;
+  background-color: white;
+  width: 100%;
+  z-index: 1000;
+}
+
+.ingredient-suggestions li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.ingredient-suggestions li:hover {
+  background-color: #f0f0f0;
+}
+
+.new-ingredient-form {
+  margin-top: 10px;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+}
+
+
+
 /*** NAVBAR section ***/
 .navbar-container {
   padding: 10px 10px 0px 20px;

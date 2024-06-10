@@ -17,7 +17,7 @@ import Fridge from "./components/fridges/Fridge";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Analysis from "./components/analysis/Analysis";
-import Ingredient from "./components/ingredients/ingredient";
+import Ingredient from "./components/ingredients/Ingredient";
 
 function App() {
   const [items, setItems] = useState([]);

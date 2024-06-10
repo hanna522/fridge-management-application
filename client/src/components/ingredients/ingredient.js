@@ -4,10 +4,10 @@ import { PlusCircleFill, SortDown } from "react-bootstrap-icons";
 import CategorySlider from "../fridges/CategorySlider";
 import {
   getIngredientCreateForm,
-  createIngredient,
   updateIngredient,
   deleteIngredient,
 } from "../../Api";
+import IngredientAdd from "./IngredientAdd";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
@@ -38,11 +38,6 @@ function Ingredient({
 
   const closeModal = () => {
     setSelectedAdd(false);
-    setFormData({
-      name: "",
-      category: "",
-      rec_exp_date: "",
-    });
   };
 
   const getNestedValue = (obj, path) =>
@@ -76,35 +71,6 @@ function Ingredient({
         console.error("Error fetching creating form data:", error);
       });
   }, []);
-
-  const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? value : value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (formData._id) {
-        // Update ingredient
-        const updatedIngredient = await updateIngredient(
-          formData._id,
-          formData
-        );
-        onIngredientUpdate(updatedIngredient.data);
-      } else {
-        // Create ingredient
-        const newIngredient = await createIngredient(formData);
-        onIngredientAdd(newIngredient.data);
-      }
-      closeModal();
-    } catch (error) {
-      console.error("Error saving ingredient:", error);
-    }
-  };
 
   const handleDelete = async (id) => {
     try {
@@ -168,13 +134,13 @@ function Ingredient({
 
       <ul className="fridge-card-container">
         {sortedAndFilteredItems.map((item) => (
-          <div key={item._id} className="fridge-card">
+          <li key={item._id} className="fridge-card">
             <p>{item.name}</p>
             <p>{item.category ? item.category.name : "No category"}</p>
             <p>{item.rec_exp_date}</p>
             <button onClick={() => openEditModal(item)}>Edit</button>
             <button onClick={() => handleDelete(item._id)}>Delete</button>
-          </div>
+          </li>
         ))}
       </ul>
       <button
@@ -193,51 +159,10 @@ function Ingredient({
         overlayClassName="Overlay"
       >
         {selectedAdd && (
-          <div>
-            <form onSubmit={handleSubmit}>
-              <label>
-                Name:
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </label>
-              <label>
-                Category:
-                <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">Select a category</option>
-                  {createElements.category_list &&
-                    createElements.category_list.map((category) => (
-                      <option key={category._id} value={category._id}>
-                        {category.name}
-                      </option>
-                    ))}
-                </select>
-              </label>
-              <label>
-                Recommended Expiry Date:
-                <input
-                  type="number"
-                  name="rec_exp_date"
-                  value={formData.rec_exp_date}
-                  onChange={handleChange}
-                  required
-                />
-              </label>
-              <button type="submit">Save</button>
-              <button type="button" onClick={closeModal}>
-                Cancel
-              </button>
-            </form>
-          </div>
+          <IngredientAdd
+            onIngredientAdd={onIngredientAdd}
+            closeForm={closeModal}
+          />
         )}
       </Modal>
     </>

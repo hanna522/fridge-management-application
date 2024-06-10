@@ -6,7 +6,7 @@ const IngredientInstance = require("../model/ingredientInstance");
 // GET request for creating an ingredient instance. NOTE This must come before routes that display ingredient instances
 exports.getIngredientInstanceCreateForm = async (req, res) => {
   try {
-    const allIngredients = await Ingredient.find()
+    const allIngredients = await Ingredient.find({user: req.user._id})
       .populate("category")
       .sort({ name: 1 })
       .exec();
@@ -43,7 +43,7 @@ exports.createIngredientInstance = [
     });
 
     if (!errors.isEmpty()) {
-      const allIngredients = await Ingredient.find({})
+      const allIngredients = await Ingredient.find({ user: req.user._id })
         .populate("category")
         .sort({ title: 1 })
         .exec();
@@ -132,7 +132,9 @@ exports.updateIngredientInstance = [
     });
 
     if (!errors.isEmpty()) {
-      const allIngredients = await Ingredient.find().sort({ name: 1 }).exec();
+      const allIngredients = await Ingredient.find({ user: req.user._id })
+        .sort({ name: 1 })
+        .exec();
 
       return res.status(400).json({
         ingredient_list: allIngredients,

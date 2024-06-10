@@ -6,7 +6,7 @@ const Category = require("../model/category");
 // GET request for creating an ingredient instance. NOTE This must come before routes that display ingredient instances
 exports.getIngredientCreateForm = async (req, res) => {
   try {
-    const allIngredients = await Ingredient.find()
+    const allIngredients = await Ingredient.find({ user: req.user._id })
       .populate("category")
       .sort({ name: 1 })
       .exec();
@@ -88,7 +88,7 @@ exports.getIngredientUpdateForm = async (req, res) => {
   try {
     const [ingredient, allIngredients] = await Promise.all([
       Ingredient.findById(req.params.id).populate("category").exec(),
-      Ingredient.find(),
+      Ingredient.find({ user: req.user._id }),
     ]);
     return res.status(200).json({
       ingredient_list: allIngredients,
