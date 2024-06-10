@@ -26,6 +26,10 @@ function App() {
   const [shoppingLists, setShoppingLists] = useState([]);
   const [categories, setCategories] = useState({ category_list: [] });
   const [ingredients, setIngredients] = useState([]);
+  const [favoriteItems, setFavoriteItems] = useState(() => {
+    const favorite = localStorage.getItem("favoriteItems");
+    return favorite ? JSON.parse(favorite) : {};
+  });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [userInfo, setUserInfo] = useState({ email: "", userName: "" });
@@ -181,6 +185,14 @@ function App() {
     setShoppingLists((prevLists) =>
       prevLists.filter((list) => list.ingredient._id !== id)
     );
+
+    // Delete the ingredient from favoriteItems
+    setFavoriteItems((prevFavorites) => {
+      const updatedFavorites = { ...prevFavorites };
+      delete updatedFavorites[id];
+      localStorage.setItem("favoriteItems", JSON.stringify(updatedFavorites));
+      return updatedFavorites;
+    });
 
     // Delete the ingredient
     setIngredients((prevIngredients) =>

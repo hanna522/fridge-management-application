@@ -30,7 +30,6 @@ function Home({
   if (!userInfo.userName)
     return (
       <>
-        {" "}
         <div className="before-login-background">
           <div className="before-login-content">
             <Typewriter
