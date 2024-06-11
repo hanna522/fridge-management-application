@@ -20,14 +20,12 @@ Fridge Manager is a web application developed to help users keep track of what t
 ### Prerequisites
 - Node.js and npm installed on your machine.
 - MongoDB instance (local or cloud).
-
-### Run
-    ```bash
-    cd ./server
-    npm start
-    cd ../client
-    npm run dev
-    ```
+```bash
+cd ./server
+npm start
+cd ../client
+npm run dev
+```
 
 ## Contributions
 We welcome contributions from the community to improve this project. Whether you have ideas for enhancing the frontend interface, adding new features, or fixing bugs, your contributions are valuable. Feel free to open an issue or submit a pull request—we appreciate your input!
