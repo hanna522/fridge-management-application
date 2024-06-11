@@ -5,12 +5,6 @@ Fridge Manager is a web application developed to help users keep track of what t
 ## Preview
 *Currently in development.*
 
-## Features
-- **User Authentication:** Sign in and sign out securely using JWT.
-- **Ingredient Tracking:** Save, edit, and delete ingredients with details.
-- **Expiration Reminders:** Receive notifications for expiring items.
-- **Shopping List Generation:** Automatically create shopping lists based on ingredients.
-
 ## Tech Stacks
 - **Node.js:** JavaScript runtime built on Chrome's V8 JavaScript engine, used to build the backend server.
 - **Express.js:** Web framework for Node.js, used to create RESTful APIs and handle HTTP requests.
