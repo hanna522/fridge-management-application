@@ -9,15 +9,19 @@ import {
 } from "../../Api";
 import IngredientAdd from "./IngredientAdd";
 import IngredientCard from "./IngredientCard";
+import LoggedOut from "../LoggedOut";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
 function Ingredient({
+  userInfo,
   ingredients,
   categories,
   onIngredientAdd,
   onIngredientDelete,
   onIngredientUpdate,
+  handleLogin,
+  handleRegister,
 }) {
   const [selectedAdd, setSelectedAdd] = useState(false);
   const [sortField, setSortField] = useState("status");
@@ -63,6 +67,11 @@ function Ingredient({
         console.error("Error fetching creating form data:", error);
       });
   }, []);
+
+  if (!userInfo.userName)
+    return (
+      <LoggedOut handleLogin={handleLogin} handleRegister={handleRegister} />
+    );
 
   return (
     <>

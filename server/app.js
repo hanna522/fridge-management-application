@@ -11,15 +11,15 @@ app.use(cors());
 
 // connect with mongoDB
 var { mongoDB } = require("./config/mongo-db");
-mongoDB();
 
 app.get("/", (req, res) => {
   console.log(req);
   res.send("Hello from MERN stack!");
 });
 
-app.use('/api', apiRoutes);
+app.use("/api", apiRoutes);
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server listening on port ${PORT}.`);
+  await mongoDB();
 });

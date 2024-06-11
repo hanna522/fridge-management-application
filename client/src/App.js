@@ -110,7 +110,7 @@ function App() {
     try {
       const res = await fetchCategories();
       setCategories(res.data);
-      console.log("Get Category Data");
+      console.log("Get Category Data", res.data);
     } catch (error) {
       console.error("Error fetching category data:", error);
     }
@@ -302,11 +302,14 @@ function App() {
             path="/fridge"
             element={
               <Fridge
+                userInfo={userInfo}
                 items={items}
                 categories={categories}
                 onItemUpdate={handleItemUpdate}
                 onItemDelete={handleItemDelete}
                 onItemAdd={handleItemAdd}
+                handleLogout={handleLogout}
+                handleLogin={handleLogin}
               />
             }
           />
@@ -314,12 +317,15 @@ function App() {
             path="/shoppinglist"
             element={
               <ShoppingList
+                userInfo={userInfo}
                 shoppingLists={shoppingLists || []}
                 allItems={items}
                 categories={categories}
                 onShoppingListUpdate={handleShoppingListUpdate}
                 onShoppingListAdd={handleShoppingListAdd}
                 onShoppingListDelete={handleShoppingListDelete}
+                handleLogout={handleLogout}
+                handleLogin={handleLogin}
               />
             }
           />
@@ -327,11 +333,14 @@ function App() {
             path="/ingredient"
             element={
               <Ingredient
+                userInfo={userInfo}
                 ingredients={ingredients || []}
                 categories={categories}
                 onIngredientAdd={handleIngredientAdd}
                 onIngredientUpdate={handleIngredientUpdate}
                 onIngredientDelete={handleIngredientDelete}
+                handleLogout={handleLogout}
+                handleLogin={handleLogin}
               />
             }
           />

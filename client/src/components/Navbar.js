@@ -121,11 +121,6 @@ function Navbar({
               Ingredients
             </Link>
           </li>
-          <li className="navbar-list-item">
-            <Link to="/analysis" className="navbar-link">
-              Analysis
-            </Link>
-          </li>
         </ul>
 
         <button className="confirm-btn" onClick={handleLogoutAndCloseProfile}>
@@ -137,3 +132,11 @@ function Navbar({
 }
 
 export default Navbar;
+
+/**
+   <li className="navbar-list-item">
+    <Link to="/analysis" className="navbar-link">
+      Analysis
+    </Link>
+  </li>
+ */

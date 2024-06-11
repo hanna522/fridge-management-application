@@ -4,10 +4,20 @@ import FridgeCard from "./FridgeCard";
 import FridgeAdd from "./FridgeAdd";
 import { Cursor, PlusCircleFill, SortDown } from "react-bootstrap-icons";
 import CategorySlider from "./CategorySlider";
+import LoggedOut from "../LoggedOut";
 
 Modal.setAppElement("#root"); // Set the app element for accessibility
 
-function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
+function Fridge({
+  userInfo,
+  items,
+  categories,
+  onItemUpdate,
+  onItemDelete,
+  onItemAdd,
+  handleLogin,
+  handleRegister,
+}) {
   const [selectedAdd, setSelectedAdd] = useState(false);
   const [sortField, setSortField] = useState("status");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -52,6 +62,11 @@ function Fridge({ items, categories, onItemUpdate, onItemDelete, onItemAdd }) {
     });
 
   console.log("sorted items: ", sortedAndFilteredItems);
+
+  if (!userInfo.userName)
+    return (
+      <LoggedOut handleLogin={handleLogin} handleRegister={handleRegister} />
+    );
 
   return (
     <>

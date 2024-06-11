@@ -10,14 +10,18 @@ import {
 } from "../../Api";
 import { DashCircleFill, Trash, PencilSquare } from "react-bootstrap-icons";
 import ShoppingListAdd from "./ShoppingListAdd";
+import LoggedOut from "../LoggedOut";
 
 function ShoppingList({
+  userInfo,
   shoppingLists,
   allItems,
   categories,
   onShoppingListUpdate,
   onShoppingListDelete,
   onShoppingListAdd,
+  handleLogin,
+  handleRegister,
 }) {
   const [ingredientOptions, setIngredientOptions] = useState({
     ingredient_list: [],
@@ -168,6 +172,11 @@ function ShoppingList({
       return "🥫";
     }
   };
+
+  if (!userInfo.userName)
+    return (
+      <LoggedOut handleLogin={handleLogin} handleRegister={handleRegister} />
+    );
 
   return (
     <div>
