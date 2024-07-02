@@ -16,24 +16,24 @@ function IngredientAdd({ onIngredientAdd, closeForm, IngredientName }) {
       .then((res) => {
         setCreateElements(res.data);
         if (IngredientName) {
-          setFormData({
-            ...formData,
+          setFormData((prevFormData) => ({
+            ...prevFormData,
             name: IngredientName,
-          });
+          }));
         }
         console.log("Create Ingredient Form Data", res.data);
       })
       .catch((error) => {
         console.error("Error fetching creating form data:", error);
       });
-  }, []);
+  }, [IngredientName]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
-    });
+    }));
   };
 
   const handleSubmit = async () => {
