@@ -19,7 +19,7 @@ import Fridge from "./components/fridges/Fridge";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Analysis from "./components/analysis/Analysis";
-import Ingredient from "./components/ingredients/Ingredient";
+import Ingredient from "./components/ingredients/Ingredient.js";
 import RedirectToAPI from "./RedirectToAPI";
 
 function App() {
