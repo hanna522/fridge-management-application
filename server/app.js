@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 // connect with mongoDB
-var { mongoDB } = require("./config/mongo-db");
+var { mongoDB } = require("./config/mongo-db.js");
 
 app.get("/", (req, res) => {
   console.log(req);
