@@ -3,7 +3,7 @@
 Fridge Manager is a web application developed to help users keep track of what they have in their fridge, remind them when it expires, and automatically create shopping lists for the user. Users can sign in/out and create profiles to save, edit, and delete their own ingredients.
 
 ## Preview
-*Currently in development.*
+[preview](https://with-my-fridge.vercel.app/home)
 
 ## Tech Stacks
 - **Node.js:** JavaScript runtime built on Chrome's V8 JavaScript engine, used to build the backend server.
