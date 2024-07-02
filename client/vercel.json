@@ -20,6 +20,13 @@
     },
     {
       "src": "/(.*)",
+      "dest": "/client/build/index.html"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
       "dest": "/client/build/$1"
     }
   ]
