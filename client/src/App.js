@@ -1,6 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import {
   fetchFridgeInstances,
   fetchCategories,
@@ -20,6 +20,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Analysis from "./components/analysis/Analysis";
 import Ingredient from "./components/ingredients/Ingredient";
+import RedirectToAPI from "./RedirectToAPI";
 
 function App() {
   const [items, setItems] = useState([]);
@@ -264,7 +265,7 @@ function App() {
   }
 
   return (
-    <Router>
+    <>
       <Navbar
         userInfo={userInfo}
         isLoggedIn={isLoggedIn}
@@ -274,10 +275,7 @@ function App() {
       />
       <main>
         <Routes>
-          <Route
-            path="/"
-            element={<Home items={items || []} categories={categories} />}
-          />
+          <Route path="/" element={<RedirectToAPI />} />
           <Route
             path="/home"
             element={
@@ -348,7 +346,7 @@ function App() {
         </Routes>
       </main>
       <Footer />
-    </Router>
+    </>
   );
 }
 
