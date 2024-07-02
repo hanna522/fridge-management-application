@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { register } from "../Api";
 
 const Register = ({ onRegister, setIsRegisterOpen }) => {
   const [email, setEmail] = useState("");

@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Modal from "react-modal";
 import {
-  fetchShoppingList,
   getCreateFormFridgeInstance,
   createShoppingList,
   deleteShoppingList,
 } from "../../Api";
-import { CheckCircle, Trash } from "react-bootstrap-icons";
+import { Trash } from "react-bootstrap-icons";
 
 function ShoppingListSummary({
   allShoppingLists,
@@ -31,7 +30,7 @@ function ShoppingListSummary({
     return saved ? JSON.parse(saved) : {};
   });
   const [statusMessage, setStatusMessage] = useState(""); // 상태 메시지 추가
-  const [favoriteItems, setFavoriteItems] = useState(() => {
+  const [favoriteItems] = useState(() => {
     const favorite = localStorage.getItem("favoriteItems");
     return favorite ? JSON.parse(favorite) : {};
   });
@@ -96,7 +95,7 @@ function ShoppingListSummary({
   const addNecessaryItems = async () => {
     setStatusMessage("Processing...");
     const shoppingListsIngredientIds = allShoppingLists.map(
-      (list) => {list.ingredient && <>list.ingredient._id</>;}
+      (list) => list.ingredient && list.ingredient._id
     );
     const allItemsIngredientIds = allItems.map((item) => item.ingredient._id);
     const allBadItemsIngredientIds = allItems

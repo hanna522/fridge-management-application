@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
 import { deleteIngredient } from "../../Api";
 import { Trash } from "react-bootstrap-icons";

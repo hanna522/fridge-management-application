@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Routes, Route } from "react-router-dom";
 import {
   fetchFridgeInstances,
@@ -32,27 +32,10 @@ function App() {
     return favorite ? JSON.parse(favorite) : {};
   });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
   const [userInfo, setUserInfo] = useState({ email: "", userName: "" });
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-
-    if (storedUser && storedUser.token) {
-      setUser(storedUser);
-      setIsLoggedIn(true);
-      fetchAllData();
-    } else {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    console.log("Updated Shopping Lists: ", shoppingLists);
-  }, [shoppingLists]);
-
-  const fetchAllData = async () => {
+  const fetchAllData = useCallback(async () => {
     try {
       setLoading(true);
       await Promise.all([
@@ -67,7 +50,22 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (storedUser && storedUser.token) {
+      setIsLoggedIn(true);
+      fetchAllData();
+    } else {
+      setLoading(false);
+    }
+  }, [fetchAllData]);
+
+  useEffect(() => {
+    console.log("Updated Shopping Lists: ", shoppingLists);
+  }, [shoppingLists]);
 
   const fetchUserData = async () => {
     try {
@@ -223,7 +221,6 @@ function App() {
   const handleLogin = async (email, password) => {
     try {
       const userData = await login(email, password);
-      setUser(userData);
       setIsLoggedIn(true);
       localStorage.setItem("user", JSON.stringify(userData));
       fetchAllData();
@@ -243,7 +240,6 @@ function App() {
 
   const handleLogout = () => {
     logout();
-    setUser(null);
     setUserInfo({ email: "", userName: "" });
     setIsLoggedIn(false);
     setItems([]);
@@ -324,6 +320,7 @@ function App() {
                 onShoppingListDelete={handleShoppingListDelete}
                 handleLogout={handleLogout}
                 handleLogin={handleLogin}
+                favoriteItems={favoriteItems}
               />
             }
           />

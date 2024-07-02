@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { CardImage } from "react-bootstrap-icons";
+import React from "react";
 import ShoppingListSummary from "./ShoppingListSummary";
 import FridgeSummary from "./FridgeSummary";
 import Modal from "react-modal";
-import Typewriter from "typewriter-effect";
-import Login from "../Login";
-import Register from "../Register";
 import LoggedOut from "../LoggedOut"
 
 Modal.setAppElement("#root"); // Set the app element for accessibility

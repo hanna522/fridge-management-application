@@ -4,8 +4,6 @@ import { PlusCircleFill, SortDown } from "react-bootstrap-icons";
 import CategorySlider from "../fridges/CategorySlider";
 import {
   getIngredientCreateForm,
-  updateIngredient,
-  deleteIngredient,
 } from "../../Api";
 import IngredientAdd from "./IngredientAdd";
 import IngredientCard from "./IngredientCard";

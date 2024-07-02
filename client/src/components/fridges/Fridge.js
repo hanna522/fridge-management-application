@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
 import FridgeCard from "./FridgeCard";
 import FridgeAdd from "./FridgeAdd";
-import { Cursor, PlusCircleFill, SortDown } from "react-bootstrap-icons";
+import { PlusCircleFill, SortDown } from "react-bootstrap-icons";
 import CategorySlider from "./CategorySlider";
 import LoggedOut from "../LoggedOut";
 

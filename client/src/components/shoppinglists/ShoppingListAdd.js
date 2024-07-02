@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import Modal from "react-modal";
 import {
-  fetchShoppingList,
   getCreateFormFridgeInstance,
   createShoppingList,
-  deleteShoppingList,
-  updateFridgeInstance,
 } from "../../Api";
-import { CheckCircle, Trash, PencilSquare } from "react-bootstrap-icons";
 
 function ShoppingListAdd({
   ingredientOptions,
@@ -24,7 +18,7 @@ function ShoppingListAdd({
         console.error("Error fetching shopping list create form:", error);
       });
   }, []);
-  const [selectedAdd, setSelectedAdd] = useState(false);
+
   const [shoppingListCreateForm, setShoppingListCreateForm] = useState({
     ingredient: "",
     possess: false,

@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import Modal from "react-modal";
 import {
-  fetchShoppingList,
   getCreateFormFridgeInstance,
-  createShoppingList,
   deleteShoppingList,
-  updateFridgeInstance,
 } from "../../Api";
-import { DashCircleFill, Trash, PencilSquare } from "react-bootstrap-icons";
+import { DashCircleFill, Trash } from "react-bootstrap-icons";
 import ShoppingListAdd from "./ShoppingListAdd";
 import LoggedOut from "../LoggedOut";
 
@@ -26,7 +22,6 @@ function ShoppingList({
   const [ingredientOptions, setIngredientOptions] = useState({
     ingredient_list: [],
   });
-  const [statusMessage, setStatusMessage] = useState("");
   const [itemToDelete, setItemToDelete] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [checkedItems, setCheckedItems] = useState(() => {
@@ -112,19 +107,6 @@ function ShoppingList({
     });
   };
 
-  const deleteCheckedItems = async () => {
-    setStatusMessage("Processing...");
-    const deletePromises = Object.keys(checkedItems).map((key) => {
-      if (checkedItems[key]) {
-        return deleteShoppingListData(key);
-      }
-      return Promise.resolve();
-    });
-    await Promise.all(deletePromises);
-    setStatusMessage("Completed!");
-    setTimeout(() => setStatusMessage(""), 1000); // 2초 후 상태 메시지 숨기기
-  };
-
   const handleFavoriteSelect = (e) => {
     setSelectedFavorite(e.target.value);
   };
@@ -157,20 +139,6 @@ function ShoppingList({
 
   const isNecessary = (ingredient) => {
     return favoriteItems[ingredient._id] ? "R" : "";
-  };
-
-  const getImoji = (cate) => {
-    if (cate === "Meat") {
-      return "🍖";
-    } else if (cate === "Fruit") {
-      return "🍎";
-    } else if (cate === "Vegetable") {
-      return "🥬";
-    } else if (cate === "Grain") {
-      return "🌾";
-    } else {
-      return "🥫";
-    }
   };
 
   if (!userInfo.userName)
